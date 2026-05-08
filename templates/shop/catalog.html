@@ -149,7 +149,7 @@
         <a class="product-card" href="{% url 'product' product.slug %}">
           <div class="product-img">
             {% if product.image %}
-              <img src="{{ product.image.url }}" alt="{{ product.name }}">
+              <img src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy">
             {% else %}
               <div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:3rem;">💐</div>
             {% endif %}

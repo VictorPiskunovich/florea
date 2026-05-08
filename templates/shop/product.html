@@ -48,7 +48,7 @@
       <div class="gallery-thumbs" id="galleryThumbs">
         {% for img in gallery_images %}
         <div class="thumb {% if forloop.first %}active{% endif %}" data-src="{{ img.url }}" data-index="{{ forloop.counter }}">
-          <img src="{{ img.url }}" alt="">
+          <img src="{{ img.url }}" alt="" loading="lazy">
         </div>
         {% endfor %}
       </div>
@@ -184,7 +184,7 @@
       <a class="product-card" href="{% url 'product' item.slug %}">
         <div class="product-img">
           {% if item.image %}
-            <img src="{{ item.image.url }}" alt="{{ item.name }}">
+            <img src="{{ item.image.url }}" alt="{{ item.name }}" loading="lazy">
           {% else %}
             <div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:3rem;">💐</div>
           {% endif %}

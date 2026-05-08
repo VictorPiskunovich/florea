@@ -135,7 +135,7 @@
                 <div class="order-item">
                   <div class="oi-img" style="background:linear-gradient(135deg,#fce4ec,#fff9e6);">
                     {% if item.product.image %}
-                      <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" style="width:100%;height:100%;object-fit:cover;border-radius:8px;">
+                      <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:8px;">
                     {% else %}
                       💐
                     {% endif %}
@@ -340,7 +340,7 @@
           <div class="fav-card" id="fav-card-{{ entry.product.pk }}">
             <a href="{% url 'product' entry.product.slug %}" class="fav-card-img">
               {% if entry.product.image %}
-                <img src="{{ entry.product.image.url }}" alt="{{ entry.product.name }}">
+                <img src="{{ entry.product.image.url }}" alt="{{ entry.product.name }}" loading="lazy">
               {% else %}
                 <span style="font-size:3rem;">💐</span>
               {% endif %}
