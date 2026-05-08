@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Заказ оформлен — Floréa, Омск{% endblock %}
+
+{% block content %}
+<div style="display:flex;align-items:center;justify-content:center;min-height:60vh;padding:40px 20px;">
+  <div class="success-screen show" style="text-align:center;max-width:480px;width:100%;">
+    <div class="success-icon">🎉</div>
+    <h2>Заказ оформлен!</h2>
+    <p>Наш менеджер свяжется с вами в течение 10 минут.</p>
+    <div class="success-num">Заказ № ЦМ-{{ order.pk|stringformat:"05d" }}</div>
+    <div style="margin-top:8px;color:#6b7280;font-size:14px;">
+      {{ order.name }} · {{ order.phone }}
+    </div>
+    <div style="margin-top:4px;color:#6b7280;font-size:14px;">
+      {{ order.address }}
+    </div>
+    <div class="success-btns" style="margin-top:32px;">
+      <a href="{% url 'index' %}" class="btn-home">На главную</a>
+      <a href="{% url 'catalog' %}" class="btn-catalog-link">Продолжить покупки</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

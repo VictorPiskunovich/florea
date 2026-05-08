@@ -1,0 +1,1805 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Админ-панель — Floréa</title>
+  <link rel="icon" type="image/png" href="{% static 'img/favicon/favicon2.ico' %}">
+  <link rel="stylesheet" href="{% static 'css/admin.css' %}" />
+</head>
+<body class="admin-body">
+
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<div class="admin-layout">
+
+<aside class="admin-sidebar" id="adminSidebar">
+  <div class="sb-logo">
+    <span class="sb-logo-icon">🌺</span>
+    <div>
+      <span class="sb-logo-name">Floréa</span>
+      <span class="sb-logo-sub">Панель управления</span>
+    </div>
+  </div>
+
+  <nav class="sb-nav">
+    <button class="sb-item active" data-panel="dashboard">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Дашборд
+    </button>
+    <button class="sb-item" data-panel="orders">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      Заказы
+      <span class="sb-badge" id="newOrdersBadge"></span>
+    </button>
+    <button class="sb-item" data-panel="products">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+      Товары
+    </button>
+    <button class="sb-item" data-panel="categories">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
+      Категории
+    </button>
+    <button class="sb-item" data-panel="packaging">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><line x1="12" y1="22" x2="12" y2="12"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/></svg>
+      Упаковка
+    </button>
+    <button class="sb-item" data-panel="reports">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      Отчёты
+    </button>
+    <button class="sb-item" data-panel="warehouse">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+      Склад
+      <span class="sb-badge sb-badge--warn" id="lowStockBadge"></span>
+    </button>
+    <button class="sb-item" data-panel="banner">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      Баннер
+    </button>
+  </nav>
+
+  <div class="sb-bottom">
+    <a href="{% url 'index' %}" class="sb-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      В магазин
+    </a>
+    <a href="{% url 'logout' %}" class="sb-item sb-logout">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Выйти
+    </a>
+  </div>
+</aside>
+
+<div class="admin-main">
+  <header class="admin-topbar">
+    <div class="topbar-left">
+      <button class="topbar-burger" id="burgerBtn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <h1 class="topbar-title" id="topbarTitle">Дашборд</h1>
+    </div>
+    <div class="topbar-right">
+      <span class="topbar-date">{% now "j E Y" %}</span>
+      <div class="topbar-user">
+        <div class="topbar-avatar">{{ user.username|slice:":1"|upper }}</div>
+        <span class="topbar-username">{{ user.get_full_name|default:user.username }}</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="admin-content">
+
+    <!-- DASHBOARD -->
+    <section class="panel active" id="panel-dashboard">
+      <div class="kpi-row">
+        <div class="kpi-card">
+          <div class="kpi-icon kpi-icon--green">💰</div>
+          <div class="kpi-body">
+            <span class="kpi-label">Выручка ({{ current_month }})</span>
+            <span class="kpi-value">{{ this_rev|floatformat:0 }} ₽</span>
+            {% if rev_delta is not None %}
+              {% if rev_negative %}
+              <span class="kpi-delta kpi-down">↓ {{ rev_delta|cut:"-" }}% к пред. месяцу</span>
+              {% else %}
+              <span class="kpi-delta kpi-up">↑ {{ rev_delta }}% к пред. месяцу</span>
+              {% endif %}
+            {% else %}
+              <span class="kpi-delta" style="color:#9ca3af;">нет данных за прошлый месяц</span>
+            {% endif %}
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon kpi-icon--blue">📦</div>
+          <div class="kpi-body">
+            <span class="kpi-label">Заказов ({{ current_month }})</span>
+            <span class="kpi-value">{{ this_cnt }}</span>
+            {% if cnt_delta is not None %}
+              {% if cnt_negative %}
+              <span class="kpi-delta kpi-down">↓ {{ cnt_delta|cut:"-" }}% к пред. месяцу</span>
+              {% else %}
+              <span class="kpi-delta kpi-up">↑ {{ cnt_delta }}% к пред. месяцу</span>
+              {% endif %}
+            {% else %}
+              <span class="kpi-delta" style="color:#9ca3af;">нет данных за прошлый месяц</span>
+            {% endif %}
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon kpi-icon--purple">🛍</div>
+          <div class="kpi-body">
+            <span class="kpi-label">Товаров в каталоге</span>
+            <span class="kpi-value" id="kpi-products">{{ product_count }}</span>
+            <span class="kpi-delta">в наличии: {{ available_count }}</span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon kpi-icon--pink">📋</div>
+          <div class="kpi-body">
+            <span class="kpi-label">Новых заказов</span>
+            <span class="kpi-value">{{ new_orders_count }}</span>
+            <span class="kpi-delta">ожидают обработки</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="dash-row">
+        <div class="dash-card dash-chart-card">
+          <div class="dash-card-hd"><h3>Выручка за 7 дней</h3><span class="dash-sub">тыс. ₽</span></div>
+          <div id="revenueChart" class="chart-wrap"></div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-hd">
+            <h3>Последние заказы</h3>
+            <button class="link-plain" onclick="showPanel('orders')">Все →</button>
+          </div>
+          <div id="recentOrdersList">
+            {% for order in recent_orders %}
+            <div class="recent-row" onclick="openOrderModal({{ order.id }})" style="cursor:pointer;">
+              <span class="r-id">#{{ order.id }}</span>
+              <span class="r-client">{{ order.name }}</span>
+              <span class="r-sum">{{ order.total_price }} ₽</span>
+              <span class="sbadge sbadge--blue">{{ order.get_status_display }}</span>
+            </div>
+            {% empty %}
+            <p style="color:var(--gray);font-size:13px;padding:12px 0">Заказов пока нет</p>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRODUCTS -->
+    <section class="panel" id="panel-products">
+      <div class="panel-toolbar">
+        <div class="toolbar-search">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input type="text" id="prodSearch" placeholder="Поиск товара…" />
+        </div>
+        <select id="prodStatusFilter" class="toolbar-select">
+          <option value="">Все статусы</option>
+          <option value="active">Активные</option>
+          <option value="hidden">Скрытые</option>
+        </select>
+        <button class="btn-add" onclick="openProductModal()">+ Добавить товар</button>
+      </div>
+
+      <div class="table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr><th>Товар</th><th>Категория</th><th>Цена</th><th>Статус</th><th>Действия</th></tr>
+          </thead>
+          <tbody id="productsTbody">
+            {% for p in products %}
+            <tr>
+              <td>
+                <div class="prod-cell">
+                  {% if p.image %}
+                  <img src="{{ p.image.url }}" alt="" style="width:36px;height:36px;object-fit:cover;border-radius:6px;flex-shrink:0;">
+                  {% endif %}
+                  <span class="prod-name">{{ p.name }}</span>
+                </div>
+              </td>
+              <td>{{ p.category|default:"—" }}</td>
+              <td><span class="price-main">{{ p.price }} ₽</span></td>
+              <td>
+                <span class="sbadge {% if p.is_available %}sbadge--green{% else %}sbadge--gray{% endif %}">
+                  {% if p.is_available %}Активен{% else %}Скрыт{% endif %}
+                </span>
+              </td>
+              <td>
+                <div class="action-btns">
+                  <button class="btn-icon" data-id="{{ p.id }}" onclick="openProductModal(this.dataset.id)" title="Редактировать">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  </button>
+                  <button class="btn-icon btn-icon--danger" data-id="{{ p.id }}" data-name="{{ p.name }}" onclick="deleteProduct(this)" title="Удалить">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5" class="empty-row">Товаров нет. <button class="link-plain" onclick="openProductModal()">Добавить первый</button></td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ORDERS -->
+    <section class="panel" id="panel-orders">
+      <div class="panel-toolbar">
+        <div class="toolbar-search">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input type="text" id="ordSearch" placeholder="Поиск по клиенту…" />
+        </div>
+        <a href="/panel/orders/export/" class="btn-add" style="text-decoration:none;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px;vertical-align:middle;"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Экспорт CSV
+        </a>
+      </div>
+      <div class="table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr><th>№</th><th>Клиент</th><th>Телефон</th><th>Дата</th><th>Сумма</th><th>Статус</th><th></th></tr>
+          </thead>
+          <tbody>
+            {% for order in all_orders %}
+            <tr>
+              <td><span class="ord-id">#{{ order.id }}</span></td>
+              <td>{{ order.name }}</td>
+              <td>{{ order.phone }}</td>
+              <td>{{ order.created_at|date:"d.m.Y H:i" }}</td>
+              <td><strong>{{ order.total_price }} ₽</strong></td>
+              <td>
+                <select class="status-select" data-id="{{ order.id }}" data-status="{{ order.status }}">
+                  {% for val, label in status_choices %}
+                  <option value="{{ val }}" {% if order.status == val %}selected{% endif %}>{{ label }}</option>
+                  {% endfor %}
+                </select>
+              </td>
+              <td>
+                <button class="btn-icon" onclick="openOrderModal({{ order.id }})" title="Подробнее">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/><line x1="11" y1="8" x2="11" y2="11"/><line x1="11" y1="14" x2="11.01" y2="14"/></svg>
+                </button>
+              </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="7" class="empty-row">Заказов пока нет</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- CATEGORIES -->
+    <section class="panel" id="panel-categories">
+      <div class="panel-toolbar">
+        <div class="toolbar-search">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input type="text" id="catSearch" placeholder="Поиск категории…" />
+        </div>
+        <button class="btn-add" onclick="openCategoryModal()">+ Добавить категорию</button>
+      </div>
+      <div class="table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr><th>Название</th><th>Slug</th><th>Порядок</th><th>Товаров</th><th>Действия</th></tr>
+          </thead>
+          <tbody id="categoriesTbody">
+            {% for cat in categories %}
+            <tr data-cat-name="{{ cat.name|lower }}">
+              <td><strong>{{ cat.name }}</strong></td>
+              <td><code style="font-size:12px;color:#6b7280;">{{ cat.slug }}</code></td>
+              <td>{{ cat.order }}</td>
+              <td>
+                <span class="sbadge sbadge--blue">{{ cat.product_count }}</span>
+              </td>
+              <td>
+                <div class="action-btns">
+                  <button class="btn-icon" data-id="{{ cat.id }}" onclick="openCategoryModal(this.dataset.id)" title="Редактировать">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  </button>
+                  <button class="btn-icon btn-icon--danger" data-id="{{ cat.id }}" data-name="{{ cat.name }}" data-count="{{ cat.product_count }}" onclick="deleteCategory(this)" title="Удалить">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5" class="empty-row">Категорий нет. <button class="link-plain" onclick="openCategoryModal()">Добавить первую</button></td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- REPORTS -->
+    <section class="panel" id="panel-reports">
+      <div class="rep-tabs">
+        <button class="rep-tab active" data-rep="orders">Заказы</button>
+        <button class="rep-tab" data-rep="sales">Продажи</button>
+        <button class="rep-tab" data-rep="customers">Клиенты</button>
+        <button class="rep-tab" data-rep="stock">Склад</button>
+      </div>
+
+      <!-- Заказы -->
+      <div class="rep-pane active" id="repPane-orders">
+        <div class="report-filters">
+          <div class="field"><label>Период с</label><input type="date" id="repDateFrom"></div>
+          <div class="field"><label>по</label><input type="date" id="repDateTo"></div>
+          <div class="field">
+            <label>Статус</label>
+            <select id="repStatus">
+              <option value="">Все статусы</option>
+              {% for val, label in status_choices %}<option value="{{ val }}">{{ label }}</option>{% endfor %}
+            </select>
+          </div>
+          <button class="btn-add" onclick="loadReport()">Сформировать</button>
+          <button class="btn-cancel" id="repExportBtn" onclick="exportReport()" style="display:none;">⬇ Скачать CSV</button>
+        </div>
+        <div id="reportResult" style="display:none;">
+          <div class="kpi-row" id="repKpi" style="margin-bottom:24px;"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+            <div class="dash-card"><div class="dash-card-hd"><h3>По статусам</h3></div><table class="admin-table" id="repStatusTable"></table></div>
+            <div class="dash-card"><div class="dash-card-hd"><h3>Топ товаров</h3></div><table class="admin-table" id="repProductsTable"></table></div>
+          </div>
+        </div>
+        <div id="reportEmpty" style="color:#9ca3af;font-size:14px;padding:32px 0;display:none;">За выбранный период заказов не найдено.</div>
+        <div id="reportLoading" style="color:#9ca3af;font-size:14px;padding:32px 0;display:none;">Загрузка…</div>
+      </div>
+
+      <!-- Продажи -->
+      <div class="rep-pane" id="repPane-sales">
+        <div class="report-filters">
+          <div class="field"><label>Период с</label><input type="date" id="salDateFrom"></div>
+          <div class="field"><label>по</label><input type="date" id="salDateTo"></div>
+          <button class="btn-add" onclick="loadSalesReport()">Сформировать</button>
+          <button class="btn-cancel" id="salExportBtn" onclick="exportSalesReport()" style="display:none;">⬇ Скачать CSV</button>
+        </div>
+        <div id="salResult" style="display:none;">
+          <div class="kpi-row" id="salKpi" style="margin-bottom:24px;"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+            <div class="dash-card"><div class="dash-card-hd"><h3>По категориям</h3></div><table class="admin-table" id="salCatTable"></table></div>
+            <div class="dash-card"><div class="dash-card-hd"><h3>Топ товаров по выручке</h3></div><table class="admin-table" id="salProdTable"></table></div>
+          </div>
+          <div class="dash-card" style="margin-top:20px;"><div class="dash-card-hd"><h3>По дням</h3></div><table class="admin-table" id="salDailyTable"></table></div>
+        </div>
+        <div id="salEmpty" style="color:#9ca3af;font-size:14px;padding:32px 0;display:none;">За выбранный период данных нет.</div>
+        <div id="salLoading" style="color:#9ca3af;font-size:14px;padding:32px 0;display:none;">Загрузка…</div>
+      </div>
+
+      <!-- Клиенты -->
+      <div class="rep-pane" id="repPane-customers">
+        <div class="report-filters">
+          <div class="field"><label>Период с</label><input type="date" id="cusDateFrom"></div>
+          <div class="field"><label>по</label><input type="date" id="cusDateTo"></div>
+          <button class="btn-add" onclick="loadCustomersReport()">Сформировать</button>
+          <button class="btn-cancel" id="cusExportBtn" onclick="exportCustomersReport()" style="display:none;">⬇ Скачать CSV</button>
+        </div>
+        <div id="cusResult" style="display:none;">
+          <div class="kpi-row" id="cusKpi" style="margin-bottom:24px;"></div>
+          <div class="dash-card"><div class="dash-card-hd"><h3>Топ клиентов</h3></div><table class="admin-table" id="cusTable"></table></div>
+        </div>
+        <div id="cusEmpty" style="color:#9ca3af;font-size:14px;padding:32px 0;display:none;">За выбранный период данных нет.</div>
+        <div id="cusLoading" style="color:#9ca3af;font-size:14px;padding:32px 0;display:none;">Загрузка…</div>
+      </div>
+
+      <!-- Склад -->
+      <div class="rep-pane" id="repPane-stock">
+        <div class="report-filters" style="justify-content:flex-end;">
+          <button class="btn-cancel" id="stkExportBtn" onclick="exportStockReport()" style="display:none;">⬇ Скачать CSV</button>
+        </div>
+        <div id="stkResult" style="display:none;">
+          <div class="kpi-row" id="stkKpi" style="margin-bottom:24px;"></div>
+          <div class="dash-card"><div class="dash-card-hd"><h3>Остатки на складе</h3></div><table class="admin-table" id="stkTable"></table></div>
+        </div>
+        <div id="stkLoading" style="color:#9ca3af;font-size:14px;padding:32px 0;display:none;">Загрузка…</div>
+      </div>
+    </section>
+
+    <!-- PACKAGING -->
+    <section class="panel" id="panel-packaging">
+      <div class="panel-toolbar">
+        <span style="font-size:13px;color:#6b7280;">Глобальные варианты упаковки — применяются к товарам без собственных вариантов</span>
+        <button class="btn-add" onclick="openGlobalPackagingModal()">+ Добавить вариант</button>
+      </div>
+      <div class="table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr><th>Название</th><th>Надбавка к цене</th><th>Порядок</th><th>Действия</th></tr>
+          </thead>
+          <tbody id="globalPackagingTbody">
+            <tr><td colspan="4" class="empty-row" id="globalPackagingLoading">Загрузка…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- WAREHOUSE -->
+    <section class="panel" id="panel-warehouse">
+      <div class="table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr><th>Товар</th><th>Категория</th><th style="text-align:center">На складе</th><th>Статус</th></tr>
+          </thead>
+          <tbody>
+            {% for p in products %}
+            <tr>
+              <td><div class="prod-cell"><span class="prod-name">{{ p.name }}</span></div></td>
+              <td>{{ p.category|default:"—" }}</td>
+              <td style="text-align:center">
+                <div class="stock-ctrl">
+                  <button class="stock-btn" onclick="changeStock({{ p.pk }}, -1)">−</button>
+                  <input type="number" class="stock-input" id="stock-{{ p.pk }}" value="{{ p.stock }}" min="0"
+                         onblur="saveStock({{ p.pk }})"
+                         onkeydown="if(event.key==='Enter'){this.blur()}">
+                  <button class="stock-btn" onclick="changeStock({{ p.pk }}, 1)">+</button>
+                </div>
+              </td>
+              <td>
+                <span class="stock-badge" id="stockbadge-{{ p.pk }}"
+                      style="{% if p.stock_status == 'out' %}background:#fee2e2;color:#b91c1c;{% elif p.stock_status == 'low' %}background:#fef9c3;color:#b45309;{% else %}background:#dcfce7;color:#15803d;{% endif %}">
+                  {% if p.stock_status == 'out' %}Нет{% elif p.stock_status == 'low' %}Мало ({{ p.stock }} шт.){% else %}В наличии ({{ p.stock }} шт.){% endif %}
+                </span>
+              </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4" class="empty-row">Товары не найдены</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- BANNER -->
+    <section class="panel" id="panel-banner">
+      <div class="banner-editor">
+        <div class="banner-editor-form">
+          <div class="field">
+            <label>Тег над заголовком</label>
+            <input type="text" id="bnTag" placeholder="🌷 Доставка по Омску за 2 часа">
+            <span class="field-hint">Маленькая подпись над h1 (можно оставить пустым)</span>
+          </div>
+          <div class="field">
+            <label>Заголовок *</label>
+            <input type="text" id="bnTitle" placeholder="Свежие цветы с душой для вас">
+          </div>
+          <div class="field">
+            <label>Подзаголовок</label>
+            <textarea id="bnSubtitle" rows="3" placeholder="Букеты ручной работы, комнатные растения..."></textarea>
+          </div>
+          <div class="banner-btns-grid">
+            <div class="field">
+              <label>Кнопка 1 — текст</label>
+              <input type="text" id="bnBtn1Text" placeholder="Смотреть каталог">
+            </div>
+            <div class="field">
+              <label>Кнопка 1 — ссылка</label>
+              <input type="text" id="bnBtn1Url" placeholder="/catalog/">
+            </div>
+            <div class="field">
+              <label>Кнопка 2 — текст</label>
+              <input type="text" id="bnBtn2Text" placeholder="Заказать звонок">
+            </div>
+            <div class="field">
+              <label>Кнопка 2 — ссылка</label>
+              <input type="text" id="bnBtn2Url" placeholder="#contacts">
+            </div>
+          </div>
+          <div class="field">
+            <label>Фоновое изображение</label>
+            <div id="bnImageCurrent" style="display:none;margin-bottom:8px;">
+              <div style="position:relative;display:inline-block;">
+                <img id="bnImageThumb" src="#" alt="" style="max-height:100px;border-radius:8px;border:1.5px solid #e5e7eb;display:block;">
+                <button type="button" onclick="clearBannerImage()" title="Удалить изображение"
+                  style="position:absolute;top:-8px;right:-8px;width:22px;height:22px;border-radius:50%;background:#b91c1c;color:#fff;border:none;cursor:pointer;font-size:13px;line-height:1;display:flex;align-items:center;justify-content:center;">✕</button>
+              </div>
+              <span class="field-hint" style="margin-top:6px;">Текущее изображение. Нажмите ✕ чтобы удалить.</span>
+            </div>
+            <input type="file" id="bnImage" accept="image/*" style="display:none">
+            <div id="bnImagePicker" class="img-preview-empty" onclick="document.getElementById('bnImage').click()">
+              🖼 Нажмите, чтобы выбрать изображение
+            </div>
+            <input type="hidden" id="bnClearImage" value="">
+            <span class="field-hint">Рекомендуемый размер: 1920×600 пикселей. Над изображением будет тёмный оверлей для читаемости текста.</span>
+          </div>
+          <div id="bannerFormError" class="pf-error" style="display:none;"></div>
+          <div style="display:flex;gap:12px;align-items:center;margin-top:4px;">
+            <button class="btn-save-status" onclick="saveBanner()">Сохранить баннер</button>
+            <a href="{% url 'index' %}" target="_blank" class="link-plain" style="font-size:13px;">Открыть главную ↗</a>
+          </div>
+        </div>
+        <div class="banner-preview-wrap">
+          <div class="banner-preview-label">Предпросмотр</div>
+          <div class="banner-preview" id="bannerPreview">
+            <div class="bp-tag" id="bpTag"></div>
+            <div class="bp-title" id="bpTitle"></div>
+            <div class="bp-sub" id="bpSub"></div>
+            <div class="bp-btns">
+              <div class="bp-btn bp-btn--primary" id="bpBtn1"></div>
+              <div class="bp-btn bp-btn--outline" id="bpBtn2"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+</div>
+
+<!-- Модалка заказа -->
+<div class="modal-overlay" id="orderModalOverlay">
+  <div class="modal" id="orderModal" style="max-width:640px;width:100%;">
+    <div class="modal-hd">
+      <h3 id="orderModalTitle">Заказ</h3>
+      <button class="modal-x" id="orderModalClose">✕</button>
+    </div>
+    <div class="modal-bd" id="orderModalBody">
+      <div style="text-align:center;padding:32px;color:#9ca3af;">Загрузка…</div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn-cancel" id="orderModalClose2">Закрыть</button>
+    </div>
+  </div>
+</div>
+
+<style>
+.status-select{padding:4px 10px;border-radius:6px;border:1px solid #e5e7eb;font-size:12px;cursor:pointer;font-weight:600;}
+.status-select[data-status="new"]{background:#dbeafe;color:#1d4ed8;}
+.status-select[data-status="processing"]{background:#fef9c3;color:#b45309;}
+.status-select[data-status="delivering"]{background:#f3e8ff;color:#7c3aed;}
+.status-select[data-status="done"]{background:#dcfce7;color:#15803d;}
+.status-select[data-status="cancelled"]{background:#fee2e2;color:#b91c1c;}
+.od-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
+.od-block{background:#f9fafb;border-radius:8px;padding:10px 14px;}
+.od-block-wide{grid-column:span 2;}
+.od-label{font-size:11px;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.od-value{font-size:14px;font-weight:600;color:#111827;}
+.od-value a{color:#40916c;text-decoration:none;}
+.od-section-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#6b7280;margin:16px 0 8px;}
+.od-table{width:100%;border-collapse:collapse;font-size:13px;}
+.od-table th{text-align:left;padding:6px 10px;background:#f3f4f6;font-weight:600;font-size:11px;color:#6b7280;text-transform:uppercase;}
+.od-table td{padding:8px 10px;border-bottom:1px solid #f3f4f6;}
+.od-total{text-align:right;padding:10px 10px 0;font-size:15px;}
+.od-comment{background:#f9fafb;border-radius:8px;padding:10px 14px;font-size:13px;white-space:pre-wrap;margin:0;color:#374151;}
+.od-status-row{display:flex;gap:10px;align-items:center;margin-top:6px;}
+.od-status-row select{flex:1;padding:8px 12px;border-radius:8px;border:1px solid #e5e7eb;font-size:14px;}
+.btn-save-status{padding:8px 20px;background:#40916c;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;}
+.btn-save-status:hover{background:#2d6a4f;}
+.report-filters{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;padding:16px;background:#f9fafb;border-radius:12px;margin-bottom:24px;}
+.report-filters .field{display:flex;flex-direction:column;gap:4px;}
+.report-filters .field label{font-size:12px;font-weight:600;color:#374151;}
+.report-filters input[type=date],.report-filters select{padding:8px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:14px;background:#fff;}
+.report-filters input[type=date]:focus,.report-filters select:focus{outline:none;border-color:#40916c;}
+.kpi-down{color:#b91c1c;}
+.stock-ctrl{display:flex;align-items:center;gap:5px;justify-content:center;}
+.stock-btn{width:26px;height:26px;border:1.5px solid #e5e7eb;border-radius:6px;background:#fff;font-size:16px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#374151;transition:.15s;}
+.stock-btn:hover{background:#f3f4f6;border-color:#40916c;color:#40916c;}
+.stock-input{width:58px;padding:5px 6px;border:1.5px solid #e5e7eb;border-radius:6px;font-size:13px;text-align:center;-moz-appearance:textfield;}
+.stock-input::-webkit-outer-spin-button,.stock-input::-webkit-inner-spin-button{-webkit-appearance:none;}
+.stock-input:focus{outline:none;border-color:#40916c;}
+.rep-tabs{display:flex;border-bottom:2px solid #e5e7eb;margin-bottom:20px;gap:0;}
+.rep-tab{padding:10px 20px;border:none;background:none;cursor:pointer;font-size:14px;font-weight:600;color:#6b7280;border-bottom:2px solid transparent;margin-bottom:-2px;transition:.15s;}
+.rep-tab:hover{color:#374151;}
+.rep-tab.active{color:#40916c;border-bottom-color:#40916c;}
+.rep-pane{display:none;}
+.rep-pane.active{display:block;}
+.toast{position:fixed;bottom:24px;right:24px;background:#1f2937;color:#fff;padding:12px 20px;border-radius:10px;font-size:14px;opacity:0;transform:translateY(8px);transition:.25s;z-index:9999;}
+.toast.show{opacity:1;transform:translateY(0);}
+.toast.toast-err{background:#b91c1c;}
+.banner-editor{display:grid;grid-template-columns:1fr 400px;gap:32px;align-items:start;}
+.banner-editor-form .field{margin-bottom:16px;}
+.banner-editor-form .field label{display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px;}
+.banner-editor-form .field input,.banner-editor-form .field textarea{width:100%;padding:8px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:14px;box-sizing:border-box;transition:.15s;font-family:inherit;}
+.banner-editor-form .field input:focus,.banner-editor-form .field textarea:focus{outline:none;border-color:#40916c;}
+.banner-editor-form .field textarea{resize:vertical;}
+.field-hint{font-size:11px;color:#9ca3af;margin-top:3px;display:block;}
+.banner-btns-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.banner-preview-wrap{position:sticky;top:24px;}
+.banner-preview-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#9ca3af;margin-bottom:10px;}
+.banner-preview{background:linear-gradient(135deg,#1b4332 0%,#2d6a4f 100%);border-radius:14px;padding:28px 24px;color:#fff;min-height:200px;background-size:cover;background-position:center;position:relative;}
+.banner-preview::after{content:'';position:absolute;inset:0;border-radius:14px;background:linear-gradient(135deg,rgba(10,30,15,.55) 0%,rgba(27,67,50,.4) 100%);pointer-events:none;}
+.banner-preview > *{position:relative;z-index:1;}
+.bp-tag{display:inline-block;background:rgba(255,255,255,.15);backdrop-filter:blur(4px);border-radius:20px;padding:5px 14px;font-size:12px;margin-bottom:14px;}
+.bp-title{font-size:22px;font-weight:700;line-height:1.3;margin-bottom:10px;}
+.bp-sub{font-size:13px;opacity:.85;line-height:1.5;margin-bottom:18px;}
+.bp-btns{display:flex;gap:10px;flex-wrap:wrap;}
+.bp-btn{padding:9px 18px;border-radius:8px;font-size:13px;font-weight:600;cursor:default;}
+.bp-btn--primary{background:#fff;color:#1b4332;}
+.bp-btn--outline{background:transparent;border:2px solid rgba(255,255,255,.6);color:#fff;}
+@media(max-width:900px){.banner-editor{grid-template-columns:1fr;}.banner-preview-wrap{position:static;}}
+</style>
+
+<!-- Модалка товара -->
+<div class="modal-overlay" id="productModalOverlay">
+  <div class="modal" id="productModal" style="max-width:660px;width:100%;">
+    <div class="modal-hd">
+      <h3 id="productModalTitle">Новый товар</h3>
+      <button class="modal-x" onclick="closeProductModal()">✕</button>
+    </div>
+    <div class="modal-bd">
+      <form id="productForm">
+        <input type="hidden" id="productId">
+        <div class="pf-grid">
+          <div class="field">
+            <label>Название *</label>
+            <input type="text" id="pName" name="name" placeholder="Букет «Алый закат»">
+          </div>
+          <div class="field">
+            <label>Slug (URL)</label>
+            <input type="text" id="pSlug" name="slug" placeholder="alyy-zakat">
+          </div>
+          <div class="field">
+            <label>Категория</label>
+            <select id="pCategory" name="category">
+              <option value="">— Без категории —</option>
+              {% for cat in categories %}
+              <option value="{{ cat.pk }}">{{ cat.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="field">
+            <label>Цена (₽) *</label>
+            <input type="number" id="pPrice" name="price" min="0" step="1" placeholder="3500">
+          </div>
+          <div class="field pf-full">
+            <label>Описание</label>
+            <textarea id="pDesc" name="description" rows="3" placeholder="25 красных роз в крафт-упаковке…"></textarea>
+          </div>
+          <div class="field">
+            <label>Остаток на складе</label>
+            <input type="number" id="pQty" name="quantity" min="0" placeholder="10">
+          </div>
+          <div class="field pf-available">
+            <input type="checkbox" id="pAvailable" name="is_available">
+            <label for="pAvailable">Доступен для продажи</label>
+          </div>
+          <div class="field pf-full">
+            <label>Главное фото</label>
+            <input type="file" id="pImage" name="image" accept="image/*" style="display:none">
+            <div id="imgPreview" class="img-preview-empty" onclick="document.getElementById('pImage').click()">
+              🖼 Нажмите чтобы выбрать изображение
+            </div>
+          </div>
+          <div class="field pf-full" id="packagingSection" style="display:none">
+            <label>Варианты упаковки</label>
+            <div id="packagingList"></div>
+            <div style="display:flex;gap:8px;margin-top:8px;">
+              <input type="text" id="newPackagingName" placeholder="Название (напр. Фатин)" style="flex:1;padding:8px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:14px;">
+              <input type="number" id="newPackagingPrice" placeholder="Надбавка ₽" min="0" style="width:120px;padding:8px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:14px;">
+              <button type="button" class="btn-save-status" onclick="addPackagingOption()" style="white-space:nowrap;">+ Добавить</button>
+            </div>
+          </div>
+          <div class="field pf-full" id="gallerySection" style="display:none">
+            <label>Галерея фотографий</label>
+            <div id="galleryGrid" class="gallery-grid"></div>
+            <input type="file" id="galleryUploadInput" accept="image/*" multiple style="display:none">
+            <button type="button" class="img-preview-empty" id="galleryAddBtn" onclick="document.getElementById('galleryUploadInput').click()" style="width:100%;margin-top:8px;">
+              + Добавить фото в галерею
+            </button>
+          </div>
+        </div>
+        <div id="productFormError" class="pf-error" style="display:none;"></div>
+      </form>
+    </div>
+    <div class="modal-ft">
+      <button class="btn-cancel" onclick="closeProductModal()">Отмена</button>
+      <button class="btn-save-status" onclick="saveProduct()">Сохранить товар</button>
+    </div>
+  </div>
+</div>
+
+<style>
+.btn-icon--danger:hover{background:#fee2e2;color:#b91c1c;}
+.gallery-grid{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px;}
+.gallery-thumb-item{position:relative;width:80px;height:80px;border-radius:8px;overflow:hidden;border:1.5px solid #e5e7eb;}
+.gallery-thumb-item img{width:100%;height:100%;object-fit:cover;display:block;}
+.gallery-thumb-del{position:absolute;top:3px;right:3px;width:20px;height:20px;background:rgba(0,0,0,.55);color:#fff;border:none;border-radius:50%;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;padding:0;}
+.gallery-thumb-del:hover{background:#b91c1c;}
+.pf-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.pf-full{grid-column:span 2;}
+.pf-available{display:flex;align-items:center;gap:8px;padding-top:24px;}
+.pf-available input{width:16px;height:16px;accent-color:#40916c;flex-shrink:0;}
+.pf-available label{margin:0;font-size:14px;cursor:pointer;}
+.pf-grid .field label{font-size:12px;font-weight:600;color:#374151;display:block;margin-bottom:5px;}
+.pf-grid input[type=text],.pf-grid input[type=number],.pf-grid select,.pf-grid textarea{width:100%;padding:8px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:14px;box-sizing:border-box;transition:.15s;}
+.pf-grid input:focus,.pf-grid select:focus,.pf-grid textarea:focus{outline:none;border-color:#40916c;}
+.pf-grid textarea{resize:vertical;}
+.img-preview-empty{border:2px dashed #e5e7eb;border-radius:10px;padding:28px;text-align:center;cursor:pointer;color:#9ca3af;font-size:13px;transition:.15s;}
+.img-preview-empty:hover{border-color:#40916c;color:#40916c;}
+.img-preview-filled{border:2px solid #e5e7eb;border-radius:10px;padding:10px;text-align:center;cursor:pointer;}
+.img-preview-filled img{max-height:130px;border-radius:6px;}
+.pf-error{background:#fee2e2;color:#b91c1c;padding:10px 14px;border-radius:8px;font-size:13px;margin-top:10px;}
+</style>
+
+<!-- Модалка категории -->
+<div class="modal-overlay" id="categoryModalOverlay">
+  <div class="modal" style="max-width:460px;width:100%;">
+    <div class="modal-hd">
+      <h3 id="categoryModalTitle">Новая категория</h3>
+      <button class="modal-x" onclick="closeCategoryModal()">✕</button>
+    </div>
+    <div class="modal-bd">
+      <form id="categoryForm">
+        <input type="hidden" id="categoryId">
+        <div class="pf-grid">
+          <div class="field pf-full">
+            <label>Название *</label>
+            <input type="text" id="cName" name="name" placeholder="Розы">
+          </div>
+          <div class="field pf-full">
+            <label>Slug (URL)</label>
+            <input type="text" id="cSlug" name="slug" placeholder="rozy">
+          </div>
+          <div class="field">
+            <label>Порядок сортировки</label>
+            <input type="number" id="cOrder" name="order" min="0" placeholder="0">
+          </div>
+        </div>
+        <div id="categoryFormError" class="pf-error" style="display:none;"></div>
+      </form>
+    </div>
+    <div class="modal-ft">
+      <button class="btn-cancel" onclick="closeCategoryModal()">Отмена</button>
+      <button class="btn-save-status" onclick="saveCategory()">Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<!-- Модалка глобальной упаковки -->
+<div class="modal-overlay" id="globalPackagingModalOverlay">
+  <div class="modal" style="max-width:420px;width:100%;">
+    <div class="modal-hd">
+      <h3 id="globalPackagingModalTitle">Новый вариант упаковки</h3>
+      <button class="modal-x" onclick="closeGlobalPackagingModal()">✕</button>
+    </div>
+    <div class="modal-bd">
+      <form id="globalPackagingForm">
+        <input type="hidden" id="globalPackagingId">
+        <div class="pf-grid">
+          <div class="field pf-full">
+            <label>Название *</label>
+            <input type="text" id="gpName" name="name" placeholder="Шляпная коробка">
+          </div>
+          <div class="field">
+            <label>Надбавка к цене (₽)</label>
+            <input type="number" id="gpModifier" name="price_modifier" min="0" step="1" placeholder="0">
+          </div>
+          <div class="field">
+            <label>Порядок сортировки</label>
+            <input type="number" id="gpOrder" name="order" min="0" placeholder="0">
+          </div>
+        </div>
+        <div id="globalPackagingFormError" class="pf-error" style="display:none;"></div>
+      </form>
+    </div>
+    <div class="modal-ft">
+      <button class="btn-cancel" onclick="closeGlobalPackagingModal()">Отмена</button>
+      <button class="btn-save-status" onclick="saveGlobalPackaging()">Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+const PANEL_TITLES = { dashboard:'Дашборд', products:'Товары', orders:'Заказы', categories:'Категории', reports:'Отчёты', packaging:'Упаковка', warehouse:'Склад', banner:'Баннер' };
+const CSRF_TOKEN = '{{ csrf_token }}';
+
+function showPanel(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sb-item[data-panel]').forEach(i => i.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  const btn = document.querySelector(`.sb-item[data-panel="${name}"]`);
+  if (btn) btn.classList.add('active');
+  document.getElementById('topbarTitle').textContent = PANEL_TITLES[name];
+  document.getElementById('adminSidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('active');
+  if (name === 'packaging') loadGlobalPackaging();
+  if (name === 'reports') initReportDates();
+  if (name === 'banner') loadBanner();
+}
+
+function showToast(msg, type = 'ok') {
+  const tc = document.getElementById('toastContainer');
+  const t = document.createElement('div');
+  t.className = 'toast' + (type === 'err' ? ' toast-err' : '');
+  t.textContent = msg;
+  tc.appendChild(t);
+  setTimeout(() => t.classList.add('show'), 10);
+  setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 300); }, 3000);
+}
+
+async function openOrderModal(id) {
+  document.getElementById('orderModalTitle').textContent = 'Заказ #' + id;
+  document.getElementById('orderModalBody').innerHTML = '<div style="text-align:center;padding:32px;color:#9ca3af;">Загрузка…</div>';
+  document.getElementById('orderModalOverlay').classList.add('active');
+
+  const resp = await fetch('/panel/order/' + id + '/');
+  if (!resp.ok) { showToast('Ошибка загрузки', 'err'); return; }
+  const d = await resp.json();
+
+  document.getElementById('orderModalTitle').textContent = 'Заказ #' + d.id + ' — ' + d.name;
+
+  const statusColors = {new:'#dbeafe',processing:'#fef9c3',delivering:'#f3e8ff',done:'#dcfce7',cancelled:'#fee2e2'};
+  const itemsRows = d.items.map(i => {
+    const extrasHtml = i.extras ? `<div style="font-size:11px;color:#6b7280;margin-top:2px;">${i.extras}</div>` : '';
+    return `<tr><td>${i.name}${extrasHtml}</td><td style="text-align:center">${i.quantity} шт.</td><td style="text-align:right">${i.price} ₽</td><td style="text-align:right"><strong>${i.subtotal} ₽</strong></td></tr>`;
+  }).join('') || '<tr><td colspan="4" style="color:#9ca3af;text-align:center;padding:12px">Состав не указан</td></tr>';
+
+  const statusOptions = [
+    ['new','Новый'],['processing','В обработке'],['delivering','Доставляется'],['done','Выполнен'],['cancelled','Отменён']
+  ].map(([v,l]) => `<option value="${v}"${d.status===v?' selected':''}>${l}</option>`).join('');
+
+  document.getElementById('orderModalBody').innerHTML = `
+    <div class="od-grid">
+      <div class="od-block">
+        <div class="od-label">Клиент</div>
+        <div class="od-value">${d.name}</div>
+      </div>
+      <div class="od-block">
+        <div class="od-label">Телефон</div>
+        <div class="od-value"><a href="tel:${d.phone}">${d.phone}</a></div>
+      </div>
+      <div class="od-block od-block-wide">
+        <div class="od-label">Адрес доставки</div>
+        <div class="od-value">${d.address}</div>
+      </div>
+      <div class="od-block">
+        <div class="od-label">Дата заказа</div>
+        <div class="od-value">${d.created_at}</div>
+      </div>
+      <div class="od-block">
+        <div class="od-label">Сумма</div>
+        <div class="od-value">${d.total_price} ₽</div>
+      </div>
+    </div>
+    ${d.comment ? `<div class="od-label">Детали заказа</div><pre class="od-comment">${d.comment}</pre>` : ''}
+    <div class="od-section-title">Состав заказа</div>
+    <table class="od-table">
+      <thead><tr><th>Товар</th><th style="text-align:center">Кол-во</th><th style="text-align:right">Цена</th><th style="text-align:right">Сумма</th></tr></thead>
+      <tbody>${itemsRows}</tbody>
+    </table>
+    <div class="od-total">Итого: <strong>${d.total_price} ₽</strong></div>
+    <div class="od-section-title">Статус заказа</div>
+    <div class="od-status-row">
+      <select id="modalStatusSelect">${statusOptions}</select>
+      <button class="btn-save-status" onclick="saveModalStatus(${d.id})">Сохранить</button>
+    </div>
+  `;
+}
+
+async function saveModalStatus(id) {
+  const status = document.getElementById('modalStatusSelect').value;
+  const fd = new FormData();
+  fd.append('status', status);
+  fd.append('csrfmiddlewaretoken', CSRF_TOKEN);
+  const resp = await fetch('/panel/order/' + id + '/status/', { method: 'POST', body: fd });
+  if (!resp.ok) { showToast('Ошибка сохранения', 'err'); return; }
+  const data = await resp.json();
+  showToast('Статус заказа #' + id + ' обновлён: ' + data.status_display);
+  const sel = document.querySelector(`.status-select[data-id="${id}"]`);
+  if (sel) { sel.value = data.status; sel.dataset.status = data.status; }
+  document.getElementById('orderModalOverlay').classList.remove('active');
+}
+
+// ── CRUD товаров ──────────────────────────────────────────────
+
+function toSlug(str) {
+  const map = {'а':'a','б':'b','в':'v','г':'g','д':'d','е':'e','ё':'yo','ж':'zh','з':'z','и':'i','й':'y','к':'k','л':'l','м':'m','н':'n','о':'o','п':'p','р':'r','с':'s','т':'t','у':'u','ф':'f','х':'kh','ц':'ts','ч':'ch','ш':'sh','щ':'shch','ъ':'','ы':'y','ь':'','э':'e','ю':'yu','я':'ya'};
+  return str.toLowerCase().split('').map(c => map[c] !== undefined ? map[c] : c).join('').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+}
+
+function openProductModal(id = null) {
+  document.getElementById('productId').value = id || '';
+  document.getElementById('productModalTitle').textContent = id ? 'Редактировать товар' : 'Новый товар';
+  document.getElementById('productForm').reset();
+  document.getElementById('pAvailable').checked = true;
+  document.getElementById('imgPreview').innerHTML = '🖼 Нажмите чтобы выбрать изображение';
+  document.getElementById('imgPreview').className = 'img-preview-empty';
+  document.getElementById('productFormError').style.display = 'none';
+  document.getElementById('packagingSection').style.display = 'none';
+  document.getElementById('packagingList').innerHTML = '';
+  document.getElementById('gallerySection').style.display = 'none';
+  document.getElementById('galleryGrid').innerHTML = '';
+
+  if (id) {
+    fetch('/panel/product/' + id + '/json/')
+      .then(r => r.json())
+      .then(d => {
+        document.getElementById('pName').value = d.name;
+        document.getElementById('pSlug').value = d.slug;
+        document.getElementById('pCategory').value = d.category;
+        document.getElementById('pPrice').value = d.price;
+        document.getElementById('pDesc').value = d.description;
+        document.getElementById('pQty').value = d.quantity;
+        document.getElementById('pAvailable').checked = d.is_available;
+        if (d.image_url) {
+          document.getElementById('imgPreview').innerHTML = `<img src="${d.image_url}">`;
+          document.getElementById('imgPreview').className = 'img-preview-filled';
+        }
+        document.getElementById('packagingSection').style.display = 'block';
+        renderPackaging(d.packaging || []);
+        document.getElementById('gallerySection').style.display = 'block';
+        renderGallery(d.gallery || []);
+      });
+  }
+  document.getElementById('productModalOverlay').classList.add('active');
+}
+
+function closeProductModal() {
+  document.getElementById('productModalOverlay').classList.remove('active');
+}
+
+function renderPackaging(options) {
+  const list = document.getElementById('packagingList');
+  if (!options.length) {
+    list.innerHTML = '<p style="color:#9ca3af;font-size:13px;margin-bottom:4px;">Не задано — будут использованы глобальные варианты упаковки из раздела «Упаковка»</p>';
+    return;
+  }
+  list.innerHTML = options.map(opt => `
+    <div class="pkg-item" id="pkg-${opt.id}" style="display:flex;align-items:center;gap:10px;padding:7px 10px;background:#f9fafb;border-radius:8px;margin-bottom:6px;">
+      <span style="flex:1;font-size:14px;font-weight:600;">${opt.name}</span>
+      <span style="font-size:13px;color:#40916c;font-weight:600;">${parseFloat(opt.price_modifier) > 0 ? '+' + parseFloat(opt.price_modifier).toFixed(0) + ' ₽' : 'Базовая'}</span>
+      <button type="button" onclick="deletePackagingOption(${opt.id})" style="border:none;background:none;cursor:pointer;color:#9ca3af;font-size:16px;padding:0;line-height:1;" title="Удалить">✕</button>
+    </div>
+  `).join('');
+}
+
+async function addPackagingOption() {
+  const id = document.getElementById('productId').value;
+  if (!id) return;
+  const name = document.getElementById('newPackagingName').value.trim();
+  if (!name) { showToast('Введите название упаковки', 'err'); return; }
+  const modifier = document.getElementById('newPackagingPrice').value || '0';
+  const fd = new FormData();
+  fd.append('csrfmiddlewaretoken', CSRF_TOKEN);
+  fd.append('name', name);
+  fd.append('price_modifier', modifier);
+  const resp = await fetch('/panel/product/' + id + '/packaging/add/', { method: 'POST', body: fd });
+  const data = await resp.json();
+  if (resp.ok) {
+    const list = document.getElementById('packagingList');
+    const placeholder = list.querySelector('p');
+    if (placeholder) placeholder.remove();
+    const item = document.createElement('div');
+    item.className = 'pkg-item';
+    item.id = 'pkg-' + data.id;
+    item.style.cssText = 'display:flex;align-items:center;gap:10px;padding:7px 10px;background:#f9fafb;border-radius:8px;margin-bottom:6px;';
+    const mod = parseFloat(data.price_modifier);
+    item.innerHTML = `<span style="flex:1;font-size:14px;font-weight:600;">${data.name}</span><span style="font-size:13px;color:#40916c;font-weight:600;">${mod > 0 ? '+' + mod.toFixed(0) + ' ₽' : 'Базовая'}</span><button type="button" onclick="deletePackagingOption(${data.id})" style="border:none;background:none;cursor:pointer;color:#9ca3af;font-size:16px;padding:0;line-height:1;" title="Удалить">✕</button>`;
+    list.appendChild(item);
+    document.getElementById('newPackagingName').value = '';
+    document.getElementById('newPackagingPrice').value = '';
+    showToast('Вариант упаковки добавлен');
+  } else {
+    showToast(data.error || 'Ошибка', 'err');
+  }
+}
+
+async function deletePackagingOption(optId) {
+  const fd = new FormData();
+  fd.append('csrfmiddlewaretoken', CSRF_TOKEN);
+  const resp = await fetch('/panel/product/packaging/' + optId + '/delete/', { method: 'POST', body: fd });
+  if (resp.ok) {
+    document.getElementById('pkg-' + optId)?.remove();
+    if (!document.querySelector('.pkg-item')) {
+      document.getElementById('packagingList').innerHTML = '<p style="color:#9ca3af;font-size:13px;margin-bottom:4px;">Не задано — будут использованы глобальные варианты упаковки из раздела «Упаковка»</p>';
+    }
+    showToast('Вариант удалён');
+  } else {
+    showToast('Ошибка удаления', 'err');
+  }
+}
+
+function renderGallery(images) {
+  const grid = document.getElementById('galleryGrid');
+  grid.innerHTML = images.map(img => `
+    <div class="gallery-thumb-item" id="gimg-${img.id}">
+      <img src="${img.url}" alt="">
+      <button type="button" class="gallery-thumb-del" onclick="deleteGalleryImage(${img.id})" title="Удалить">✕</button>
+    </div>
+  `).join('') || '<p style="color:#9ca3af;font-size:13px;">Нет дополнительных фото</p>';
+}
+
+async function deleteGalleryImage(imgId) {
+  const fd = new FormData();
+  fd.append('csrfmiddlewaretoken', CSRF_TOKEN);
+  const resp = await fetch('/panel/product/image/' + imgId + '/delete/', { method: 'POST', body: fd });
+  if (resp.ok) {
+    document.getElementById('gimg-' + imgId)?.remove();
+    if (!document.querySelector('.gallery-thumb-item')) {
+      document.getElementById('galleryGrid').innerHTML = '<p style="color:#9ca3af;font-size:13px;">Нет дополнительных фото</p>';
+    }
+    showToast('Фото удалено');
+  } else {
+    showToast('Ошибка удаления', 'err');
+  }
+}
+
+async function saveProduct() {
+  const id = document.getElementById('productId').value;
+  const form = document.getElementById('productForm');
+  const errEl = document.getElementById('productFormError');
+  errEl.style.display = 'none';
+
+  const fd = new FormData(form);
+  fd.append('csrfmiddlewaretoken', CSRF_TOKEN);
+  // файл добавляем вручную из input, т.к. form.reset() его не сбрасывает в FormData
+  const imgFile = document.getElementById('pImage').files[0];
+  if (imgFile) fd.set('image', imgFile);
+
+  const url = id ? '/panel/product/' + id + '/edit/' : '/panel/product/new/';
+  const resp = await fetch(url, { method: 'POST', body: fd });
+  const data = await resp.json();
+
+  if (!resp.ok) {
+    errEl.textContent = data.error || 'Ошибка сохранения';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  showToast(id ? 'Товар обновлён: ' + data.name : 'Товар добавлен: ' + data.name);
+
+  if (!id) {
+    // Новый товар — переключаемся в режим редактирования, показываем галерею
+    document.getElementById('productId').value = data.id;
+    document.getElementById('productModalTitle').textContent = 'Редактировать товар';
+    document.getElementById('packagingSection').style.display = 'block';
+    renderPackaging([]);
+    document.getElementById('gallerySection').style.display = 'block';
+    renderGallery([]);
+    sessionStorage.setItem('activePanel', 'products');
+  } else {
+    closeProductModal();
+    sessionStorage.setItem('activePanel', 'products');
+    window.location.reload();
+  }
+}
+
+async function deleteProduct(btn) {
+  const id = btn.dataset.id;
+  const name = btn.dataset.name;
+  if (!confirm(`Удалить товар «${name}»?\nЭто действие нельзя отменить.`)) return;
+  const fd = new FormData();
+  fd.append('csrfmiddlewaretoken', CSRF_TOKEN);
+  const resp = await fetch('/panel/product/' + id + '/delete/', { method: 'POST', body: fd });
+  const data = await resp.json();
+  if (resp.ok) {
+    showToast('Товар удалён');
+    sessionStorage.setItem('activePanel', 'products');
+    window.location.reload();
+  } else {
+    showToast(data.error || 'Ошибка удаления', 'err');
+  }
+}
+
+// ── CRUD категорий ────────────────────────────────────────────
+
+function openCategoryModal(id = null) {
+  document.getElementById('categoryId').value = id || '';
+  document.getElementById('categoryModalTitle').textContent = id ? 'Редактировать категорию' : 'Новая категория';
+  document.getElementById('categoryForm').reset();
+  document.getElementById('categoryFormError').style.display = 'none';
+
+  if (id) {
+    fetch('/panel/category/' + id + '/json/')
+      .then(r => r.json())
+      .then(d => {
+        document.getElementById('cName').value = d.name;
+        document.getElementById('cSlug').value = d.slug;
+        document.getElementById('cOrder').value = d.order;
+      });
+  }
+  document.getElementById('categoryModalOverlay').classList.add('active');
+}
+
+function closeCategoryModal() {
+  document.getElementById('categoryModalOverlay').classList.remove('active');
+}
+
+async function saveCategory() {
+  const id = document.getElementById('categoryId').value;
+  const errEl = document.getElementById('categoryFormError');
+  errEl.style.display = 'none';
+
+  const fd = new FormData(document.getElementById('categoryForm'));
+  fd.append('csrfmiddlewaretoken', CSRF_TOKEN);
+
+  const url = id ? '/panel/category/' + id + '/edit/' : '/panel/category/new/';
+  const resp = await fetch(url, { method: 'POST', body: fd });
+  const data = await resp.json();
+
+  if (!resp.ok) {
+    errEl.textContent = data.error || 'Ошибка сохранения';
+    errEl.style.display = 'block';
+    return;
+  }
+  showToast(id ? 'Категория обновлена: ' + data.name : 'Категория добавлена: ' + data.name);
+  closeCategoryModal();
+  sessionStorage.setItem('activePanel', 'categories');
+  window.location.reload();
+}
+
+async function deleteCategory(btn) {
+  const id = btn.dataset.id;
+  const name = btn.dataset.name;
+  const count = parseInt(btn.dataset.count);
+  const warn = count > 0 ? `\n\nВ этой категории ${count} товар(ов). Они останутся без категории.` : '';
+  if (!confirm(`Удалить категорию «${name}»?${warn}`)) return;
+
+  const fd = new FormData();
+  fd.append('csrfmiddlewaretoken', CSRF_TOKEN);
+  const resp = await fetch('/panel/category/' + id + '/delete/', { method: 'POST', body: fd });
+  if (resp.ok) {
+    showToast('Категория удалена');
+    sessionStorage.setItem('activePanel', 'categories');
+    window.location.reload();
+  } else {
+    const data = await resp.json();
+    showToast(data.error || 'Ошибка удаления', 'err');
+  }
+}
+
+// ── Склад ────────────────────────────────────────────────────
+
+async function saveStock(productId) {
+  const input = document.getElementById('stock-' + productId);
+  const qty = Math.max(0, parseInt(input.value) || 0);
+  input.value = qty;
+  const fd = new FormData();
+  fd.append('csrfmiddlewaretoken', CSRF_TOKEN);
+  fd.append('quantity', qty);
+  const resp = await fetch('/panel/inventory/' + productId + '/update/', { method: 'POST', body: fd });
+  if (resp.ok) {
+    updateStockBadge(productId, qty);
+    showToast('Склад обновлён');
+  } else {
+    showToast('Ошибка сохранения', 'err');
+  }
+}
+
+async function changeStock(productId, delta) {
+  const input = document.getElementById('stock-' + productId);
+  input.value = Math.max(0, (parseInt(input.value) || 0) + delta);
+  await saveStock(productId);
+}
+
+function updateStockBadge(id, qty) {
+  const badge = document.getElementById('stockbadge-' + id);
+  if (!badge) return;
+  if (qty === 0) {
+    badge.style.cssText = 'background:#fee2e2;color:#b91c1c;';
+    badge.textContent = 'Нет';
+  } else if (qty < 5) {
+    badge.style.cssText = 'background:#fef9c3;color:#b45309;';
+    badge.textContent = 'Мало (' + qty + ' шт.)';
+  } else {
+    badge.style.cssText = 'background:#dcfce7;color:#15803d;';
+    badge.textContent = 'В наличии (' + qty + ' шт.)';
+  }
+}
+
+// ── Отчёты ───────────────────────────────────────────────────
+
+function fmtMoney(val) {
+  return parseFloat(val).toLocaleString('ru-RU', {maximumFractionDigits: 0}) + ' ₽';
+}
+
+function initReportDates() {
+  const now = new Date();
+  const y = now.getFullYear(), m = String(now.getMonth() + 1).padStart(2, '0');
+  const last = String(new Date(y, now.getMonth() + 1, 0).getDate()).padStart(2, '0');
+  [['repDateFrom','repDateTo'],['salDateFrom','salDateTo'],['cusDateFrom','cusDateTo']].forEach(([f, t]) => {
+    if (!document.getElementById(f).value) {
+      document.getElementById(f).value = `${y}-${m}-01`;
+      document.getElementById(t).value = `${y}-${m}-${last}`;
+    }
+  });
+}
+
+function switchRepTab(name) {
+  document.querySelectorAll('.rep-tab').forEach(t => t.classList.toggle('active', t.dataset.rep === name));
+  document.querySelectorAll('.rep-pane').forEach(p => p.classList.toggle('active', p.id === 'repPane-' + name));
+  if (name === 'stock') loadStockReport();
+}
+
+async function loadSalesReport() {
+  const from = document.getElementById('salDateFrom').value;
+  const to = document.getElementById('salDateTo').value;
+  ['salResult','salEmpty'].forEach(id => document.getElementById(id).style.display = 'none');
+  document.getElementById('salLoading').style.display = 'block';
+  document.getElementById('salExportBtn').style.display = 'none';
+  const params = new URLSearchParams();
+  if (from) params.set('date_from', from);
+  if (to) params.set('date_to', to);
+  const d = await fetch('/panel/reports/sales/?' + params).then(r => r.json());
+  document.getElementById('salLoading').style.display = 'none';
+  if (!d.total_count) { document.getElementById('salEmpty').style.display = 'block'; return; }
+  document.getElementById('salExportBtn').style.display = '';
+  document.getElementById('salKpi').innerHTML = `
+    <div class="kpi-card"><div class="kpi-icon kpi-icon--green">💰</div><div class="kpi-body"><span class="kpi-label">Выручка</span><span class="kpi-value">${fmtMoney(d.total_revenue)}</span></div></div>
+    <div class="kpi-card"><div class="kpi-icon kpi-icon--blue">📦</div><div class="kpi-body"><span class="kpi-label">Заказов</span><span class="kpi-value">${d.total_count}</span></div></div>
+    <div class="kpi-card"><div class="kpi-icon kpi-icon--purple">📊</div><div class="kpi-body"><span class="kpi-label">Средний чек</span><span class="kpi-value">${fmtMoney(d.avg_order)}</span></div></div>`;
+  document.getElementById('salCatTable').innerHTML = `
+    <thead><tr><th>Категория</th><th style="text-align:center">Продано</th><th style="text-align:right">Выручка</th></tr></thead>
+    <tbody>${d.by_category.map(c => `<tr><td>${c.name}</td><td style="text-align:center"><span class="sbadge sbadge--blue">${c.qty} шт.</span></td><td style="text-align:right">${fmtMoney(c.sum)}</td></tr>`).join('') || '<tr><td colspan="3" class="empty-row">Нет данных</td></tr>'}</tbody>`;
+  document.getElementById('salProdTable').innerHTML = `
+    <thead><tr><th>#</th><th>Товар</th><th style="text-align:center">Шт.</th><th style="text-align:right">Выручка</th></tr></thead>
+    <tbody>${d.top_by_revenue.map((p,i) => `<tr><td style="color:#9ca3af;font-size:12px">${i+1}</td><td>${p.name}</td><td style="text-align:center"><span class="sbadge sbadge--blue">${p.qty}</span></td><td style="text-align:right">${fmtMoney(p.sum)}</td></tr>`).join('') || '<tr><td colspan="4" class="empty-row">Нет данных</td></tr>'}</tbody>`;
+  document.getElementById('salDailyTable').innerHTML = `
+    <thead><tr><th>Дата</th><th style="text-align:center">Заказов</th><th style="text-align:right">Выручка</th></tr></thead>
+    <tbody>${d.daily.map(e => `<tr><td>${e.date}</td><td style="text-align:center"><span class="sbadge sbadge--blue">${e.cnt}</span></td><td style="text-align:right">${fmtMoney(e.total)}</td></tr>`).join('') || '<tr><td colspan="3" class="empty-row">Нет данных</td></tr>'}</tbody>`;
+  document.getElementById('salResult').style.display = 'block';
+}
+
+function exportSalesReport() {
+  const params = new URLSearchParams({ format: 'csv' });
+  const f = document.getElementById('salDateFrom').value, t = document.getElementById('salDateTo').value;
+  if (f) params.set('date_from', f); if (t) params.set('date_to', t);
+  window.location.href = '/panel/reports/sales/?' + params;
+}
+
+async function loadCustomersReport() {
+  const from = document.getElementById('cusDateFrom').value;
+  const to = document.getElementById('cusDateTo').value;
+  ['cusResult','cusEmpty'].forEach(id => document.getElementById(id).style.display = 'none');
+  document.getElementById('cusLoading').style.display = 'block';
+  document.getElementById('cusExportBtn').style.display = 'none';
+  const params = new URLSearchParams();
+  if (from) params.set('date_from', from);
+  if (to) params.set('date_to', to);
+  const d = await fetch('/panel/reports/customers/?' + params).then(r => r.json());
+  document.getElementById('cusLoading').style.display = 'none';
+  if (!d.unique_customers) { document.getElementById('cusEmpty').style.display = 'block'; return; }
+  document.getElementById('cusExportBtn').style.display = '';
+  document.getElementById('cusKpi').innerHTML = `
+    <div class="kpi-card"><div class="kpi-icon kpi-icon--blue">👥</div><div class="kpi-body"><span class="kpi-label">Уникальных клиентов</span><span class="kpi-value">${d.unique_customers}</span></div></div>
+    <div class="kpi-card"><div class="kpi-icon kpi-icon--green">💰</div><div class="kpi-body"><span class="kpi-label">Средний чек / клиент</span><span class="kpi-value">${fmtMoney(d.avg_per_customer)}</span></div></div>
+    <div class="kpi-card"><div class="kpi-icon kpi-icon--purple">🔄</div><div class="kpi-body"><span class="kpi-label">Постоянных (2+ заказа)</span><span class="kpi-value">${d.returning}</span></div></div>
+    <div class="kpi-card"><div class="kpi-icon kpi-icon--pink">🆕</div><div class="kpi-body"><span class="kpi-label">Разовых (1 заказ)</span><span class="kpi-value">${d.one_time}</span></div></div>`;
+  document.getElementById('cusTable').innerHTML = `
+    <thead><tr><th>#</th><th>Клиент</th><th>Телефон</th><th style="text-align:center">Заказов</th><th style="text-align:right">Потрачено</th><th>Последний заказ</th></tr></thead>
+    <tbody>${d.top_customers.map((c,i) => `<tr><td style="color:#9ca3af;font-size:12px">${i+1}</td><td><strong>${c.name}</strong></td><td><a href="tel:${c.phone}" style="color:#40916c;text-decoration:none">${c.phone}</a></td><td style="text-align:center"><span class="sbadge sbadge--blue">${c.order_count}</span></td><td style="text-align:right">${fmtMoney(c.total_spent)}</td><td style="color:#6b7280;font-size:12px">${c.last_order}</td></tr>`).join('') || '<tr><td colspan="6" class="empty-row">Нет данных</td></tr>'}</tbody>`;
+  document.getElementById('cusResult').style.display = 'block';
+}
+
+function exportCustomersReport() {
+  const params = new URLSearchParams({ format: 'csv' });
+  const f = document.getElementById('cusDateFrom').value, t = document.getElementById('cusDateTo').value;
+  if (f) params.set('date_from', f); if (t) params.set('date_to', t);
+  window.location.href = '/panel/reports/customers/?' + params;
+}
+
+let stockLoaded = false;
+
+async function loadStockReport() {
+  if (stockLoaded) return;
+  document.getElementById('stkLoading').style.display = 'block';
+  document.getElementById('stkResult').style.display = 'none';
+  const d = await fetch('/panel/reports/stock/').then(r => r.json());
+  document.getElementById('stkLoading').style.display = 'none';
+  stockLoaded = true;
+  document.getElementById('stkExportBtn').style.display = '';
+  document.getElementById('stkKpi').innerHTML = `
+    <div class="kpi-card"><div class="kpi-icon kpi-icon--purple">🛍</div><div class="kpi-body"><span class="kpi-label">Всего товаров</span><span class="kpi-value">${d.total}</span></div></div>
+    <div class="kpi-card"><div class="kpi-icon kpi-icon--green">✅</div><div class="kpi-body"><span class="kpi-label">Доступно</span><span class="kpi-value">${d.available}</span></div></div>
+    <div class="kpi-card"><div class="kpi-icon" style="background:#fef9c3;">⚠️</div><div class="kpi-body"><span class="kpi-label">Мало на складе</span><span class="kpi-value" style="color:#b45309">${d.low_stock}</span></div></div>
+    <div class="kpi-card"><div class="kpi-icon" style="background:#fee2e2;">❌</div><div class="kpi-body"><span class="kpi-label">Закончилось</span><span class="kpi-value" style="color:#b91c1c">${d.out_of_stock}</span></div></div>`;
+  const stLabel = {ok:'В наличии',low:'Мало',out:'Закончился',unknown:'Не указан'};
+  const stStyle = {ok:'background:#dcfce7;color:#15803d',low:'background:#fef9c3;color:#b45309',out:'background:#fee2e2;color:#b91c1c',unknown:'background:#f3f4f6;color:#6b7280'};
+  document.getElementById('stkTable').innerHTML = `
+    <thead><tr><th>Товар</th><th>Категория</th><th style="text-align:center">На складе</th><th>Статус</th></tr></thead>
+    <tbody>${d.products.map(p => `<tr><td><strong>${p.name}</strong></td><td style="color:#6b7280">${p.category}</td><td style="text-align:center">${p.qty !== null ? p.qty + ' шт.' : '—'}</td><td><span class="sbadge" style="${stStyle[p.status]||''}">${stLabel[p.status]||'—'}</span></td></tr>`).join('') || '<tr><td colspan="4" class="empty-row">Нет товаров</td></tr>'}</tbody>`;
+  document.getElementById('stkResult').style.display = 'block';
+}
+
+function exportStockReport() {
+  window.location.href = '/panel/reports/stock/?format=csv';
+}
+
+async function loadReport() {
+  const from = document.getElementById('repDateFrom').value;
+  const to = document.getElementById('repDateTo').value;
+  const status = document.getElementById('repStatus').value;
+
+  document.getElementById('reportResult').style.display = 'none';
+  document.getElementById('reportEmpty').style.display = 'none';
+  document.getElementById('reportLoading').style.display = 'block';
+  document.getElementById('repExportBtn').style.display = 'none';
+
+  const params = new URLSearchParams();
+  if (from) params.set('date_from', from);
+  if (to) params.set('date_to', to);
+  if (status) params.set('status', status);
+
+  const resp = await fetch('/panel/reports/?' + params);
+  const d = await resp.json();
+  document.getElementById('reportLoading').style.display = 'none';
+
+  if (!d.total_count) {
+    document.getElementById('reportEmpty').style.display = 'block';
+    return;
+  }
+
+  document.getElementById('repExportBtn').style.display = '';
+
+  document.getElementById('repKpi').innerHTML = `
+    <div class="kpi-card">
+      <div class="kpi-icon kpi-icon--blue">📦</div>
+      <div class="kpi-body"><span class="kpi-label">Заказов</span><span class="kpi-value">${d.total_count}</span></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon kpi-icon--green">💰</div>
+      <div class="kpi-body"><span class="kpi-label">Выручка</span><span class="kpi-value">${fmtMoney(d.total_revenue)}</span></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon kpi-icon--purple">📊</div>
+      <div class="kpi-body"><span class="kpi-label">Средний чек</span><span class="kpi-value">${fmtMoney(d.avg_order)}</span></div>
+    </div>
+  `;
+
+  const statusRows = d.by_status.filter(s => s.count > 0).map(s => `
+    <tr>
+      <td>${s.label}</td>
+      <td style="text-align:center"><span class="sbadge sbadge--blue">${s.count}</span></td>
+      <td style="text-align:right">${fmtMoney(s.revenue)}</td>
+    </tr>
+  `).join('') || '<tr><td colspan="3" class="empty-row">Нет данных</td></tr>';
+  document.getElementById('repStatusTable').innerHTML = `
+    <thead><tr><th>Статус</th><th style="text-align:center">Кол-во</th><th style="text-align:right">Сумма</th></tr></thead>
+    <tbody>${statusRows}</tbody>
+  `;
+
+  const productRows = d.top_products.map((p, i) => `
+    <tr>
+      <td style="color:#9ca3af;font-size:12px;width:24px">${i + 1}</td>
+      <td>${p.name}</td>
+      <td style="text-align:center"><span class="sbadge sbadge--blue">${p.qty} шт.</span></td>
+      <td style="text-align:right">${fmtMoney(p.sum)}</td>
+    </tr>
+  `).join('') || '<tr><td colspan="4" class="empty-row">Нет данных</td></tr>';
+  document.getElementById('repProductsTable').innerHTML = `
+    <thead><tr><th>#</th><th>Товар</th><th style="text-align:center">Продано</th><th style="text-align:right">Выручка</th></tr></thead>
+    <tbody>${productRows}</tbody>
+  `;
+
+  document.getElementById('reportResult').style.display = 'block';
+}
+
+function exportReport() {
+  const from = document.getElementById('repDateFrom').value;
+  const to = document.getElementById('repDateTo').value;
+  const status = document.getElementById('repStatus').value;
+  const params = new URLSearchParams();
+  if (from) params.set('date_from', from);
+  if (to) params.set('date_to', to);
+  if (status) params.set('status', status);
+  window.location.href = '/panel/reports/export/?' + params;
+}
+
+// ── Глобальные варианты упаковки ──────────────────────────────
+
+let globalPackagingLoaded = false;
+
+async function loadGlobalPackaging() {
+  if (globalPackagingLoaded) return;
+  const resp = await fetch('/panel/global-packaging/');
+  const data = await resp.json();
+  globalPackagingLoaded = true;
+  renderGlobalPackagingTable(data.options);
+}
+
+function renderGlobalPackagingTable(options) {
+  const tbody = document.getElementById('globalPackagingTbody');
+  if (!options.length) {
+    tbody.innerHTML = '<tr><td colspan="4" class="empty-row">Вариантов нет. <button class="link-plain" onclick="openGlobalPackagingModal()">Добавить первый</button></td></tr>';
+    return;
+  }
+  tbody.innerHTML = options.map(opt => `
+    <tr id="gprow-${opt.id}">
+      <td><strong>${opt.name}</strong></td>
+      <td>${parseFloat(opt.price_modifier) > 0 ? '+' + parseFloat(opt.price_modifier).toFixed(0) + ' ₽' : '<span style="color:#9ca3af">Базовая (0 ₽)</span>'}</td>
+      <td>${opt.order}</td>
+      <td>
+        <div class="action-btns">
+          <button class="btn-icon" onclick="openGlobalPackagingModal(${opt.id},'${opt.name.replace(/'/g,'\\\'')}')" title="Редактировать">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </button>
+          <button class="btn-icon btn-icon--danger" onclick="deleteGlobalPackaging(${opt.id},'${opt.name.replace(/'/g,'\\\'')}')" title="Удалить">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+          </button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function openGlobalPackagingModal(id = null, name = '') {
+  document.getElementById('globalPackagingId').value = id || '';
+  document.getElementById('globalPackagingModalTitle').textContent = id ? 'Редактировать упаковку' : 'Новый вариант упаковки';
+  document.getElementById('globalPackagingForm').reset();
+  document.getElementById('globalPackagingFormError').style.display = 'none';
+  if (id) {
+    const row = document.getElementById('gprow-' + id);
+    if (row) {
+      document.getElementById('gpName').value = row.cells[0].textContent.trim();
+      const modText = row.cells[1].textContent.replace('+','').replace(' ₽','').trim();
+      document.getElementById('gpModifier').value = isNaN(parseFloat(modText)) ? 0 : parseFloat(modText);
+      document.getElementById('gpOrder').value = row.cells[2].textContent.trim();
+    }
+  }
+  document.getElementById('globalPackagingModalOverlay').classList.add('active');
+}
+
+function closeGlobalPackagingModal() {
+  document.getElementById('globalPackagingModalOverlay').classList.remove('active');
+}
+
+async function saveGlobalPackaging() {
+  const id = document.getElementById('globalPackagingId').value;
+  const errEl = document.getElementById('globalPackagingFormError');
+  errEl.style.display = 'none';
+
+  const fd = new FormData(document.getElementById('globalPackagingForm'));
+  fd.append('csrfmiddlewaretoken', CSRF_TOKEN);
+
+  const url = id ? '/panel/global-packaging/' + id + '/edit/' : '/panel/global-packaging/add/';
+  const resp = await fetch(url, { method: 'POST', body: fd });
+  const data = await resp.json();
+
+  if (!resp.ok) {
+    errEl.textContent = data.error || 'Ошибка сохранения';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  showToast(id ? 'Упаковка обновлена: ' + data.name : 'Вариант добавлен: ' + data.name);
+  closeGlobalPackagingModal();
+  globalPackagingLoaded = false;
+  loadGlobalPackaging();
+}
+
+async function deleteGlobalPackaging(id, name) {
+  if (!confirm(`Удалить вариант упаковки «${name}»?`)) return;
+  const fd = new FormData();
+  fd.append('csrfmiddlewaretoken', CSRF_TOKEN);
+  const resp = await fetch('/panel/global-packaging/' + id + '/delete/', { method: 'POST', body: fd });
+  if (resp.ok) {
+    showToast('Вариант удалён');
+    globalPackagingLoaded = false;
+    loadGlobalPackaging();
+  } else {
+    showToast('Ошибка удаления', 'err');
+  }
+}
+
+// ── Уведомления о новых заказах ──────────────────────────────
+
+let pollMaxId = {{ max_order_id }};
+
+function playOrderChime() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
+    notes.forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      const t = ctx.currentTime + i * 0.18;
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.18, t + 0.04);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.45);
+      osc.start(t); osc.stop(t + 0.45);
+    });
+  } catch(e) {}
+}
+
+function showOrderNotification(orders) {
+  const first = orders[0];
+  const text = orders.length === 1
+    ? `Заказ #${first.id} — ${first.name}, ${first.total} ₽`
+    : `${orders.length} новых заказа`;
+  showToast('🛒 ' + text);
+  // Мигание badge
+  const badge = document.getElementById('newOrdersBadge');
+  if (badge) { badge.textContent = orders.length; badge.style.display = ''; }
+  // Браузерное уведомление
+  if (Notification.permission === 'granted') {
+    new Notification('Floréa — новый заказ', { body: text, icon: '/static/img/favicon/web-app-manifest-192x192.png' });
+  }
+  // Мигание заголовка вкладки
+  let blink = true, orig = document.title, count = 0;
+  const iv = setInterval(() => {
+    document.title = blink ? '🔔 Новый заказ!' : orig;
+    blink = !blink;
+    if (++count > 10) { clearInterval(iv); document.title = orig; }
+  }, 700);
+}
+
+async function pollNewOrders() {
+  try {
+    const resp = await fetch('/panel/orders/poll/?since=' + pollMaxId);
+    if (!resp.ok) return;
+    const data = await resp.json();
+    if (data.new_orders && data.new_orders.length > 0) {
+      playOrderChime();
+      showOrderNotification(data.new_orders);
+    }
+    if (data.max_id > pollMaxId) pollMaxId = data.max_id;
+  } catch(e) {}
+}
+
+function initOrderPolling() {
+  if (Notification.permission === 'default') Notification.requestPermission();
+  setInterval(pollNewOrders, 30000);
+}
+
+// ── Баннер ───────────────────────────────────────────────────
+
+let bannerLoaded = false;
+
+async function loadBanner() {
+  if (bannerLoaded) return;
+  const resp = await fetch('/panel/banner/');
+  if (!resp.ok) return;
+  const d = await resp.json();
+  bannerLoaded = true;
+  document.getElementById('bnTag').value = d.tag;
+  document.getElementById('bnTitle').value = d.title;
+  document.getElementById('bnSubtitle').value = d.subtitle;
+  document.getElementById('bnBtn1Text').value = d.btn1_text;
+  document.getElementById('bnBtn1Url').value = d.btn1_url;
+  document.getElementById('bnBtn2Text').value = d.btn2_text;
+  document.getElementById('bnBtn2Url').value = d.btn2_url;
+  setBannerImageThumb(d.image_url);
+  updateBannerPreview();
+}
+
+function setBannerImageThumb(url) {
+  const current = document.getElementById('bnImageCurrent');
+  const picker = document.getElementById('bnImagePicker');
+  const thumb = document.getElementById('bnImageThumb');
+  if (url) {
+    thumb.src = url;
+    current.style.display = '';
+    picker.style.display = 'none';
+  } else {
+    current.style.display = 'none';
+    picker.style.display = '';
+    picker.textContent = '🖼 Нажмите, чтобы выбрать изображение';
+  }
+  document.getElementById('bnClearImage').value = '';
+  updateBannerPreview(url);
+}
+
+function clearBannerImage() {
+  document.getElementById('bnImageCurrent').style.display = 'none';
+  const picker = document.getElementById('bnImagePicker');
+  picker.style.display = '';
+  picker.textContent = '🖼 Нажмите, чтобы выбрать изображение';
+  document.getElementById('bnImage').value = '';
+  document.getElementById('bnClearImage').value = 'on';
+  updateBannerPreview('');
+}
+
+function updateBannerPreview(imgUrl) {
+  document.getElementById('bpTag').textContent = document.getElementById('bnTag').value;
+  document.getElementById('bpTag').style.display = document.getElementById('bnTag').value ? '' : 'none';
+  document.getElementById('bpTitle').textContent = document.getElementById('bnTitle').value || '—';
+  document.getElementById('bpSub').textContent = document.getElementById('bnSubtitle').value;
+  const t1 = document.getElementById('bnBtn1Text').value;
+  const t2 = document.getElementById('bnBtn2Text').value;
+  document.getElementById('bpBtn1').textContent = t1;
+  document.getElementById('bpBtn1').style.display = t1 ? '' : 'none';
+  document.getElementById('bpBtn2').textContent = t2;
+  document.getElementById('bpBtn2').style.display = t2 ? '' : 'none';
+  const preview = document.getElementById('bannerPreview');
+  if (imgUrl === undefined) {
+    imgUrl = document.getElementById('bnImageThumb').src;
+    if (imgUrl === location.origin + '/#' || imgUrl === '#') imgUrl = '';
+  }
+  if (imgUrl) {
+    preview.style.backgroundImage = `url('${imgUrl}')`;
+    preview.style.backgroundSize = 'cover';
+    preview.style.backgroundPosition = 'center';
+  } else {
+    preview.style.backgroundImage = '';
+  }
+}
+
+async function saveBanner() {
+  const errEl = document.getElementById('bannerFormError');
+  errEl.style.display = 'none';
+  const fd = new FormData();
+  fd.append('csrfmiddlewaretoken', CSRF_TOKEN);
+  fd.append('tag', document.getElementById('bnTag').value);
+  fd.append('title', document.getElementById('bnTitle').value);
+  fd.append('subtitle', document.getElementById('bnSubtitle').value);
+  fd.append('btn1_text', document.getElementById('bnBtn1Text').value);
+  fd.append('btn1_url', document.getElementById('bnBtn1Url').value);
+  fd.append('btn2_text', document.getElementById('bnBtn2Text').value);
+  fd.append('btn2_url', document.getElementById('bnBtn2Url').value);
+  const clearImg = document.getElementById('bnClearImage').value;
+  if (clearImg === 'on') {
+    fd.append('clear_image', 'on');
+  } else {
+    const file = document.getElementById('bnImage').files[0];
+    if (file) fd.append('image', file);
+  }
+  const resp = await fetch('/panel/banner/save/', { method: 'POST', body: fd });
+  const data = await resp.json();
+  if (!resp.ok) {
+    errEl.textContent = data.error || 'Ошибка сохранения';
+    errEl.style.display = 'block';
+    return;
+  }
+  bannerLoaded = false;
+  showToast('Баннер сохранён');
+  setBannerImageThumb(data.image_url);
+  updateBannerPreview(data.image_url);
+}
+
+// ─────────────────────────────────────────────────────────────
+
+function renderChart() {
+  const vals = {{ chart_values|safe }};
+  const days = {{ chart_labels|safe }};
+  const maxVal = Math.max(...vals, 1);
+  const bW=36, gap=16, topPad=24, botPad=28, chartH=110;
+  const totalW=vals.length*bW+(vals.length-1)*gap, svgH=topPad+chartH+botPad;
+  const bars=vals.map((v,i)=>{
+    const h=Math.max(4,Math.round(v/maxVal*chartH)), x=i*(bW+gap), y=topPad+chartH-h;
+    const label = v >= 1000 ? (v/1000).toFixed(1)+'к' : v > 0 ? v.toFixed(0) : '';
+    return `<g><rect x="${x}" y="${y}" width="${bW}" height="${h}" rx="6" fill="url(#bg)"/>
+      <text x="${x+bW/2}" y="${topPad+chartH+18}" text-anchor="middle" class="c-day">${days[i]}</text>
+      <text x="${x+bW/2}" y="${y-6}" text-anchor="middle" class="c-val">${label}</text></g>`;
+  }).join('');
+  document.getElementById('revenueChart').innerHTML=`<svg viewBox="0 0 ${totalW} ${svgH}" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto">
+    <defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#40916c"/><stop offset="100%" stop-color="#95d5b2"/></linearGradient></defs>${bars}</svg>`;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.sb-item[data-panel]').forEach(btn => {
+    btn.addEventListener('click', () => showPanel(btn.dataset.panel));
+  });
+  document.querySelectorAll('.rep-tab').forEach(btn => {
+    btn.addEventListener('click', () => switchRepTab(btn.dataset.rep));
+  });
+  document.getElementById('burgerBtn').addEventListener('click', () => {
+    document.getElementById('adminSidebar').classList.toggle('open');
+    document.getElementById('sidebarOverlay').classList.toggle('active');
+  });
+  document.getElementById('sidebarOverlay').addEventListener('click', () => {
+    document.getElementById('adminSidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('active');
+  });
+  const closeModal = () => document.getElementById('orderModalOverlay').classList.remove('active');
+  document.getElementById('orderModalClose').addEventListener('click', closeModal);
+  document.getElementById('orderModalClose2').addEventListener('click', closeModal);
+  document.getElementById('orderModalOverlay').addEventListener('click', e => {
+    if (e.target === document.getElementById('orderModalOverlay')) closeModal();
+  });
+
+  // Восстановить активную вкладку после перезагрузки
+  const savedPanel = sessionStorage.getItem('activePanel');
+  if (savedPanel) { showPanel(savedPanel); sessionStorage.removeItem('activePanel'); }
+
+  // Автослаг при вводе названия
+  document.getElementById('pName').addEventListener('input', function() {
+    if (!document.getElementById('productId').value) {
+      document.getElementById('pSlug').value = toSlug(this.value);
+    }
+  });
+
+  // Превью изображения
+  document.getElementById('pImage').addEventListener('change', function() {
+    if (!this.files[0]) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      const el = document.getElementById('imgPreview');
+      el.innerHTML = `<img src="${e.target.result}">`;
+      el.className = 'img-preview-filled';
+    };
+    reader.readAsDataURL(this.files[0]);
+  });
+
+  // Загрузка фото в галерею
+  document.getElementById('galleryUploadInput').addEventListener('change', async function() {
+    const id = document.getElementById('productId').value;
+    if (!id || !this.files.length) return;
+    for (const file of this.files) {
+      const fd = new FormData();
+      fd.append('csrfmiddlewaretoken', CSRF_TOKEN);
+      fd.append('image', file);
+      const resp = await fetch('/panel/product/' + id + '/image/add/', { method: 'POST', body: fd });
+      if (resp.ok) {
+        const data = await resp.json();
+        const grid = document.getElementById('galleryGrid');
+        const placeholder = grid.querySelector('p');
+        if (placeholder) placeholder.remove();
+        const item = document.createElement('div');
+        item.className = 'gallery-thumb-item';
+        item.id = 'gimg-' + data.id;
+        item.innerHTML = `<img src="${data.url}" alt=""><button type="button" class="gallery-thumb-del" onclick="deleteGalleryImage(${data.id})" title="Удалить">✕</button>`;
+        grid.appendChild(item);
+        showToast('Фото добавлено');
+      } else {
+        showToast('Ошибка загрузки фото', 'err');
+      }
+    }
+    this.value = '';
+  });
+
+  // Автослаг для категории
+  document.getElementById('cName').addEventListener('input', function() {
+    if (!document.getElementById('categoryId').value) {
+      document.getElementById('cSlug').value = toSlug(this.value);
+    }
+  });
+
+  // Закрытие модалки категории по оверлею
+  document.getElementById('categoryModalOverlay').addEventListener('click', e => {
+    if (e.target === document.getElementById('categoryModalOverlay')) closeCategoryModal();
+  });
+
+  // Закрытие модалки глобальной упаковки по оверлею
+  document.getElementById('globalPackagingModalOverlay').addEventListener('click', e => {
+    if (e.target === document.getElementById('globalPackagingModalOverlay')) closeGlobalPackagingModal();
+  });
+
+  // Поиск по категориям
+  document.getElementById('catSearch').addEventListener('input', function() {
+    const q = this.value.toLowerCase();
+    document.querySelectorAll('#categoriesTbody tr[data-cat-name]').forEach(row => {
+      row.style.display = row.dataset.catName.includes(q) ? '' : 'none';
+    });
+  });
+
+  // Инлайн смена статуса прямо в таблице
+  document.querySelectorAll('.status-select').forEach(sel => {
+    sel.addEventListener('change', async () => {
+      const id = sel.dataset.id;
+      const fd = new FormData();
+      fd.append('status', sel.value);
+      fd.append('csrfmiddlewaretoken', CSRF_TOKEN);
+      const resp = await fetch('/panel/order/' + id + '/status/', { method: 'POST', body: fd });
+      if (resp.ok) {
+        const data = await resp.json();
+        sel.dataset.status = data.status;
+        showToast('Заказ #' + id + ': ' + data.status_display);
+      } else {
+        showToast('Ошибка', 'err');
+      }
+    });
+  });
+
+  // Живой предпросмотр баннера
+  ['bnTag','bnTitle','bnSubtitle','bnBtn1Text','bnBtn2Text'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', () => updateBannerPreview());
+  });
+  document.getElementById('bnImage').addEventListener('change', function() {
+    if (!this.files[0]) return;
+    document.getElementById('bnClearImage').value = '';
+    const reader = new FileReader();
+    reader.onload = e => {
+      const picker = document.getElementById('bnImagePicker');
+      picker.textContent = '✓ ' + this.files[0].name;
+      document.getElementById('bnImageCurrent').style.display = 'none';
+      updateBannerPreview(e.target.result);
+    };
+    reader.readAsDataURL(this.files[0]);
+  });
+
+  renderChart();
+  initOrderPolling();
+});
+</script>
+</body>
+</html>

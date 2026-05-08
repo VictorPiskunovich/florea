@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Корзина — Floréa, Омск{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/cart.css' %}" />
+{% endblock %}
+
+{% block content %}
+
+<div class="steps-bar">
+  <div class="steps-inner">
+    <div class="step-item active"><div class="step-num">1</div><span class="step-name">Корзина</span></div>
+    <div class="step-line"></div>
+    <div class="step-item"><div class="step-num">2</div><span class="step-name">Доставка</span></div>
+    <div class="step-line"></div>
+    <div class="step-item"><div class="step-num">3</div><span class="step-name">Оплата</span></div>
+    <div class="step-line"></div>
+    <div class="step-item"><div class="step-num">4</div><span class="step-name">Готово</span></div>
+  </div>
+</div>
+
+<div class="breadcrumb">
+  <div class="breadcrumb-inner">
+    <a href="{% url 'index' %}">Главная</a>
+    <span class="breadcrumb-sep">›</span>
+    <span class="breadcrumb-current">Корзина</span>
+  </div>
+</div>
+
+<div class="cart-page">
+  <div class="cart-layout">
+
+    <div>
+      {% if not cart %}
+
+      <div class="empty-cart show">
+        <div class="empty-icon">🛒</div>
+        <h2>Корзина пуста</h2>
+        <p>Добавьте букеты из каталога — мы доставим их в любой район Омска</p>
+        <a href="{% url 'catalog' %}" class="btn-to-catalog">Перейти в каталог</a>
+      </div>
+
+      {% else %}
+
+      <div class="cart-panel">
+        <div class="cart-panel-header">
+          <h2>Моя корзина
+            <span style="font-family:sans-serif;font-size:14px;color:var(--gray);font-weight:400;">
+              ({{ cart_count }}
+              {% if cart_count == 1 %}товар{% elif cart_count == 2 or cart_count == 3 or cart_count == 4 %}товара{% else %}товаров{% endif %})
+            </span>
+          </h2>
+          <form method="post" action="{% url 'cart_clear' %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="clear-cart" onclick="return confirm('Очистить всю корзину?')">Очистить корзину</button>
+          </form>
+        </div>
+
+        {% for item in cart %}
+        <div class="cart-item">
+          <div class="item-img">
+            {% if item.product.image %}
+              <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">
+            {% else %}
+              <div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:2.5rem;">💐</div>
+            {% endif %}
+          </div>
+          <div class="item-details">
+            <div class="item-name"><a href="{% url 'product' item.product.slug %}" style="color:inherit;text-decoration:none;">{{ item.product.name }}</a></div>
+            <div class="item-meta">{{ item.product.description|truncatechars:50 }}</div>
+            <div class="item-controls">
+              <form method="post" action="{% url 'cart_update' item.product.pk %}">
+                {% csrf_token %}
+                <div class="qty-control">
+                  <button type="submit" name="quantity" value="{{ item.quantity|add:'-1' }}" class="qty-btn">−</button>
+                  <div class="qty-val">{{ item.quantity }}</div>
+                  {% if item.at_max %}
+                  <button type="submit" name="quantity" value="{{ item.quantity|add:'1' }}" class="qty-btn" disabled title="Больше нет на складе">+</button>
+                  {% else %}
+                  <button type="submit" name="quantity" value="{{ item.quantity|add:'1' }}" class="qty-btn">+</button>
+                  {% endif %}
+                </div>
+              </form>
+              {% if item.at_max %}
+              <span style="font-size:11px;color:#b45309;margin-top:4px;display:block;">Максимум {{ item.stock }} шт.</span>
+              {% endif %}
+              <form method="post" action="{% url 'cart_remove' item.product.pk %}" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="item-remove">✕ Удалить</button>
+              </form>
+            </div>
+          </div>
+          <div class="item-price-block">
+            <div class="item-price">{{ item.subtotal }} ₽</div>
+            <div class="item-price-unit">{{ item.price }} ₽ / шт.</div>
+          </div>
+        </div>
+        {% endfor %}
+
+        <div class="promo-row">
+          <input class="promo-input" id="promoInput" placeholder="Введите промокод" />
+          <button class="btn-promo" id="promoBtn">Применить</button>
+        </div>
+        <div class="promo-msg" id="promoMsg"></div>
+      </div>
+
+      {% if suggestions %}
+      <div class="also-buy">
+        <h3>Добавьте к заказу</h3>
+        <div class="also-scroll">
+          {% for product in suggestions %}
+          <div class="also-card">
+            <div class="also-img">
+              {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">
+              {% else %}
+                <div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:2rem;">💐</div>
+              {% endif %}
+            </div>
+            <div class="also-body">
+              <div class="also-name">{{ product.name }}</div>
+              <div class="also-price">{{ product.price }} ₽</div>
+              <form method="post" action="{% url 'cart_add' product.pk %}">
+                {% csrf_token %}
+                <input type="hidden" name="quantity" value="1">
+                <button type="submit" class="also-add">+ В корзину</button>
+              </form>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+      {% endif %}
+    </div>
+
+    {% if cart %}
+    <div class="cart-summary" id="cartSummary">
+      <div class="summary-card">
+        <div class="delivery-progress">
+          <div class="dp-text">
+            {% if delivery == 0 %}
+            <span>🎉 У вас бесплатная доставка!</span><span>+0 ₽</span>
+            {% else %}
+            <span>До бесплатной доставки:</span>
+            <span style="color:var(--green);font-weight:700">{{ free_delivery_left }} ₽</span>
+            {% endif %}
+          </div>
+          <div class="dp-track"><div class="dp-fill" style="width:{{ delivery_progress }}%"></div></div>
+        </div>
+      </div>
+      <div class="summary-card">
+        <h3>Ваш заказ</h3>
+        <div class="summary-rows">
+          <div class="summary-row">
+            <span>Товары ({{ cart_count }} шт.)</span>
+            <span>{{ subtotal }} ₽</span>
+          </div>
+          <div class="summary-divider"></div>
+          {% if delivery == 0 %}
+          <div class="summary-row highlight"><span>Доставка</span><span>Бесплатно 🎉</span></div>
+          {% else %}
+          <div class="summary-row"><span>Доставка по Омску</span><span>{{ delivery }} ₽</span></div>
+          {% endif %}
+        </div>
+        <div class="summary-total">
+          <span class="summary-total-label">Итого:</span>
+          <span class="summary-total-price">{{ total }} ₽</span>
+        </div>
+        <a href="{% url 'checkout' %}" class="btn-checkout">Оформить заказ →</a>
+        <p class="checkout-note">Нажимая «Оформить заказ», вы соглашаетесь с условиями публичной оферты</p>
+        <div class="trust-badges">
+          <div class="trust-item"><span class="trust-icon">🔒</span> Безопасная оплата</div>
+          <div class="trust-item"><span class="trust-icon">🚚</span> Доставка за 2 часа по Омску</div>
+          <div class="trust-item"><span class="trust-icon">🔄</span> Замена при браке цветов</div>
+          <div class="trust-item"><span class="trust-icon">📞</span> Поддержка 8:00–22:00</div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+{% if cart %}
+<script>
+const PROMOS = { 'ЦВЕТЫ10':10, 'ОМСК15':15, 'ЛЕТО20':20 };
+document.getElementById('promoBtn').addEventListener('click', () => {
+  const code = document.getElementById('promoInput').value.trim().toUpperCase();
+  const msg = document.getElementById('promoMsg');
+  const inp = document.getElementById('promoInput');
+  const btn = document.getElementById('promoBtn');
+  if (PROMOS[code]) {
+    inp.classList.add('applied'); inp.disabled = true;
+    msg.className = 'promo-msg ok';
+    msg.textContent = `✓ Промокод «${code}» применён — скидка ${PROMOS[code]}%`;
+    btn.textContent = 'Применён'; btn.style.background = 'var(--green)';
+  } else {
+    inp.classList.add('error');
+    msg.className = 'promo-msg err';
+    msg.textContent = 'Промокод не найден. Попробуйте ЦВЕТЫ10, ОМСК15 или ЛЕТО20';
+  }
+});
+document.getElementById('promoInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('promoBtn').click();
+});
+</script>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,337 @@
+{% extends "base.html" %}
+{% load static l10n %}
+
+{% block title %}{{ product.name }} — Floréa, Омск{% endblock %}
+{% block title2 %}{{ product.name }} — Floréa, Омск{% endblock %}
+{% block og_type %}product{% endblock %}
+{% block og_title %}{{ product.name }} — Floréa, Омск{% endblock %}
+{% block meta_description %}{{ product.description|truncatechars:160 }}{% endblock %}
+{% block og_description %}{{ product.description|truncatechars:160 }}{% endblock %}
+{% if product.image %}{% block og_image %}{{ request.build_absolute_uri }}{{ product.image.url|slice:"1:" }}{% endblock %}{% endif %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/product.css' %}" />
+{% endblock %}
+
+{% block content %}
+
+<div class="breadcrumb">
+  <div class="breadcrumb-inner">
+    <a href="{% url 'index' %}">Главная</a>
+    <span class="breadcrumb-sep">›</span>
+    <a href="{% url 'catalog' %}">Каталог</a>
+    {% if product.category %}
+    <span class="breadcrumb-sep">›</span>
+    <a href="{% url 'catalog' %}?category={{ product.category.slug }}">{{ product.category.name }}</a>
+    {% endif %}
+    <span class="breadcrumb-sep">›</span>
+    <span class="breadcrumb-current">{{ product.name }}</span>
+  </div>
+</div>
+
+<section class="product-page">
+  <div class="product-layout">
+
+    <!-- ГАЛЕРЕЯ -->
+    <div class="gallery">
+      <div class="gallery-main" id="mainImg">
+        {% if gallery_images %}
+          <img src="{{ gallery_images.0.url }}" alt="{{ product.name }}" id="mainImgEl">
+          {% if gallery_images|length > 1 %}
+          <div class="gallery-counter" id="galleryCounter">1 / {{ gallery_images|length }}</div>
+          {% endif %}
+        {% else %}
+          <div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:5rem;">💐</div>
+        {% endif %}
+      </div>
+      {% if gallery_images|length > 1 %}
+      <div class="gallery-thumbs" id="galleryThumbs">
+        {% for img in gallery_images %}
+        <div class="thumb {% if forloop.first %}active{% endif %}" data-src="{{ img.url }}" data-index="{{ forloop.counter }}">
+          <img src="{{ img.url }}" alt="">
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- ИНФО -->
+    <div class="product-info">
+
+      <div class="info-tags">
+        {% if product.category %}
+        <span class="info-tag tag-fresh">{{ product.category.name }}</span>
+        {% endif %}
+        {% if stock_status == 'none' %}
+        <span class="info-tag" style="background:#fee2e2;color:#dc2626;">Нет в наличии</span>
+        {% elif stock_status == 'low' %}
+        <span class="info-tag" style="background:#fef9c3;color:#b45309;">Осталось мало</span>
+        {% else %}
+        <span class="info-tag tag-fresh">Свежие сегодня</span>
+        {% endif %}
+      </div>
+
+      <h1 class="info-title">{{ product.name }}</h1>
+      <p class="info-subtitle">{{ product.description }}</p>
+
+      <div class="info-rating">
+        {% if stock_status != 'unknown' %}
+        <span class="in-stock">
+          {% if stock_status == 'none' %}✗ Нет в наличии{% else %}✓ Есть в наличии ({{ stock }} шт.){% endif %}
+        </span>
+        {% endif %}
+      </div>
+
+      <div class="info-price-block">
+        <span class="info-price">{{ product.price }} ₽</span>
+      </div>
+
+      <div class="option-block">
+        <div class="option-label">Упаковка</div>
+        <div class="option-chips">
+          {% for opt in packaging_options %}
+          <button class="chip {% if forloop.first %}active{% endif %}"
+                  data-name="{{ opt.name }}"
+                  data-modifier="{{ opt.price_modifier|unlocalize }}">
+            {{ opt.name }}{% if opt.price_modifier > 0 %} <span class="chip-price">+{{ opt.price_modifier|floatformat:0 }} ₽</span>{% endif %}
+          </button>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="option-block">
+        <div class="option-label">Цвет ленты</div>
+        <div class="option-colors">
+          <div class="color-dot active" style="background:#c41e3a;" title="Красная"></div>
+          <div class="color-dot" style="background:#fff;border:1px solid #e5e7eb;" title="Белая"></div>
+          <div class="color-dot" style="background:#f8c8d4;" title="Розовая"></div>
+          <div class="color-dot" style="background:#2d6a4f;" title="Зелёная"></div>
+          <div class="color-dot" style="background:#1a1a2e;" title="Чёрная"></div>
+          <div class="color-dot" style="background:#fbbf24;" title="Золотая"></div>
+        </div>
+      </div>
+
+      <form method="post" action="{% url 'cart_add' product.pk %}" id="addCartForm">
+        {% csrf_token %}
+        <input type="hidden" name="quantity" id="cartQtyInput" value="1">
+        <input type="hidden" name="packaging" id="cartPackaging" value="Крафт">
+        <input type="hidden" name="ribbon" id="cartRibbon" value="Красная">
+        <div class="add-block">
+          <div class="qty-control">
+            <button type="button" class="qty-btn" id="qtyMinus">−</button>
+            <div class="qty-val" id="qtyVal">1</div>
+            <button type="button" class="qty-btn" id="qtyPlus">+</button>
+          </div>
+          {% if stock_status == 'none' %}
+          <button type="submit" class="btn-buy" disabled>🛒 В корзину</button>
+          {% else %}
+          <button type="submit" class="btn-buy">🛒 В корзину</button>
+          {% endif %}
+          <button type="button" class="btn-wish {% if in_wishlist %}active{% endif %}" id="wishBtn" data-id="{{ product.pk }}">{% if in_wishlist %}❤️{% else %}🤍{% endif %}</button>
+        </div>
+      </form>
+
+      <div class="delivery-info-block">
+        <div class="di-row">
+          <div class="di-icon">🚚</div>
+          <div class="di-text">
+            <b>Доставка сегодня</b>
+            <span>Курьером по Омску · от 300 ₽ · бесплатно от 3 000 ₽</span>
+          </div>
+        </div>
+        <div class="di-row">
+          <div class="di-icon">🏪</div>
+          <div class="di-text">
+            <b>Самовывоз — бесплатно</b>
+            <span>ул. Ленина, 12 · Ежедневно 8:00–22:00</span>
+          </div>
+        </div>
+        <div class="di-row">
+          <div class="di-icon">🔄</div>
+          <div class="di-text">
+            <b>Замена при браке</b>
+            <span>Заменим букет, если цветы завянут раньше срока</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion">
+        <div class="acc-item">
+          <button class="acc-header" data-acc="1">Уход за цветами <span class="acc-arrow">▼</span></button>
+          <div class="acc-body" id="acc1">
+            Подрежьте стебли под углом 45°. Поставьте в чистую вазу с прохладной водой. Меняйте воду каждые 2 дня. Держите вдали от солнца и сквозняков.
+          </div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-header" data-acc="2">Открытка и пожелание <span class="acc-arrow">▼</span></button>
+          <div class="acc-body" id="acc2">
+            К букету можно добавить бесплатную открытку с вашим текстом — укажите пожелание в поле комментария при оформлении заказа.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ПОХОЖИЕ ТОВАРЫ -->
+{% if related %}
+<section class="related">
+  <div class="related-inner">
+    <h2>Похожие <span class="accent">товары</span></h2>
+    <div class="products-grid">
+      {% for item in related %}
+      <a class="product-card" href="{% url 'product' item.slug %}">
+        <div class="product-img">
+          {% if item.image %}
+            <img src="{{ item.image.url }}" alt="{{ item.name }}">
+          {% else %}
+            <div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:3rem;">💐</div>
+          {% endif %}
+        </div>
+        <div class="product-body">
+          <div class="product-name">{{ item.name }}</div>
+          <div class="product-desc">{{ item.description|truncatechars:50 }}</div>
+          <div class="product-footer">
+            <div class="product-price">{{ item.price }} ₽</div>
+            <button class="btn-add">+</button>
+          </div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  const basePrice = parseFloat('{{ product.price|unlocalize }}');
+  const priceEl = document.querySelector('.info-price');
+
+  document.querySelectorAll('.option-chips').forEach(group => {
+    group.querySelectorAll('.chip:not(.disabled)').forEach(chip => {
+      chip.addEventListener('click', () => {
+        group.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        document.getElementById('cartPackaging').value = chip.dataset.name;
+        const modifier = parseFloat(chip.dataset.modifier || 0);
+        const total = basePrice + modifier;
+        priceEl.textContent = total.toLocaleString('ru-RU') + ' ₽';
+      });
+    });
+  });
+
+  document.querySelectorAll('.color-dot').forEach(dot => {
+    dot.addEventListener('click', () => {
+      document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+      dot.classList.add('active');
+      document.getElementById('cartRibbon').value = dot.title;
+    });
+  });
+
+  const maxQty = {% if stock is not None %}{{ stock }}{% else %}null{% endif %};
+  let qty = 1;
+  const qtyVal = document.getElementById('qtyVal');
+  const qtyInput = document.getElementById('cartQtyInput');
+  const qtyPlus = document.getElementById('qtyPlus');
+  const qtyMinus = document.getElementById('qtyMinus');
+
+  function updateQtyButtons() {
+    qtyMinus.disabled = qty <= 1;
+    if (maxQty !== null) qtyPlus.disabled = qty >= maxQty;
+  }
+
+  qtyMinus.addEventListener('click', () => {
+    if (qty > 1) { qty--; qtyVal.textContent = qty; qtyInput.value = qty; updateQtyButtons(); }
+  });
+  qtyPlus.addEventListener('click', () => {
+    if (maxQty !== null && qty >= maxQty) return;
+    qty++; qtyVal.textContent = qty; qtyInput.value = qty; updateQtyButtons();
+  });
+
+  updateQtyButtons();
+
+  document.getElementById('addCartForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = this.querySelector('.btn-buy');
+    const fd = new FormData(this);
+    fd.set('quantity', qty);
+    const resp = await fetch(this.action, {
+      method: 'POST', body: fd,
+      headers: {'X-Requested-With': 'XMLHttpRequest'},
+    });
+    if (resp.ok) {
+      const data = await resp.json();
+      if (data.ok) {
+        btn.textContent = '✓ Добавлено!'; btn.style.background = '#16a34a';
+        document.querySelector('.cart-count').textContent = data.count;
+        setTimeout(() => { btn.textContent = '🛒 В корзину'; btn.style.background = ''; }, 1500);
+      } else {
+        btn.textContent = data.error; btn.style.background = '#b45309';
+        setTimeout(() => { btn.textContent = '🛒 В корзину'; btn.style.background = ''; }, 2000);
+      }
+    }
+  });
+
+  const wishBtn = document.getElementById('wishBtn');
+  wishBtn.addEventListener('click', async () => {
+    const fd = new FormData();
+    fd.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+    const resp = await fetch(`/wishlist/toggle/${wishBtn.dataset.id}/`, {
+      method: 'POST', body: fd,
+      headers: {'X-Requested-With': 'XMLHttpRequest'},
+    });
+    if (resp.status === 401) {
+      window.location.href = '/auth/?next=' + window.location.pathname;
+      return;
+    }
+    if (resp.ok) {
+      const data = await resp.json();
+      if (data.ok) {
+        wishBtn.classList.toggle('active', data.action === 'added');
+        wishBtn.textContent = data.action === 'added' ? '❤️' : '🤍';
+      }
+    }
+  });
+
+  // Галерея — переключение миниатюр
+  document.querySelectorAll('.gallery-thumbs .thumb').forEach(thumb => {
+    thumb.addEventListener('click', () => {
+      const mainEl = document.getElementById('mainImgEl');
+      const counter = document.getElementById('galleryCounter');
+      mainEl.style.opacity = '0';
+      mainEl.style.transform = 'scale(.97)';
+      setTimeout(() => {
+        mainEl.src = thumb.dataset.src;
+        mainEl.style.opacity = '1';
+        mainEl.style.transform = 'scale(1)';
+      }, 150);
+      document.querySelectorAll('.gallery-thumbs .thumb').forEach(t => t.classList.remove('active'));
+      thumb.classList.add('active');
+      if (counter) counter.textContent = thumb.dataset.index + ' / {{ gallery_images|length }}';
+    });
+  });
+
+  document.querySelectorAll('.acc-header').forEach(header => {
+    header.addEventListener('click', () => {
+      const body = document.getElementById('acc' + header.dataset.acc);
+      const isOpen = body.classList.contains('open');
+      document.querySelectorAll('.acc-body').forEach(b => b.classList.remove('open'));
+      document.querySelectorAll('.acc-header').forEach(h => h.classList.remove('open'));
+      if (!isOpen) { body.classList.add('open'); header.classList.add('open'); }
+    });
+  });
+
+  document.querySelectorAll('.btn-add').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.preventDefault(); e.stopPropagation();
+      btn.textContent = '✓'; btn.style.background = '#16a34a';
+      setTimeout(() => { btn.textContent = '+'; btn.style.background = ''; }, 1200);
+    });
+  });
+
+</script>
+{% endblock %}

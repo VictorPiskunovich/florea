@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python manage.py check)",
+      "Bash(python manage.py shell -c \"from shop.models import Category; [print\\(i+1, c.pk, c.name, c.slug\\) for i, c in enumerate\\(Category.objects.all\\(\\)\\)]\")",
+      "Bash(python manage.py makemigrations)",
+      "Bash(python manage.py migrate)",
+      "Bash(python -c \"import django; print\\(django.__version__\\)\")",
+      "Bash(python manage.py shell -c \"from django.contrib.auth.models import User; print\\(list\\(User.objects.values\\('username','is_staff','is_superuser'\\)\\)\\)\")",
+      "Bash(python manage.py shell -c \"from django.contrib.auth.models import User; u = User.objects.get\\(username='admin'\\); u.set_password\\('admin'\\); u.save\\(\\); print\\('OK'\\)\")",
+      "Bash(python manage.py runserver)",
+      "Bash(Get-Content \"C:\\\\Users\\\\pisku\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-pisku-OneDrive--------------test\\\\2707f7ef-5b67-4468-ab5c-80b807e8e700\\\\tasks\\\\bw0pryc0l.output\")",
+      "Bash(Select-Object -Last 10)",
+      "Bash(pip install *)",
+      "Bash(pip freeze *)",
+      "Bash(python manage.py collectstatic --noinput)",
+      "Bash(python manage.py check --deploy)"
+    ]
+  }
+}

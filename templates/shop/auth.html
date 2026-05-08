@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Вход и регистрация — Floréa{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}" />
+{% endblock %}
+
+{% block content %}
+
+<main class="auth-main">
+  <div class="auth-deco auth-deco--left">🌸</div>
+  <div class="auth-deco auth-deco--right">🌿</div>
+
+  <div class="auth-card">
+
+    <div class="auth-brand">
+      <a href="{% url 'index' %}" style="text-decoration:none;display:flex;align-items:center;gap:8px;">
+        <span class="auth-brand-icon">🌺</span>
+        <span class="auth-brand-name">Floréa</span>
+      </a>
+    </div>
+
+    <div class="auth-tabs">
+      <button class="auth-tab {% if active_tab != 'register' %}active{% endif %}" data-tab="login">Войти</button>
+      <button class="auth-tab {% if active_tab == 'register' %}active{% endif %}" data-tab="register">Регистрация</button>
+    </div>
+
+    <!-- ══ ВХОД ══ -->
+    <form class="auth-form {% if active_tab == 'register' %}hidden{% endif %}" id="loginForm"
+          method="post" action="{% url 'login' %}">
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ next }}" />
+
+      <div class="auth-welcome">
+        <h1>Добро пожаловать</h1>
+        <p>Войдите, чтобы видеть заказы и избранное</p>
+      </div>
+
+      {% if form.errors %}
+      <div class="auth-alert auth-alert--error">
+        Неверный email или пароль. Попробуйте ещё раз.
+      </div>
+      {% endif %}
+
+      <div class="form-group">
+        <label for="id_username">Логин или Email</label>
+        <div class="input-wrap">
+          <span class="input-icon">✉️</span>
+          <input type="text" id="id_username" name="username"
+                 placeholder="ivan@mail.ru"
+                 autocomplete="username"
+                 value="{{ form.username.value|default:'' }}"
+                 required />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="id_password">
+          Пароль
+          <a href="{% url 'password_reset' %}" class="forgot-link">Забыли пароль?</a>
+        </label>
+        <div class="input-wrap">
+          <span class="input-icon">🔒</span>
+          <input type="password" id="id_password" name="password"
+                 placeholder="Введите пароль"
+                 autocomplete="current-password"
+                 required />
+          <button type="button" class="toggle-pw" data-target="id_password">👁</button>
+        </div>
+      </div>
+
+      <label class="remember-me">
+        <input type="checkbox" name="remember_me" />
+        <span class="remember-box"></span>
+        Запомнить меня
+      </label>
+
+      <button type="submit" class="btn-auth">Войти в аккаунт</button>
+
+      <p class="auth-switch">
+        Нет аккаунта?
+        <button type="button" class="auth-switch-btn" data-tab="register">Зарегистрироваться</button>
+      </p>
+    </form>
+
+    <!-- ══ РЕГИСТРАЦИЯ ══ -->
+    <form class="auth-form {% if active_tab != 'register' %}hidden{% endif %}" id="registerForm"
+          method="post" action="{% url 'register' %}">
+      {% csrf_token %}
+
+      <div class="auth-welcome">
+        <h1>Создать аккаунт</h1>
+        <p>Зарегистрируйтесь — это займёт минуту</p>
+      </div>
+
+      <div class="form-group">
+        <label>Ваше имя</label>
+        <div class="input-wrap {% if reg_errors.first_name %}has-error{% endif %}">
+          <span class="input-icon">👤</span>
+          <input type="text" name="first_name"
+                 placeholder="Иван"
+                 value="{{ reg_data.first_name|default:'' }}"
+                 required />
+        </div>
+        {% if reg_errors.first_name %}
+        <div class="field-error">{{ reg_errors.first_name }}</div>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label>Email</label>
+        <div class="input-wrap {% if reg_errors.email %}has-error{% endif %}">
+          <span class="input-icon">✉️</span>
+          <input type="email" name="email"
+                 placeholder="ivan@mail.ru"
+                 value="{{ reg_data.email|default:'' }}"
+                 required />
+        </div>
+        {% if reg_errors.email %}
+        <div class="field-error">{{ reg_errors.email }}</div>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label>Пароль</label>
+        <div class="input-wrap {% if reg_errors.password1 %}has-error{% endif %}">
+          <span class="input-icon">🔒</span>
+          <input type="password" id="reg_pw1" name="password1"
+                 placeholder="Минимум 8 символов"
+                 required />
+          <button type="button" class="toggle-pw" data-target="reg_pw1">👁</button>
+        </div>
+        {% if reg_errors.password1 %}
+        <div class="field-error">{{ reg_errors.password1 }}</div>
+        {% endif %}
+        <div class="pw-strength" id="pwStrength">
+          <div class="pw-strength-bar"><div class="pw-strength-fill" id="pwFill"></div></div>
+          <span class="pw-strength-label" id="pwLabel"></span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Повторите пароль</label>
+        <div class="input-wrap {% if reg_errors.password2 %}has-error{% endif %}">
+          <span class="input-icon">🔒</span>
+          <input type="password" id="reg_pw2" name="password2"
+                 placeholder="Повторите пароль"
+                 required />
+          <button type="button" class="toggle-pw" data-target="reg_pw2">👁</button>
+        </div>
+        {% if reg_errors.password2 %}
+        <div class="field-error">{{ reg_errors.password2 }}</div>
+        {% endif %}
+      </div>
+
+      <label class="remember-me">
+        <input type="checkbox" required />
+        <span class="remember-box"></span>
+        Я согласен с <a href="#" style="color:var(--green)">условиями использования</a>
+      </label>
+
+      <button type="submit" class="btn-auth">Создать аккаунт</button>
+
+      <p class="auth-switch">
+        Уже есть аккаунт?
+        <button type="button" class="auth-switch-btn" data-tab="login">Войти</button>
+      </p>
+    </form>
+
+  </div>
+</main>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Переключение вкладок
+  function switchTab(tabName) {
+    document.querySelectorAll('.auth-tab').forEach(t => {
+      t.classList.toggle('active', t.dataset.tab === tabName);
+    });
+    document.getElementById('loginForm').classList.toggle('hidden', tabName !== 'login');
+    document.getElementById('registerForm').classList.toggle('hidden', tabName !== 'register');
+  }
+
+  document.querySelectorAll('.auth-tab, .auth-switch-btn').forEach(btn => {
+    btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+  });
+
+  // Показать/скрыть пароль
+  document.querySelectorAll('.toggle-pw').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const input = document.getElementById(btn.dataset.target);
+      const isText = input.type === 'text';
+      input.type = isText ? 'password' : 'text';
+      btn.textContent = isText ? '👁' : '🙈';
+    });
+  });
+
+  // Индикатор силы пароля
+  const pw1 = document.getElementById('reg_pw1');
+  const pwFill = document.getElementById('pwFill');
+  const pwLabel = document.getElementById('pwLabel');
+  const pwStrength = document.getElementById('pwStrength');
+
+  pw1.addEventListener('input', () => {
+    const v = pw1.value;
+    let score = 0;
+    if (v.length >= 8) score++;
+    if (/[A-Z]/.test(v)) score++;
+    if (/[0-9]/.test(v)) score++;
+    if (/[^A-Za-z0-9]/.test(v)) score++;
+
+    const levels = [
+      { pct: '0%',   color: '#e5e7eb', label: '' },
+      { pct: '25%',  color: '#ef4444', label: 'Слабый' },
+      { pct: '50%',  color: '#f97316', label: 'Средний' },
+      { pct: '75%',  color: '#eab308', label: 'Хороший' },
+      { pct: '100%', color: '#22c55e', label: 'Надёжный' },
+    ];
+    const lvl = v.length === 0 ? levels[0] : levels[score] || levels[1];
+    pwStrength.style.display = v.length ? 'flex' : 'none';
+    pwFill.style.width = lvl.pct;
+    pwFill.style.background = lvl.color;
+    pwLabel.textContent = lvl.label;
+    pwLabel.style.color = lvl.color;
+  });
+</script>
+{% endblock %}

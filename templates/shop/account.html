@@ -1,0 +1,421 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Личный кабинет — Floréa, Омск{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/account.css' %}" />
+{% endblock %}
+
+{% block content %}
+
+<div class="breadcrumb">
+  <div class="breadcrumb-inner">
+    <a href="{% url 'index' %}">Главная</a>
+    <span class="breadcrumb-sep">›</span>
+    <span class="breadcrumb-current">Личный кабинет</span>
+  </div>
+</div>
+
+<div class="account-page">
+  <div class="account-layout">
+
+    <!-- ── SIDEBAR ── -->
+    <aside class="account-sidebar">
+
+      <div class="user-card">
+        <div class="user-avatar">
+          {% if user.is_authenticated %}{{ user.first_name|first|upper|default:"👤" }}{% else %}👤{% endif %}
+        </div>
+        {% if user.is_authenticated %}
+          <div class="user-name">{{ user.get_full_name|default:user.username }}</div>
+          <div class="user-since">{{ user.email }}</div>
+          <div class="user-stats">
+            <div class="stat-pill">
+              <span class="stat-pill-val">{{ orders|length }}</span>
+              <span class="stat-pill-label">Заказов</span>
+            </div>
+            <div class="stat-pill">
+              <span class="stat-pill-val">{{ wishlist|length }}</span>
+              <span class="stat-pill-label">Избранных</span>
+            </div>
+          </div>
+        {% else %}
+          <div class="user-name">Гость</div>
+          <div class="user-since"><a href="{% url 'auth' %}">Войти в аккаунт</a></div>
+          <div class="user-stats">
+            <div class="stat-pill"><span class="stat-pill-val">—</span><span class="stat-pill-label">Заказов</span></div>
+            <div class="stat-pill"><span class="stat-pill-val">—</span><span class="stat-pill-label">Избранных</span></div>
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="sidebar-nav">
+        <div class="nav-item active" data-panel="orders">
+          <span class="nav-icon">📦</span> Мои заказы
+          {% if orders %}<span class="nav-badge">{{ orders|length }}</span>{% endif %}
+        </div>
+        <div class="nav-item" data-panel="profile">
+          <span class="nav-icon">👤</span> Профиль
+        </div>
+        <div class="nav-item" data-panel="addresses">
+          <span class="nav-icon">📍</span> Адреса доставки
+        </div>
+        <div class="nav-item" data-panel="favorites">
+          <span class="nav-icon">🤍</span> Избранное
+        </div>
+        {% if user.is_staff %}
+        <a href="{% url 'admin_panel' %}" class="nav-item" style="text-decoration:none;">
+          <span class="nav-icon">⚙️</span> Панель администратора
+        </a>
+        {% endif %}
+        {% if user.is_authenticated %}
+        <form method="post" action="{% url 'logout' %}" style="margin:0;" id="logoutForm">
+          {% csrf_token %}
+          <button type="button" class="nav-item danger" id="logoutBtn" style="width:100%;background:none;border:none;cursor:pointer;text-align:left;">
+            <span class="nav-icon">🚪</span> Выйти
+          </button>
+        </form>
+        {% else %}
+        <a href="{% url 'auth' %}" class="nav-item" style="text-decoration:none;">
+          <span class="nav-icon">🔑</span> Войти
+        </a>
+        {% endif %}
+      </div>
+
+    </aside>
+
+    <!-- ── MAIN ── -->
+    <div class="account-main">
+
+      <!-- ЗАКАЗЫ -->
+      <div class="account-panel active" id="panel-orders">
+        <div class="panel-header">
+          <div>
+            <h2>Мои заказы</h2>
+            <p>История всех ваших покупок в Floréa</p>
+          </div>
+        </div>
+
+        {% if not user.is_authenticated %}
+        <div class="fav-empty">
+          <div class="fav-empty-icon">🔑</div>
+          <h3>Войдите в аккаунт</h3>
+          <p>Чтобы видеть историю заказов, необходимо авторизоваться</p>
+          <a href="{% url 'auth' %}" class="btn-sm primary">Войти</a>
+        </div>
+
+        {% elif not orders %}
+        <div class="fav-empty">
+          <div class="fav-empty-icon">📦</div>
+          <h3>Заказов пока нет</h3>
+          <p>Здесь будет отображаться история ваших покупок</p>
+          <a href="{% url 'catalog' %}" class="btn-sm primary">Перейти в каталог</a>
+        </div>
+
+        {% else %}
+        {% for order in orders %}
+        <div class="history-card {% if forloop.first %}open{% endif %}">
+          <div class="history-head" onclick="this.closest('.history-card').classList.toggle('open')">
+            <div class="history-num">Заказ #{{ order.pk|stringformat:"05d" }}</div>
+            <div class="history-date">{{ order.created_at|date:"d.m.Y, H:i" }}</div>
+            <div class="history-amount">{{ order.total_price }} ₽</div>
+            <span class="history-badge {% if order.status == 'done' %}badge-done{% elif order.status == 'cancelled' %}badge-cancel{% else %}badge-done{% endif %}">
+              {{ order.get_status_display }}
+            </span>
+            <span class="history-arrow">▼</span>
+          </div>
+          <div class="history-body">
+            <div class="history-body-inner">
+              <div class="delivery-addr">
+                <span>📍</span> {{ order.address }}
+              </div>
+              <div class="history-items">
+                {% for item in order.items.all %}
+                <div class="order-item">
+                  <div class="oi-img" style="background:linear-gradient(135deg,#fce4ec,#fff9e6);">
+                    {% if item.product.image %}
+                      <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" style="width:100%;height:100%;object-fit:cover;border-radius:8px;">
+                    {% else %}
+                      💐
+                    {% endif %}
+                  </div>
+                  <div>
+                    <div class="oi-name">{{ item.product.name }}</div>
+                    <div class="oi-meta">{{ item.quantity }} шт. × {{ item.price }} ₽</div>
+                  </div>
+                  <div class="oi-price">{{ item.subtotal }} ₽</div>
+                </div>
+                {% endfor %}
+              </div>
+              {% if order.comment %}
+              <div style="font-family:sans-serif;font-size:13px;color:var(--gray);margin-bottom:12px;white-space:pre-line;">{{ order.comment }}</div>
+              {% endif %}
+              <div class="history-item-actions">
+                <a href="{% url 'catalog' %}" class="btn-sm primary" style="text-decoration:none;">Повторить заказ</a>
+                <button class="btn-sm">Написать отзыв</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+      </div>
+
+      <!-- ПРОФИЛЬ -->
+      <div class="account-panel" id="panel-profile">
+        <div class="panel-header">
+          <div>
+            <h2>Личные данные</h2>
+            <p>Ваш профиль и настройки уведомлений</p>
+          </div>
+        </div>
+
+        {% if user.is_authenticated %}
+        <div class="profile-grid">
+          <div class="profile-card">
+            <div class="profile-card-title">
+              Основная информация
+              <button class="profile-edit-btn">Редактировать</button>
+            </div>
+            <div class="profile-field">
+              <label>Имя</label>
+              <div class="profile-field-val">{{ user.first_name|default:"—" }}</div>
+            </div>
+            <div class="profile-field">
+              <label>Фамилия</label>
+              <div class="profile-field-val">{{ user.last_name|default:"—" }}</div>
+            </div>
+            <div class="profile-field">
+              <label>Email</label>
+              <div class="profile-field-val">{{ user.email }}</div>
+            </div>
+          </div>
+
+          <div class="profile-card">
+            <div class="profile-card-title">Уведомления</div>
+            <div class="notif-list">
+              <div class="notif-row">
+                <span>Статус заказа</span>
+                <label class="toggle-switch">
+                  <input type="checkbox" checked>
+                  <div class="toggle-track"><div class="toggle-thumb"></div></div>
+                </label>
+              </div>
+              <div class="notif-row">
+                <span>Акции и скидки</span>
+                <label class="toggle-switch">
+                  <input type="checkbox">
+                  <div class="toggle-track"><div class="toggle-thumb"></div></div>
+                </label>
+              </div>
+              <div class="notif-row">
+                <span>Новые поступления</span>
+                <label class="toggle-switch">
+                  <input type="checkbox" checked>
+                  <div class="toggle-track"><div class="toggle-thumb"></div></div>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="profile-card password-section">
+            <div class="profile-card-title">Смена пароля</div>
+            <div class="profile-grid" style="margin-bottom:0;">
+              <div class="profile-field">
+                <label>Новый пароль</label>
+                <input type="password" placeholder="••••••••">
+              </div>
+              <div class="profile-field">
+                <label>Повторите пароль</label>
+                <input type="password" placeholder="••••••••">
+              </div>
+            </div>
+            <button class="btn-save" style="margin-top:16px;">Сохранить изменения</button>
+          </div>
+        </div>
+        {% else %}
+        <div class="fav-empty">
+          <div class="fav-empty-icon">🔑</div>
+          <h3>Войдите в аккаунт</h3>
+          <p>Для просмотра профиля необходимо авторизоваться</p>
+          <a href="{% url 'auth' %}" class="btn-sm primary">Войти</a>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- АДРЕСА -->
+      <div class="account-panel" id="panel-addresses">
+        <div class="panel-header">
+          <div>
+            <h2>Адреса доставки</h2>
+            <p>Сохранённые адреса для быстрого оформления</p>
+          </div>
+        </div>
+        <div class="addresses-grid">
+          <div class="address-card default">
+            <span class="address-default-badge">Основной</span>
+            <div class="address-title">Домашний адрес</div>
+            <div class="address-text">г. Омск, ул. Ленина, д. 1, кв. 10</div>
+            <div class="address-card-actions">
+              <button class="btn-sm">Изменить</button>
+              <button class="btn-sm">Удалить</button>
+            </div>
+          </div>
+          <button class="btn-add-address">
+            <span style="font-size:20px;">＋</span> Добавить адрес
+          </button>
+        </div>
+      </div>
+
+      <!-- ИЗБРАННОЕ -->
+      <div class="account-panel" id="panel-favorites">
+        <div class="panel-header">
+          <div>
+            <h2>Избранное {% if wishlist %}<span class="panel-count">{{ wishlist|length }}</span>{% endif %}</h2>
+            <p>Товары, которые вы отметили сердечком</p>
+          </div>
+          <a href="{% url 'catalog' %}" class="btn-sm" style="text-decoration:none;white-space:nowrap;">Перейти в каталог</a>
+        </div>
+        {% if not wishlist %}
+        <div class="fav-empty">
+          <div class="fav-empty-icon">🤍</div>
+          <h3>Список пуст</h3>
+          <p>Нажимайте на сердечко на карточках товаров, чтобы сохранять понравившиеся букеты</p>
+          <a href="{% url 'catalog' %}" class="btn-sm primary" style="text-decoration:none;">Перейти в каталог</a>
+        </div>
+        {% else %}
+        <div class="fav-grid">
+          {% for entry in wishlist %}
+          <div class="fav-card" id="fav-card-{{ entry.product.pk }}">
+            <a href="{% url 'product' entry.product.slug %}" class="fav-card-img">
+              {% if entry.product.image %}
+                <img src="{{ entry.product.image.url }}" alt="{{ entry.product.name }}">
+              {% else %}
+                <span style="font-size:3rem;">💐</span>
+              {% endif %}
+            </a>
+            <div class="fav-card-body">
+              <a href="{% url 'product' entry.product.slug %}" class="fav-card-name">{{ entry.product.name }}</a>
+              {% if entry.product.description %}
+              <p class="fav-card-desc">{{ entry.product.description|truncatechars:55 }}</p>
+              {% endif %}
+              <div class="fav-card-footer">
+                <span class="fav-card-price">{{ entry.product.price }} ₽</span>
+                <div class="fav-card-actions">
+                  <button class="btn-sm primary fav-cart-btn" data-id="{{ entry.product.pk }}">В корзину</button>
+                  <button class="btn-sm fav-remove-btn" data-id="{{ entry.product.pk }}" title="Убрать из избранного">🤍</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Модалка подтверждения выхода -->
+<div class="logout-overlay" id="logoutOverlay">
+  <div class="logout-modal">
+    <div class="logout-modal-icon">🚪</div>
+    <h3>Выйти из аккаунта?</h3>
+    <p>Вы уверены, что хотите завершить сеанс?</p>
+    <div class="logout-modal-actions">
+      <button class="btn-sm primary" id="logoutConfirm">Да, выйти</button>
+      <button class="btn-sm" id="logoutCancel">Отмена</button>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  const logoutOverlay = document.getElementById('logoutOverlay');
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    logoutOverlay.classList.add('show');
+  });
+  document.getElementById('logoutCancel').addEventListener('click', () => {
+    logoutOverlay.classList.remove('show');
+  });
+  logoutOverlay.addEventListener('click', e => {
+    if (e.target === logoutOverlay) logoutOverlay.classList.remove('show');
+  });
+  document.getElementById('logoutConfirm').addEventListener('click', () => {
+    document.getElementById('logoutForm').submit();
+  });
+
+  document.querySelectorAll('.nav-item[data-panel]').forEach(item => {
+    item.addEventListener('click', () => {
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.querySelectorAll('.account-panel').forEach(p => p.classList.remove('active'));
+      item.classList.add('active');
+      document.getElementById('panel-' + item.dataset.panel).classList.add('active');
+    });
+  });
+
+  const csrf = '{{ csrf_token }}';
+
+  document.querySelectorAll('.fav-remove-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const fd = new FormData();
+      fd.append('csrfmiddlewaretoken', csrf);
+      const resp = await fetch(`/wishlist/toggle/${btn.dataset.id}/`, {
+        method: 'POST', body: fd,
+        headers: {'X-Requested-With': 'XMLHttpRequest'},
+      });
+      if (resp.ok) {
+        const data = await resp.json();
+        if (data.ok) {
+          const card = document.getElementById('fav-card-' + btn.dataset.id);
+          card.style.transition = 'opacity .2s, transform .2s';
+          card.style.opacity = '0';
+          card.style.transform = 'scale(.95)';
+          setTimeout(() => {
+            card.remove();
+            const countBadge = document.querySelector('.panel-count');
+            if (countBadge) {
+              const n = Math.max(0, parseInt(countBadge.textContent) - 1);
+              countBadge.textContent = n;
+              if (n === 0) countBadge.remove();
+            }
+            const statEl = document.querySelectorAll('.stat-pill-val')[1];
+            if (statEl) statEl.textContent = Math.max(0, parseInt(statEl.textContent) - 1);
+            if (!document.querySelector('.fav-card')) location.reload();
+          }, 200);
+        }
+      }
+    });
+  });
+
+  document.querySelectorAll('.fav-cart-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const fd = new FormData();
+      fd.append('csrfmiddlewaretoken', csrf);
+      fd.append('quantity', '1');
+      const resp = await fetch(`/cart/add/${btn.dataset.id}/`, {
+        method: 'POST', body: fd,
+        headers: {'X-Requested-With': 'XMLHttpRequest'},
+      });
+      if (resp.ok) {
+        const data = await resp.json();
+        if (data.ok) {
+          btn.textContent = '✓ Добавлено';
+          btn.style.background = '#16a34a';
+          const cartCount = document.querySelector('.cart-count');
+          if (cartCount) cartCount.textContent = data.count;
+          setTimeout(() => { btn.textContent = 'В корзину'; btn.style.background = ''; }, 1500);
+        } else {
+          btn.textContent = data.error;
+          btn.style.background = '#b45309';
+          setTimeout(() => { btn.textContent = 'В корзину'; btn.style.background = ''; }, 2000);
+        }
+      }
+    });
+  });
+</script>
+{% endblock %}

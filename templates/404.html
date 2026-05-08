@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}404 — Страница не найдена · Floréa{% endblock %}
+
+{% block extra_css %}
+<style>
+.page-404 {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 24px;
+  text-align: center;
+}
+.page-404-inner {
+  max-width: 560px;
+  width: 100%;
+}
+.p404-art {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 32px;
+}
+.p404-number {
+  font-size: clamp(96px, 18vw, 160px);
+  font-weight: 800;
+  line-height: 1;
+  background: linear-gradient(135deg, #40916c 0%, #95d5b2 60%, #fce4ec 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -4px;
+  user-select: none;
+}
+.p404-flower {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -54%);
+  font-size: clamp(48px, 8vw, 72px);
+  animation: float 3.6s ease-in-out infinite;
+  filter: drop-shadow(0 8px 24px rgba(45,106,79,.18));
+}
+@keyframes float {
+  0%, 100% { transform: translate(-50%, -54%) rotate(-6deg); }
+  50%       { transform: translate(-50%, -64%) rotate(6deg); }
+}
+.p404-petals {
+  position: absolute;
+  inset: -20px;
+  pointer-events: none;
+}
+.p404-petal {
+  position: absolute;
+  font-size: 18px;
+  animation: petal-fall linear infinite;
+  opacity: 0;
+}
+.p404-petal:nth-child(1) { left: 10%; animation-duration: 5.2s; animation-delay: 0s;    font-size: 14px; }
+.p404-petal:nth-child(2) { left: 30%; animation-duration: 4.8s; animation-delay: 1.1s; }
+.p404-petal:nth-child(3) { left: 55%; animation-duration: 5.6s; animation-delay: 0.4s; font-size: 12px; }
+.p404-petal:nth-child(4) { left: 75%; animation-duration: 4.4s; animation-delay: 1.8s; font-size: 16px; }
+.p404-petal:nth-child(5) { left: 88%; animation-duration: 5.0s; animation-delay: 0.8s; font-size: 13px; }
+@keyframes petal-fall {
+  0%   { opacity: 0; top: -10%; transform: rotate(0deg) translateX(0); }
+  10%  { opacity: 1; }
+  90%  { opacity: .6; }
+  100% { opacity: 0; top: 110%; transform: rotate(360deg) translateX(30px); }
+}
+.p404-title {
+  font-size: clamp(22px, 4vw, 30px);
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 14px;
+}
+.p404-text {
+  font-size: 16px;
+  color: var(--gray);
+  line-height: 1.65;
+  margin-bottom: 36px;
+}
+.p404-btns {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+.p404-hint {
+  font-size: 13px;
+  color: #b0b8c1;
+}
+.p404-hint a {
+  color: var(--green);
+  text-decoration: none;
+}
+.p404-hint a:hover { text-decoration: underline; }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="page-404">
+  <div class="page-404-inner">
+
+    <div class="p404-art">
+      <div class="p404-number">404</div>
+      <div class="p404-flower">🌸</div>
+      <div class="p404-petals">
+        <span class="p404-petal">🌷</span>
+        <span class="p404-petal">🌿</span>
+        <span class="p404-petal">🌸</span>
+        <span class="p404-petal">🍃</span>
+        <span class="p404-petal">🌺</span>
+      </div>
+    </div>
+
+    <h1 class="p404-title">Страница не найдена</h1>
+    <p class="p404-text">
+      Кажется, этот букет уже забрали — или такой страницы никогда не существовало.<br>
+      Не расстраивайтесь, у нас есть много другого!
+    </p>
+
+    <div class="p404-btns">
+      <a href="{% url 'index' %}" class="btn-primary">На главную</a>
+      <a href="{% url 'catalog' %}" class="btn-outline">Смотреть каталог</a>
+    </div>
+
+    <p class="p404-hint">
+      Или перейдите в
+      <a href="{% url 'cart' %}">корзину</a>,
+      <a href="{% url 'index' %}#delivery">доставку</a>,
+      <a href="{% url 'index' %}#contacts">контакты</a>
+    </p>
+
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,321 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Floréa — свежие цветы с доставкой по Омску{% endblock %}
+
+{% block content %}
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<section class="hero{% if banner.image %} hero--img{% endif %}"{% if banner.image %} style="background-image: url('{{ banner.image.url }}');"{% endif %}>
+  <div class="hero-inner">
+    {% if banner.tag %}<span class="hero-tag">{{ banner.tag }}</span>{% endif %}
+    <h1>{{ banner.title }}</h1>
+    <p>{{ banner.subtitle }}</p>
+    <div class="hero-btns">
+      {% if banner.btn1_text %}<a href="{{ banner.btn1_url }}" class="btn-primary">{{ banner.btn1_text }}</a>{% endif %}
+      {% if banner.btn2_text %}<a href="{{ banner.btn2_url }}" class="btn-outline">{{ banner.btn2_text }}</a>{% endif %}
+    </div>
+    <div class="hero-badges">
+      <div class="badge"><span class="badge-icon">🚚</span> Бесплатная доставка от 3 000 ₽</div>
+      <div class="badge"><span class="badge-icon">⭐</span> Рейтинг 4.9 — 1 200+ отзывов</div>
+      <div class="badge"><span class="badge-icon">🌿</span> Только свежие цветы</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ CATEGORIES ═══════════════════ -->
+<section class="categories" id="catalog">
+  <div class="section-inner">
+    <div class="section-title">
+      <h2>Популярные <span class="accent">категории</span></h2>
+      <p>Найдите идеальный букет для любого повода</p>
+    </div>
+    <div class="cat-grid">
+      {% for cat in categories %}
+      <a href="{% url 'catalog' %}?category={{ cat.slug }}" class="cat-card {% cycle 'cat-roses' 'cat-pions' 'cat-sunflower' 'cat-tulip' 'cat-bouqet' 'cat-plant' %}">
+        <div class="cat-content">
+          <div class="cat-name">{{ cat.name }}</div>
+        </div>
+      </a>
+      {% empty %}
+      <a href="{% url 'catalog' %}" class="cat-card cat-roses">
+        <div class="cat-content"><div class="cat-name">Все букеты</div></div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ PRODUCTS ═══════════════════ -->
+<section class="products">
+  <div class="section-inner">
+    <div class="section-title">
+      <h2>Популярные <span class="accent">букеты</span></h2>
+      <p>Хиты продаж и сезонные новинки</p>
+    </div>
+    <div class="products-grid">
+      {% for product in products %}
+      <a class="product-card" href="{% url 'product' product.slug %}">
+        <div class="product-img">
+          {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+          {% endif %}
+        </div>
+        <div class="product-body">
+          <div class="product-name">{{ product.name }}</div>
+          <div class="product-desc">{{ product.description }}</div>
+          <div class="product-footer">
+            <div class="product-price">{{ product.price }} ₽</div>
+            <button class="btn-add" data-id="{{ product.id }}">+</button>
+          </div>
+        </div>
+      </a>
+      {% empty %}
+      <p>Товары скоро появятся.</p>
+      {% endfor %}
+    </div>
+    <div style="text-align:center; margin-top: 2rem;">
+      <a href="{% url 'catalog' %}" class="btn-primary">Весь каталог</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ BANNER ═══════════════════ -->
+<section class="banner">
+  <div class="banner-inner">
+    <div>
+      <h2>Свадебные букеты и оформление</h2>
+      <p>Создадим флористику вашей мечты. Работаем с каждой парой индивидуально — от нежной классики до смелых авангардных решений.</p>
+      <div class="banner-features">
+        <div class="banner-feat"><div class="feat-icon">👰</div> Свадебный букет невесты</div>
+        <div class="banner-feat"><div class="feat-icon">🏛️</div> Украшение зала и арки</div>
+        <div class="banner-feat"><div class="feat-icon">🤝</div> Персональный флорист</div>
+      </div>
+      <br/>
+      <a href="#contacts" class="btn-primary">Получить консультацию</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ WHY ═══════════════════ -->
+<section class="why" id="about">
+  <div class="section-inner">
+    <div class="section-title">
+      <h2>Почему выбирают <span class="accent">нас</span></h2>
+      <p>Более 12 лет дарим радость жителям Омска</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-icon">🚀</div>
+        <h3>Доставка за 2 часа</h3>
+        <p>Развозим цветы по всему Омску. Экспресс-доставка за 1 час — тоже возможна.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🌿</div>
+        <h3>Только свежие цветы</h3>
+        <p>Прямые поставки из Нидерландов, Эквадора и собственных теплиц в Омской области.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🎨</div>
+        <h3>Ручная работа</h3>
+        <p>Каждый букет составляется флористом вручную. Индивидуальный подход к каждому заказу.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">💳</div>
+        <h3>Удобная оплата</h3>
+        <p>Картой, наличными или онлайн. Оплата при получении тоже доступна.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ REVIEWS ═══════════════════ -->
+<section class="reviews">
+  <div class="section-inner">
+    <div class="section-title">
+      <h2>Отзывы <span class="accent">клиентов</span></h2>
+      <p>Более 1 200 счастливых покупателей в Омске</p>
+    </div>
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">«Заказала букет маме на день рождения. Доставили вовремя, цветы свежайшие, упаковка красивая. Мама была в восторге! Обязательно закажу ещё.»</div>
+        <div class="review-author">
+          <div class="review-avatar">👩</div>
+          <div>
+            <div class="review-name">Анастасия К.</div>
+            <div class="review-date">12 апреля 2026</div>
+          </div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">«Брал букет жене неожиданно — позвонил в 19:00, привезли уже в 20:30. Розы стояли две недели! Цена приятная, буду заказывать постоянно.»</div>
+        <div class="review-author">
+          <div class="review-avatar">👨</div>
+          <div>
+            <div class="review-name">Дмитрий В.</div>
+            <div class="review-date">28 марта 2026</div>
+          </div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">«Заказывали свадебную флористику. Флорист всё выслушала, предложила идеи, результат превзошёл ожидания. Все гости спрашивали, кто делал оформление!»</div>
+        <div class="review-author">
+          <div class="review-avatar">👰</div>
+          <div>
+            <div class="review-name">Юлия и Игорь М.</div>
+            <div class="review-date">15 февраля 2026</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ DELIVERY ═══════════════════ -->
+<section class="delivery" id="delivery">
+  <div class="section-inner">
+    <div class="delivery-grid">
+      <div class="delivery-info">
+        <h2>Доставка по <span class="accent">всему Омску</span></h2>
+        <p>Доставляем букеты в любой район города ежедневно с 8:00 до 22:00.</p>
+        <div class="delivery-steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-text">
+              <h4>Выберите букет</h4>
+              <p>В нашем каталоге более 200 готовых букетов и составление на заказ</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-text">
+              <h4>Оформите заказ</h4>
+              <p>Укажите адрес, время и пожелание к открытке — онлайн или по телефону</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-text">
+              <h4>Получите цветы</h4>
+              <p>Курьер привезёт свежий букет точно в срок — в красивой упаковке</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="delivery-map">
+        <div class="map-icon">📍</div>
+        <div class="map-text">Омск, весь город</div>
+        <div class="map-addr">ул. Ленина, 12 — наш главный магазин<br/>Доставка: 300 ₽ · Бесплатно от 3 000 ₽</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ CONTACTS ═══════════════════ -->
+<section class="contacts" id="contacts">
+  <div class="contacts-inner">
+    <div>
+      <h2>Свяжитесь с нами</h2>
+      <p class="lead">Ответим на вопросы и поможем выбрать букет</p>
+      <div class="contact-list">
+        <div class="contact-item">
+          <div class="contact-icon">📞</div>
+          <div>
+            <div class="contact-label">Телефон</div>
+            <div class="contact-value">+7 (3812) 55-44-33</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">💬</div>
+          <div>
+            <div class="contact-label">WhatsApp / Telegram</div>
+            <div class="contact-value">+7 (908) 777-00-11</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">🕐</div>
+          <div>
+            <div class="contact-label">Режим работы</div>
+            <div class="contact-value">Ежедневно 8:00 — 22:00</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">📍</div>
+          <div>
+            <div class="contact-label">Адрес магазина</div>
+            <div class="contact-value">г. Омск, ул. Ленина, 12</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="order-form">
+      <h3>Быстрый заказ</h3>
+      <form method="post" action="{% url 'quick_order' %}">
+        {% csrf_token %}
+        <div class="form-row">
+          <div class="form-group">
+            <label>Ваше имя</label>
+            <input type="text" name="name" placeholder="Иван" required />
+          </div>
+          <div class="form-group">
+            <label>Телефон</label>
+            <input type="tel" name="phone" placeholder="+7 (___) ___-__-__" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Выберите повод</label>
+          <select name="occasion">
+            <option>День рождения</option>
+            <option>Свадьба</option>
+            <option>8 марта</option>
+            <option>Корпоратив</option>
+            <option>Просто так</option>
+            <option>Другое</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Пожелания к букету</label>
+          <textarea name="comment" placeholder="Например: розы белые, бюджет до 5 000 ₽, доставка к 18:00..."></textarea>
+        </div>
+        <button type="submit" class="btn-submit">Отправить заявку 🌸</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  const csrfToken = '{{ csrf_token }}';
+  document.querySelectorAll('.btn-add').forEach(btn => {
+    btn.addEventListener('click', async e => {
+      e.preventDefault();
+      e.stopPropagation();
+      const fd = new FormData();
+      fd.append('quantity', '1');
+      fd.append('csrfmiddlewaretoken', csrfToken);
+      try {
+        const resp = await fetch(`/cart/add/${btn.dataset.id}/`, {
+          method: 'POST', body: fd,
+          headers: {'X-Requested-With': 'XMLHttpRequest'},
+        });
+        if (resp.ok) {
+          const data = await resp.json();
+          if (data.ok) {
+            btn.textContent = '✓'; btn.style.background = '#16a34a';
+            document.querySelector('.cart-count').textContent = data.count;
+          } else {
+            btn.textContent = '✕'; btn.style.background = '#b45309';
+            btn.title = data.error;
+          }
+          setTimeout(() => { btn.textContent = '+'; btn.style.background = ''; btn.title = ''; }, 1200);
+        }
+      } catch {}
+    });
+  });
+</script>
+{% endblock %}

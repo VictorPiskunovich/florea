@@ -1,0 +1,322 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Оформление заказа — Floréa, Омск{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/checkout.css' %}" />
+{% endblock %}
+
+{% block content %}
+
+<div class="steps-bar">
+  <div class="steps-inner">
+    <div class="step-item done"><div class="step-num">✓</div><span class="step-name">Корзина</span></div>
+    <div class="step-line done"></div>
+    <div class="step-item active"><div class="step-num">2</div><span class="step-name">Оформление</span></div>
+    <div class="step-line"></div>
+    <div class="step-item"><div class="step-num">3</div><span class="step-name">Готово</span></div>
+  </div>
+</div>
+
+<div class="breadcrumb">
+  <div class="breadcrumb-inner">
+    <a href="{% url 'index' %}">Главная</a>
+    <span class="breadcrumb-sep">›</span>
+    <a href="{% url 'cart' %}">Корзина</a>
+    <span class="breadcrumb-sep">›</span>
+    <span class="breadcrumb-current">Оформление заказа</span>
+  </div>
+</div>
+
+<div class="checkout-page">
+  <form method="post" id="checkoutForm">
+    {% csrf_token %}
+    <input type="hidden" name="time_slot" id="timeSlotInput">
+
+    <div class="checkout-layout">
+
+      <div id="formCol">
+
+        <div class="form-section">
+          <div class="section-head"><div class="section-num">1</div><h3>Контактные данные</h3></div>
+          <div class="section-body">
+            <div class="field-row">
+              <div class="field">
+                <label>Имя *</label>
+                <input type="text" id="fname" name="fname" placeholder="Иван" />
+                <span class="field-error" id="fnameErr">Введите имя</span>
+              </div>
+              <div class="field">
+                <label>Фамилия</label>
+                <input type="text" id="lname" name="lname" placeholder="Иванов" />
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label>Телефон *</label>
+                <input type="tel" id="phone" name="phone" placeholder="+7 (___) ___-__-__" />
+                <span class="field-error" id="phoneErr">Введите корректный номер</span>
+              </div>
+              <div class="field">
+                <label>Email</label>
+                <input type="email" id="email" name="email" placeholder="ivan@mail.ru" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="section-head"><div class="section-num">2</div><h3>Способ получения</h3></div>
+          <div class="section-body">
+            <div class="delivery-toggle">
+              <label class="toggle-card active" id="cardDelivery">
+                <input type="radio" name="receive" value="delivery" class="toggle-radio" checked />
+                <span class="toggle-icon">🚚</span>
+                <div class="toggle-label"><b>Доставка курьером</b><span>По всему Омску · 300 ₽</span></div>
+              </label>
+              <label class="toggle-card" id="cardPickup">
+                <input type="radio" name="receive" value="pickup" class="toggle-radio" />
+                <span class="toggle-icon">🏪</span>
+                <div class="toggle-label"><b>Самовывоз</b><span>ул. Ленина, 12 · Бесплатно</span></div>
+              </label>
+            </div>
+            <div class="address-block" id="addressBlock">
+              <div class="field">
+                <label>Улица *</label>
+                <input type="text" id="street" name="street" placeholder="ул. Ленина" />
+                <span class="field-error" id="streetErr">Введите улицу</span>
+              </div>
+              <div class="field-row-3">
+                <div class="field"><label>Дом *</label><input type="text" id="house" name="house" placeholder="12" /><span class="field-error" id="houseErr">Укажите дом</span></div>
+                <div class="field"><label>Квартира</label><input type="text" id="flat" name="flat" placeholder="45" /></div>
+                <div class="field"><label>Подъезд / этаж</label><input type="text" id="entrance" name="entrance" placeholder="3 / 7" /></div>
+              </div>
+              <div class="field">
+                <label>Комментарий курьеру</label>
+                <textarea id="courierNote" name="courier_note" placeholder="Домофон 45, перезвоните за 30 минут..."></textarea>
+              </div>
+            </div>
+            <div class="pickup-info" id="pickupInfo">
+              <span class="pickup-info-icon">📍</span>
+              <div><strong>г. Омск, ул. Ленина, 12</strong><br/><span style="font-size:13px;color:var(--gray)">Ежедневно с 8:00 до 22:00</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="section-head"><div class="section-num">3</div><h3>Дата и время доставки</h3></div>
+          <div class="section-body">
+            <div class="field-row">
+              <div class="field">
+                <label>Дата *</label>
+                <input type="date" id="delDate" name="date" />
+                <span class="field-error" id="delDateErr">Выберите дату</span>
+              </div>
+              <div class="field">
+                <label>&nbsp;</label>
+                <label style="display:flex;align-items:center;gap:8px;padding:12px 16px;border:2px solid #e5e7eb;border-radius:10px;cursor:pointer;font-size:14px;margin:0">
+                  <input type="checkbox" id="asap" name="asap" style="accent-color:var(--green)" /> Как можно скорее
+                </label>
+              </div>
+            </div>
+            <div class="field" id="timeField">
+              <label>Время *</label>
+              <div class="time-slots" id="timeSlots"></div>
+              <span class="field-error" id="timeErr">Выберите время</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="section-head"><div class="section-num">4</div><h3>Открытка и пожелание</h3></div>
+          <div class="section-body">
+            <label class="card-checkbox">
+              <input type="checkbox" id="addCard" /><span class="check-box"></span>
+              Добавить открытку к букету (бесплатно)
+            </label>
+            <div class="card-extras" id="cardExtras">
+              <div class="field">
+                <label>Текст пожелания</label>
+                <textarea id="cardText" name="card_text" placeholder="Дорогая мамочка, поздравляю!"></textarea>
+              </div>
+              <div class="field">
+                <label>Подпись «от кого»</label>
+                <input type="text" id="cardFrom" name="card_from" placeholder="С любовью, Иван" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="section-head"><div class="section-num">5</div><h3>Способ оплаты</h3></div>
+          <div class="section-body">
+            <div class="payment-options">
+              <label class="payment-card active" data-method="online">
+                <input type="radio" name="payment" value="online" checked />
+                <span class="payment-icon">💳</span>
+                <div class="payment-label"><b>Картой онлайн</b><span>Visa, Mastercard, Мир</span></div>
+              </label>
+              <label class="payment-card" data-method="cash">
+                <input type="radio" name="payment" value="cash" />
+                <span class="payment-icon">💵</span>
+                <div class="payment-label"><b>Наличными курьеру</b><span>Подготовьте точную сумму</span></div>
+              </label>
+              <label class="payment-card" data-method="sbp">
+                <input type="radio" name="payment" value="sbp" />
+                <span class="payment-icon">⚡</span>
+                <div class="payment-label"><b>СБП</b><span>Перевод по QR-коду</span></div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section submit-block">
+          <div class="section-body">
+            <button type="submit" class="btn-submit-order" id="submitOrder">Подтвердить заказ 🌸</button>
+            <p class="submit-note">Нажимая кнопку, вы соглашаетесь с <a href="#" style="color:var(--green)">условиями публичной оферты</a></p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="order-summary" id="summaryCol">
+        <div class="summary-card">
+          <h3>Ваш заказ</h3>
+          <div class="summary-items">
+            {% for item in cart %}
+            <div class="summary-item">
+              <div class="s-img">
+                {% if item.product.image %}
+                  <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" style="width:100%;height:100%;object-fit:cover;border-radius:8px;">
+                {% else %}
+                  <div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:2rem;">💐</div>
+                {% endif %}
+              </div>
+              <div>
+                <div class="s-name">{{ item.product.name }}</div>
+                <div class="s-qty">{{ item.quantity }} шт.</div>
+              </div>
+              <div class="s-price">{{ item.subtotal }} ₽</div>
+            </div>
+            {% endfor %}
+          </div>
+          <div class="summary-divider"></div>
+          <div class="summary-rows">
+            <div class="summary-row"><span>Товары</span><span>{{ subtotal }} ₽</span></div>
+            <div class="summary-row" id="deliveryRow">
+              <span>Доставка</span>
+              <span id="deliveryPrice">{% if delivery == 0 %}Бесплатно 🎉{% else %}{{ delivery }} ₽{% endif %}</span>
+            </div>
+          </div>
+          <div class="summary-total">
+            <span>Итого</span>
+            <span class="summary-total-price" id="summaryTotal">{{ total }} ₽</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </form>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const SUBTOTAL = parseFloat('{{ subtotal }}');
+const FREE_DELIVERY = 3000;
+const DELIVERY_COST = 300;
+const TIME_SLOTS = ['8:00–10:00','10:00–12:00','12:00–14:00','14:00–16:00','16:00–18:00','18:00–20:00','20:00–22:00'];
+const BUSY_SLOTS  = ['8:00–10:00','12:00–14:00'];
+
+let deliveryMode = 'delivery', selTime = '';
+
+function fmt(n) { return n.toLocaleString('ru') + ' ₽'; }
+
+function updateDeliverySummary() {
+  const cost = deliveryMode === 'pickup' ? 0 : (SUBTOTAL >= FREE_DELIVERY ? 0 : DELIVERY_COST);
+  const total = SUBTOTAL + cost;
+  const el = document.getElementById('deliveryPrice');
+  if (deliveryMode === 'pickup') el.textContent = 'Самовывоз';
+  else if (cost === 0) el.textContent = 'Бесплатно 🎉';
+  else el.textContent = fmt(cost);
+  document.getElementById('summaryTotal').textContent = fmt(total);
+}
+
+function renderSlots() {
+  document.getElementById('timeSlots').innerHTML = TIME_SLOTS.map(t => {
+    const busy = BUSY_SLOTS.includes(t), active = t === selTime;
+    return `<div class="time-slot${busy?' busy':''}${active?' active':''}" data-time="${t}">${t}</div>`;
+  }).join('');
+  document.querySelectorAll('.time-slot:not(.busy)').forEach(el => {
+    el.addEventListener('click', () => { selTime = el.dataset.time; renderSlots(); });
+  });
+}
+
+document.querySelectorAll('.toggle-card').forEach(card => {
+  card.addEventListener('click', () => {
+    document.querySelectorAll('.toggle-card').forEach(c => c.classList.remove('active'));
+    card.classList.add('active');
+    deliveryMode = card.querySelector('.toggle-radio').value;
+    const isD = deliveryMode === 'delivery';
+    document.getElementById('addressBlock').classList.toggle('hidden', !isD);
+    document.getElementById('pickupInfo').classList.toggle('show', !isD);
+    updateDeliverySummary();
+  });
+});
+
+document.getElementById('addCard').addEventListener('change', function() {
+  document.getElementById('cardExtras').classList.toggle('show', this.checked);
+});
+
+document.querySelectorAll('.payment-card').forEach(card => {
+  card.addEventListener('click', () => {
+    document.querySelectorAll('.payment-card').forEach(c => c.classList.remove('active'));
+    card.classList.add('active');
+  });
+});
+
+const today = new Date();
+const dateInput = document.getElementById('delDate');
+dateInput.min = today.toISOString().split('T')[0];
+dateInput.value = today.toISOString().split('T')[0];
+
+document.getElementById('asap').addEventListener('change', function() {
+  document.getElementById('timeField').style.opacity = this.checked ? '.4' : '1';
+  document.getElementById('timeField').style.pointerEvents = this.checked ? 'none' : '';
+  if (this.checked) selTime = 'asap';
+  else { selTime = ''; renderSlots(); }
+});
+
+function required(id, errId) {
+  const val = document.getElementById(id).value.trim(), ok = val.length > 0;
+  document.getElementById(id).classList.toggle('error', !ok);
+  document.getElementById(errId).classList.toggle('show', !ok);
+  return ok;
+}
+function validate() {
+  let ok = required('fname', 'fnameErr') && required('phone', 'phoneErr');
+  if (deliveryMode === 'delivery') { ok = required('street', 'streetErr') && required('house', 'houseErr') && ok; }
+  ok = required('delDate', 'delDateErr') && ok;
+  const asap = document.getElementById('asap').checked;
+  if (!asap && !selTime) { document.getElementById('timeErr').classList.add('show'); ok = false; }
+  else document.getElementById('timeErr').classList.remove('show');
+  return ok;
+}
+
+document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+  if (!validate()) {
+    e.preventDefault();
+    document.querySelector('.field-error.show')?.closest('.form-section')?.scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  document.getElementById('timeSlotInput').value = selTime;
+  const btn = document.getElementById('submitOrder');
+  btn.textContent = '⏳ Оформляем заказ...';
+  btn.disabled = true;
+});
+
+renderSlots();
+</script>
+{% endblock %}
