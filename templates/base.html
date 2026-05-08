@@ -52,9 +52,34 @@
         🛒 Корзина
         <span class="cart-count">{{ cart_count|default:0 }}</span>
       </a>
+      <button class="burger" id="burgerBtn" aria-label="Меню">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </div>
 </header>
+
+<div class="mobile-nav-overlay" id="mobileOverlay"></div>
+<div class="mobile-nav" id="mobileNav">
+  <div class="mobile-nav-head">
+    <a href="{% url 'index' %}" class="logo">
+      <img class="logo-icon" src="{% static 'img/favicon/web-app-manifest-192x192.png' %}" alt="">
+      <span class="logo-text">Floréa</span>
+    </a>
+    <button class="mobile-nav-close" id="mobileNavClose" aria-label="Закрыть">✕</button>
+  </div>
+  <nav class="mobile-nav-links">
+    <a href="{% url 'index' %}">Главная</a>
+    <a href="{% url 'catalog' %}">Каталог</a>
+    <a href="{% url 'about' %}">О нас</a>
+    <a href="{% url 'cart' %}">Корзина <span class="cart-count-m">{{ cart_count|default:0 }}</span></a>
+    {% if user.is_authenticated %}
+    <a href="{% url 'account' %}">Личный кабинет</a>
+    {% else %}
+    <a href="{% url 'auth' %}">Войти</a>
+    {% endif %}
+  </nav>
+</div>
 
 {% block content %}{% endblock %}
 
@@ -132,6 +157,33 @@
 </button>
 
 <script>
+(function() {
+  var burger = document.getElementById('burgerBtn');
+  var nav = document.getElementById('mobileNav');
+  var overlay = document.getElementById('mobileOverlay');
+
+  function openMenu() {
+    nav.classList.add('open');
+    overlay.style.display = 'block';
+    requestAnimationFrame(function() { overlay.classList.add('show'); });
+    burger.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMenu() {
+    nav.classList.remove('open');
+    overlay.classList.remove('show');
+    burger.classList.remove('open');
+    document.body.style.overflow = '';
+    setTimeout(function() { overlay.style.display = 'none'; }, 300);
+  }
+
+  burger.addEventListener('click', function() {
+    nav.classList.contains('open') ? closeMenu() : openMenu();
+  });
+  document.getElementById('mobileNavClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+})();
+
 (function() {
   var btn = document.getElementById('backToTop');
   window.addEventListener('scroll', function() {
