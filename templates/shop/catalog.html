@@ -28,11 +28,11 @@
         <div class="filter-card">
           <div class="filter-title">Категория</div>
           <div class="cat-list">
-            <a href="{% url 'catalog' %}" class="cat-item {% if not current_category %}active{% endif %}">
+            <a href="{% url 'catalog' %}{% if current_colors %}?{% for c in current_colors %}colors={{ c }}{% if not forloop.last %}&{% endif %}{% endfor %}{% endif %}" class="cat-item {% if not current_category %}active{% endif %}">
               <div class="cat-item-left">Все букеты</div>
             </a>
             {% for cat in categories %}
-            <a href="?category={{ cat.slug }}{% if price_min %}&price_min={{ price_min }}{% endif %}{% if price_max %}&price_max={{ price_max }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}"
+            <a href="?category={{ cat.slug }}{% if price_min %}&price_min={{ price_min }}{% endif %}{% if price_max %}&price_max={{ price_max }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}{% for c in current_colors %}&colors={{ c }}{% endfor %}"
                class="cat-item {% if current_category == cat.slug %}active{% endif %}">
               <div class="cat-item-left">{{ cat.name }}</div>
               <span class="cat-item-count">{{ cat.products.count }}</span>
@@ -41,10 +41,25 @@
           </div>
         </div>
 
+        {% if colors %}
+        <div class="filter-card">
+          <div class="filter-title">Цвет</div>
+          <div class="color-filter-list">
+            {% for color in colors %}
+            <label class="color-filter-item">
+              <input type="checkbox" name="colors" value="{{ color.slug }}" {% if color.slug in current_colors %}checked{% endif %}>
+              <span class="color-dot" style="background:{{ color.hex_code }}"></span>
+              <span class="color-filter-name">{{ color.name }}</span>
+            </label>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+
         <div class="filter-card">
           <div class="filter-title">
             Цена, ₽
-            <a href="?{% if current_category %}category={{ current_category }}{% endif %}" class="filter-reset-link">Сбросить</a>
+            <a href="?{% if current_category %}category={{ current_category }}{% endif %}{% for c in current_colors %}&colors={{ c }}{% endfor %}" class="filter-reset-link">Сбросить</a>
           </div>
           <div class="price-inputs">
             <div class="price-input">

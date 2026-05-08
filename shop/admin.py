@@ -1,10 +1,17 @@
 from django.contrib import admin
-from .models import Category, Product, Inventory, Order, OrderItem
+from .models import Category, Color, Product, Inventory, Order, OrderItem
 
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug', 'order')
+    list_editable = ('order',)
+    prepopulated_fields = {'slug': ('name',)}
+
+
+@admin.register(Color)
+class ColorAdmin(admin.ModelAdmin):
+    list_display = ('name', 'slug', 'hex_code', 'order')
     list_editable = ('order',)
     prepopulated_fields = {'slug': ('name',)}
 
@@ -17,8 +24,9 @@ class InventoryInline(admin.StackedInline):
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('name', 'category', 'price', 'is_available', 'get_stock')
-    list_filter = ('category', 'is_available')
+    list_filter = ('category', 'is_available', 'colors')
     prepopulated_fields = {'slug': ('name',)}
+    filter_horizontal = ('colors',)
     inlines = [InventoryInline]
 
     def get_stock(self, obj):

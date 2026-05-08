@@ -24,6 +24,7 @@ class Product(models.Model):
     description = models.TextField('Описание', blank=True)
     price = models.DecimalField('Цена', max_digits=10, decimal_places=2)
     image = models.ImageField('Фото', upload_to='products/', blank=True)
+    colors = models.ManyToManyField('Color', blank=True, related_name='products', verbose_name='Цвета')
     is_available = models.BooleanField('В наличии', default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -133,6 +134,21 @@ class ProductImage(models.Model):
 
     class Meta:
         ordering = ['order', 'id']
+
+
+class Color(models.Model):
+    name = models.CharField('Название', max_length=50)
+    slug = models.SlugField(unique=True)
+    hex_code = models.CharField('HEX-цвет', max_length=7, default='#cccccc')
+    order = models.PositiveSmallIntegerField('Порядок', default=0)
+
+    class Meta:
+        verbose_name = 'Цвет'
+        verbose_name_plural = 'Цвета'
+        ordering = ['order', 'name']
+
+    def __str__(self):
+        return self.name
 
 
 class Banner(models.Model):

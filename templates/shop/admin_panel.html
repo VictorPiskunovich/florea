@@ -664,6 +664,18 @@
               🖼 Нажмите чтобы выбрать изображение
             </div>
           </div>
+          <div class="field pf-full">
+            <label>Цвета</label>
+            <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:6px;" id="colorCheckboxes">
+              {% for color in colors %}
+              <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:14px;">
+                <input type="checkbox" name="colors" value="{{ color.pk }}" id="color_{{ color.pk }}">
+                <span style="width:18px;height:18px;border-radius:50%;background:{{ color.hex_code }};border:2px solid rgba(0,0,0,.15);display:inline-block;"></span>
+                {{ color.name }}
+              </label>
+              {% endfor %}
+            </div>
+          </div>
           <div class="field pf-full" id="packagingSection" style="display:none">
             <label>Варианты упаковки</label>
             <div id="packagingList"></div>
@@ -925,6 +937,9 @@ function openProductModal(id = null) {
         renderPackaging(d.packaging || []);
         document.getElementById('gallerySection').style.display = 'block';
         renderGallery(d.gallery || []);
+        document.querySelectorAll('#colorCheckboxes input[type=checkbox]').forEach(cb => {
+          cb.checked = (d.color_ids || []).includes(parseInt(cb.value));
+        });
       });
   }
   document.getElementById('productModalOverlay').classList.add('active');

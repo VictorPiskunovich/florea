@@ -10,7 +10,7 @@ from django.db.models import ProtectedError, Q, Count, Sum, F, ExpressionWrapper
 from django.db.models.functions import TruncDay
 from django.utils import timezone
 from django.utils.text import slugify
-from .models import Product, Category, Order, OrderItem, Inventory, Wishlist, ProductImage, PackagingOption, GlobalPackagingOption, Banner
+from .models import Product, Category, Color, Order, OrderItem, Inventory, Wishlist, ProductImage, PackagingOption, GlobalPackagingOption, Banner
 from .cart import Cart, FREE_DELIVERY_THRESHOLD, DELIVERY_COST
 
 
@@ -46,6 +46,7 @@ def catalog(request):
     price_max = request.GET.get('price_max', '')
     sort = request.GET.get('sort', 'created_at')
     q = request.GET.get('q', '').strip()
+    color_slugs = request.GET.getlist('colors')
 
     if category_slug:
         products = products.filter(category__slug=category_slug)
@@ -53,6 +54,8 @@ def catalog(request):
         products = products.filter(price__gte=price_min)
     if price_max:
         products = products.filter(price__lte=price_max)
+    if color_slugs:
+        products = products.filter(colors__slug__in=color_slugs).distinct()
 
     sort_map = {
         'price-asc': 'price',
@@ -78,6 +81,7 @@ def catalog(request):
     filter_params = params.urlencode()
 
     categories = Category.objects.all()
+    colors = Color.objects.all()
 
     wishlist_ids = set(
         Wishlist.objects.filter(user=request.user).values_list('product_id', flat=True)
@@ -96,6 +100,8 @@ def catalog(request):
         'sort': sort,
         'q': q,
         'wishlist_ids': wishlist_ids,
+        'colors': colors,
+        'current_colors': color_slugs,
     })
 
 
@@ -408,6 +414,7 @@ def admin_panel(request):
     chart_values = json.dumps([daily_map.get(d, 0) for d in chart_days])
 
     context = {
+        'colors': Color.objects.all(),
         'products': Product.objects.select_related('category', 'inventory').all(),
         'product_count': Product.objects.count(),
         'available_count': Product.objects.filter(is_available=True).count(),
@@ -457,6 +464,7 @@ def product_detail_json(request, pk):
         'image_url': p.image.url if p.image else '',
         'gallery': gallery,
         'packaging': packaging,
+        'color_ids': list(p.colors.values_list('pk', flat=True)),
     })
 
 
@@ -501,6 +509,9 @@ def product_save(request, pk=None):
     qty = request.POST.get('quantity', '').strip()
     if qty.isdigit():
         Inventory.objects.update_or_create(product=p, defaults={'quantity': int(qty)})
+
+    color_ids = request.POST.getlist('colors')
+    p.colors.set(Color.objects.filter(pk__in=color_ids))
 
     return JsonResponse({'ok': True, 'id': p.pk, 'name': p.name})
 

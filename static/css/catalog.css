@@ -182,6 +182,27 @@
       border-color: var(--green);
       transform: scale(1.15);
     }
+
+    .color-filter-list { display: flex; flex-direction: column; gap: 8px; }
+    .color-filter-item {
+      display: flex; align-items: center; gap: 10px;
+      cursor: pointer; font-size: 14px; color: #374151;
+      user-select: none;
+    }
+    .color-filter-item input[type="checkbox"] { display: none; }
+    .color-dot {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      border: 2px solid rgba(0,0,0,.12);
+      flex-shrink: 0;
+      transition: transform .15s, box-shadow .15s;
+    }
+    .color-filter-item input:checked ~ .color-dot {
+      box-shadow: 0 0 0 3px var(--green);
+      transform: scale(1.15);
+    }
+    .color-filter-item:hover .color-dot { transform: scale(1.1); }
+    .color-filter-name { flex: 1; }
     .color-swatch.active::after {
       content: '✓';
       position: absolute;
