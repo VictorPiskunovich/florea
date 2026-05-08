@@ -173,6 +173,44 @@ class Banner(models.Model):
         return obj
 
 
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    phone = models.CharField('Телефон', max_length=20, blank=True)
+
+    class Meta:
+        verbose_name = 'Профиль пользователя'
+
+    def __str__(self):
+        return f'Профиль {self.user.username}'
+
+
+class Address(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='addresses', verbose_name='Пользователь')
+    title = models.CharField('Название', max_length=100, default='Домашний')
+    street = models.CharField('Улица', max_length=255)
+    house = models.CharField('Дом', max_length=20)
+    flat = models.CharField('Квартира', max_length=20, blank=True)
+    entrance = models.CharField('Подъезд/этаж', max_length=50, blank=True)
+    is_default = models.BooleanField('Основной', default=False)
+
+    class Meta:
+        verbose_name = 'Адрес доставки'
+        verbose_name_plural = 'Адреса доставки'
+        ordering = ['-is_default', 'id']
+
+    def __str__(self):
+        return f'{self.title} — {self.full_address}'
+
+    @property
+    def full_address(self):
+        parts = [f'ул. {self.street}, д. {self.house}']
+        if self.flat:
+            parts.append(f'кв. {self.flat}')
+        if self.entrance:
+            parts.append(f'подъезд/этаж {self.entrance}')
+        return ', '.join(parts)
+
+
 class Wishlist(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='wishlist')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='wishlisted_by')

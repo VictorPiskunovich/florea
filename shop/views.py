@@ -10,7 +10,7 @@ from django.db.models import ProtectedError, Q, Count, Sum, F, ExpressionWrapper
 from django.db.models.functions import TruncDay
 from django.utils import timezone
 from django.utils.text import slugify
-from .models import Product, Category, Color, Order, OrderItem, Inventory, Wishlist, ProductImage, PackagingOption, GlobalPackagingOption, Banner
+from .models import Product, Category, Color, Order, OrderItem, Inventory, Wishlist, Address, UserProfile, ProductImage, PackagingOption, GlobalPackagingOption, Banner
 from .cart import Cart, FREE_DELIVERY_THRESHOLD, DELIVERY_COST
 
 
@@ -262,9 +262,13 @@ def account(request):
         return redirect(f'/auth/?next=/account/')
     orders = request.user.orders.order_by('-created_at').prefetch_related('items__product')
     wishlist = request.user.wishlist.select_related('product').order_by('-created_at')
+    addresses = request.user.addresses.all()
+    profile, _ = UserProfile.objects.get_or_create(user=request.user)
     return render(request, 'shop/account.html', {
         'orders': orders,
         'wishlist': wishlist,
+        'addresses': addresses,
+        'profile': profile,
     })
 
 
@@ -345,11 +349,19 @@ def checkout(request):
     subtotal = c.get_total_price()
     delivery = c.get_delivery()
     total = c.get_total()
+    default_address = None
+    user_profile = None
+    if request.user.is_authenticated:
+        default_address = Address.objects.filter(user=request.user, is_default=True).first() or \
+                          Address.objects.filter(user=request.user).first()
+        user_profile, _ = UserProfile.objects.get_or_create(user=request.user)
     return render(request, 'shop/checkout.html', {
         'cart': c,
         'subtotal': subtotal,
         'delivery': delivery,
         'total': total,
+        'default_address': default_address,
+        'user_profile': user_profile,
     })
 
 
@@ -1082,6 +1094,122 @@ def banner_save(request):
 
 def page_not_found(request, exception=None):
     return render(request, '404.html', status=404)
+
+
+def address_save(request, pk=None):
+    if not request.user.is_authenticated:
+        return JsonResponse({'error': 'auth'}, status=401)
+    if request.method != 'POST':
+        return JsonResponse({'error': 'method'}, status=405)
+    addr = get_object_or_404(Address, pk=pk, user=request.user) if pk else Address(user=request.user)
+    street = request.POST.get('street', '').strip()
+    house = request.POST.get('house', '').strip()
+    if not street or not house:
+        return JsonResponse({'error': 'Улица и дом обязательны'}, status=400)
+    addr.title = request.POST.get('title', 'Домашний').strip() or 'Домашний'
+    addr.street = street
+    addr.house = house
+    addr.flat = request.POST.get('flat', '').strip()
+    addr.entrance = request.POST.get('entrance', '').strip()
+    is_default = request.POST.get('is_default') == 'on'
+    if is_default:
+        Address.objects.filter(user=request.user).update(is_default=False)
+    addr.is_default = is_default
+    if not Address.objects.filter(user=request.user).exclude(pk=addr.pk or 0).exists():
+        addr.is_default = True
+    addr.save()
+    return JsonResponse({'ok': True, 'id': addr.pk, 'title': addr.title,
+                         'full_address': addr.full_address, 'is_default': addr.is_default})
+
+
+def address_delete(request, pk):
+    if not request.user.is_authenticated:
+        return JsonResponse({'error': 'auth'}, status=401)
+    if request.method != 'POST':
+        return JsonResponse({'error': 'method'}, status=405)
+    addr = get_object_or_404(Address, pk=pk, user=request.user)
+    was_default = addr.is_default
+    addr.delete()
+    if was_default:
+        first = Address.objects.filter(user=request.user).first()
+        if first:
+            first.is_default = True
+            first.save(update_fields=['is_default'])
+    return JsonResponse({'ok': True})
+
+
+def address_set_default(request, pk):
+    if not request.user.is_authenticated:
+        return JsonResponse({'error': 'auth'}, status=401)
+    if request.method != 'POST':
+        return JsonResponse({'error': 'method'}, status=405)
+    Address.objects.filter(user=request.user).update(is_default=False)
+    addr = get_object_or_404(Address, pk=pk, user=request.user)
+    addr.is_default = True
+    addr.save(update_fields=['is_default'])
+    return JsonResponse({'ok': True})
+
+
+def order_repeat(request, pk):
+    if not request.user.is_authenticated:
+        return redirect('auth')
+    order = get_object_or_404(Order, pk=pk, user=request.user)
+    c = Cart(request)
+    for item in order.items.select_related('product'):
+        try:
+            c.add(item.product, quantity=item.quantity, override=False)
+        except Exception:
+            pass
+    return redirect('cart')
+
+
+def profile_update(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'error': 'auth'}, status=401)
+    if request.method != 'POST':
+        return JsonResponse({'error': 'method'}, status=405)
+    user = request.user
+    first_name = request.POST.get('first_name', '').strip()
+    last_name = request.POST.get('last_name', '').strip()
+    email = request.POST.get('email', '').strip()
+    if not first_name:
+        return JsonResponse({'error': 'Имя обязательно'}, status=400)
+    if not email:
+        return JsonResponse({'error': 'Email обязателен'}, status=400)
+    if User.objects.filter(username=email).exclude(pk=user.pk).exists():
+        return JsonResponse({'error': 'Этот email уже занят'}, status=400)
+    phone = request.POST.get('phone', '').strip()
+    user.first_name = first_name
+    user.last_name = last_name
+    user.email = email
+    user.username = email
+    user.save(update_fields=['first_name', 'last_name', 'email', 'username'])
+    profile, _ = UserProfile.objects.get_or_create(user=user)
+    profile.phone = phone
+    profile.save(update_fields=['phone'])
+    return JsonResponse({'ok': True, 'first_name': first_name, 'last_name': last_name, 'email': email, 'phone': phone})
+
+
+def password_change(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'error': 'auth'}, status=401)
+    if request.method != 'POST':
+        return JsonResponse({'error': 'method'}, status=405)
+    user = request.user
+    current = request.POST.get('current_password', '')
+    new1 = request.POST.get('new_password1', '')
+    new2 = request.POST.get('new_password2', '')
+    if not user.check_password(current):
+        return JsonResponse({'error': 'Неверный текущий пароль'}, status=400)
+    if len(new1) < 8:
+        return JsonResponse({'error': 'Пароль должен быть не менее 8 символов'}, status=400)
+    if new1 != new2:
+        return JsonResponse({'error': 'Пароли не совпадают'}, status=400)
+    user.set_password(new1)
+    user.save()
+    from django.contrib.auth import update_session_auth_hash
+    update_session_auth_hash(request, user)
+    return JsonResponse({'ok': True})
 
 
 def about(request):

@@ -152,8 +152,7 @@
               <div style="font-family:sans-serif;font-size:13px;color:var(--gray);margin-bottom:12px;white-space:pre-line;">{{ order.comment }}</div>
               {% endif %}
               <div class="history-item-actions">
-                <a href="{% url 'catalog' %}" class="btn-sm primary" style="text-decoration:none;">Повторить заказ</a>
-                <button class="btn-sm">Написать отзыв</button>
+                <a href="{% url 'order_repeat' order.pk %}" class="btn-sm primary" style="text-decoration:none;">Повторить заказ</a>
               </div>
             </div>
           </div>
@@ -173,66 +172,76 @@
 
         {% if user.is_authenticated %}
         <div class="profile-grid">
+
+          <!-- Основная информация -->
           <div class="profile-card">
             <div class="profile-card-title">
               Основная информация
-              <button class="profile-edit-btn">Редактировать</button>
+              <button class="profile-edit-btn" id="profileEditBtn" onclick="toggleProfileEdit()">Редактировать</button>
             </div>
-            <div class="profile-field">
-              <label>Имя</label>
-              <div class="profile-field-val">{{ user.first_name|default:"—" }}</div>
+            <div id="profileView">
+              <div class="profile-field">
+                <label>Имя</label>
+                <div class="profile-field-val" id="viewFirstName">{{ user.first_name|default:"—" }}</div>
+              </div>
+              <div class="profile-field">
+                <label>Фамилия</label>
+                <div class="profile-field-val" id="viewLastName">{{ user.last_name|default:"—" }}</div>
+              </div>
+              <div class="profile-field">
+                <label>Email</label>
+                <div class="profile-field-val" id="viewEmail">{{ user.email }}</div>
+              </div>
+              <div class="profile-field">
+                <label>Телефон</label>
+                <div class="profile-field-val" id="viewPhone">{{ profile.phone|default:"—" }}</div>
+              </div>
             </div>
-            <div class="profile-field">
-              <label>Фамилия</label>
-              <div class="profile-field-val">{{ user.last_name|default:"—" }}</div>
-            </div>
-            <div class="profile-field">
-              <label>Email</label>
-              <div class="profile-field-val">{{ user.email }}</div>
+            <div id="profileEdit" style="display:none;">
+              <div class="profile-field">
+                <label>Имя</label>
+                <input type="text" id="editFirstName" value="{{ user.first_name }}" placeholder="Имя">
+              </div>
+              <div class="profile-field">
+                <label>Фамилия</label>
+                <input type="text" id="editLastName" value="{{ user.last_name }}" placeholder="Фамилия">
+              </div>
+              <div class="profile-field">
+                <label>Email</label>
+                <input type="email" id="editEmail" value="{{ user.email }}" placeholder="email@example.com">
+              </div>
+              <div class="profile-field">
+                <label>Телефон</label>
+                <input type="tel" id="editPhone" value="{{ profile.phone }}" placeholder="+7 (___) ___-__-__">
+              </div>
+              <div id="profileError" style="color:#b91c1c;font-size:13px;margin-bottom:8px;display:none;"></div>
+              <div style="display:flex;gap:10px;margin-top:12px;">
+                <button class="btn-save" onclick="saveProfile()">Сохранить</button>
+                <button class="btn-sm" onclick="toggleProfileEdit()">Отмена</button>
+              </div>
             </div>
           </div>
 
-          <div class="profile-card">
-            <div class="profile-card-title">Уведомления</div>
-            <div class="notif-list">
-              <div class="notif-row">
-                <span>Статус заказа</span>
-                <label class="toggle-switch">
-                  <input type="checkbox" checked>
-                  <div class="toggle-track"><div class="toggle-thumb"></div></div>
-                </label>
-              </div>
-              <div class="notif-row">
-                <span>Акции и скидки</span>
-                <label class="toggle-switch">
-                  <input type="checkbox">
-                  <div class="toggle-track"><div class="toggle-thumb"></div></div>
-                </label>
-              </div>
-              <div class="notif-row">
-                <span>Новые поступления</span>
-                <label class="toggle-switch">
-                  <input type="checkbox" checked>
-                  <div class="toggle-track"><div class="toggle-thumb"></div></div>
-                </label>
-              </div>
-            </div>
-          </div>
-
+          <!-- Смена пароля -->
           <div class="profile-card password-section">
             <div class="profile-card-title">Смена пароля</div>
-            <div class="profile-grid" style="margin-bottom:0;">
-              <div class="profile-field">
-                <label>Новый пароль</label>
-                <input type="password" placeholder="••••••••">
-              </div>
-              <div class="profile-field">
-                <label>Повторите пароль</label>
-                <input type="password" placeholder="••••••••">
-              </div>
+            <div class="profile-field">
+              <label>Текущий пароль</label>
+              <input type="password" id="currentPassword" placeholder="••••••••">
             </div>
-            <button class="btn-save" style="margin-top:16px;">Сохранить изменения</button>
+            <div class="profile-field">
+              <label>Новый пароль</label>
+              <input type="password" id="newPassword1" placeholder="Минимум 8 символов">
+            </div>
+            <div class="profile-field">
+              <label>Повторите пароль</label>
+              <input type="password" id="newPassword2" placeholder="••••••••">
+            </div>
+            <div id="passwordError" style="color:#b91c1c;font-size:13px;margin-bottom:8px;display:none;"></div>
+            <div id="passwordSuccess" style="color:#16a34a;font-size:13px;margin-bottom:8px;display:none;">Пароль успешно изменён</div>
+            <button class="btn-save" style="margin-top:8px;" onclick="savePassword()">Сохранить пароль</button>
           </div>
+
         </div>
         {% else %}
         <div class="fav-empty">
@@ -252,19 +261,60 @@
             <p>Сохранённые адреса для быстрого оформления</p>
           </div>
         </div>
-        <div class="addresses-grid">
-          <div class="address-card default">
-            <span class="address-default-badge">Основной</span>
-            <div class="address-title">Домашний адрес</div>
-            <div class="address-text">г. Омск, ул. Ленина, д. 1, кв. 10</div>
+        <div class="addresses-grid" id="addressesGrid">
+          {% for addr in addresses %}
+          <div class="address-card {% if addr.is_default %}default{% endif %}" id="addr-{{ addr.pk }}">
+            {% if addr.is_default %}<span class="address-default-badge">Основной</span>{% endif %}
+            <div class="address-title">{{ addr.title }}</div>
+            <div class="address-text">г. Омск, {{ addr.full_address }}</div>
             <div class="address-card-actions">
-              <button class="btn-sm">Изменить</button>
-              <button class="btn-sm">Удалить</button>
+              <button class="btn-sm" onclick="openAddrModal({{ addr.pk }}, '{{ addr.title }}', '{{ addr.street }}', '{{ addr.house }}', '{{ addr.flat }}', '{{ addr.entrance }}', {{ addr.is_default|yesno:'true,false' }})">Изменить</button>
+              {% if not addr.is_default %}<button class="btn-sm" onclick="setDefaultAddr({{ addr.pk }})">Сделать основным</button>{% endif %}
+              <button class="btn-sm danger" onclick="deleteAddr({{ addr.pk }})">Удалить</button>
             </div>
           </div>
-          <button class="btn-add-address">
+          {% endfor %}
+          <button class="btn-add-address" onclick="openAddrModal()">
             <span style="font-size:20px;">＋</span> Добавить адрес
           </button>
+        </div>
+      </div>
+
+      <!-- Модалка адреса -->
+      <div class="logout-overlay" id="addrOverlay">
+        <div class="logout-modal" style="max-width:460px;width:100%;text-align:left;">
+          <h3 style="margin-bottom:16px;" id="addrModalTitle">Новый адрес</h3>
+          <input type="hidden" id="addrId">
+          <div class="profile-field">
+            <label>Название (напр. Домашний, Рабочий)</label>
+            <input type="text" id="addrTitle" placeholder="Домашний">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div class="profile-field">
+              <label>Улица *</label>
+              <input type="text" id="addrStreet" placeholder="Ленина">
+            </div>
+            <div class="profile-field">
+              <label>Дом *</label>
+              <input type="text" id="addrHouse" placeholder="12">
+            </div>
+            <div class="profile-field">
+              <label>Квартира</label>
+              <input type="text" id="addrFlat" placeholder="10">
+            </div>
+            <div class="profile-field">
+              <label>Подъезд/этаж</label>
+              <input type="text" id="addrEntrance" placeholder="2 подъезд, 3 этаж">
+            </div>
+          </div>
+          <label style="display:flex;align-items:center;gap:8px;margin:12px 0;font-size:14px;cursor:pointer;">
+            <input type="checkbox" id="addrDefault"> Сделать основным
+          </label>
+          <div id="addrError" style="color:#b91c1c;font-size:13px;margin-bottom:8px;display:none;"></div>
+          <div style="display:flex;gap:10px;margin-top:4px;">
+            <button class="btn-save" onclick="saveAddr()">Сохранить</button>
+            <button class="btn-sm" onclick="closeAddrModal()">Отмена</button>
+          </div>
         </div>
       </div>
 
@@ -360,6 +410,34 @@
 
   const csrf = '{{ csrf_token }}';
 
+  function applyPhoneMask(input) {
+    input.addEventListener('input', function(e) {
+      let digits = this.value.replace(/\D/g, '');
+      if (digits.startsWith('8')) digits = '7' + digits.slice(1);
+      if (!digits.startsWith('7')) digits = '7' + digits;
+      digits = digits.slice(0, 11);
+      let result = '+7';
+      if (digits.length > 1) result += ' (' + digits.slice(1, 4);
+      if (digits.length >= 4) result += ') ' + digits.slice(4, 7);
+      if (digits.length >= 7) result += ' ' + digits.slice(7, 9);
+      if (digits.length >= 9) result += ' ' + digits.slice(9, 11);
+      this.value = result;
+    });
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Backspace' && (this.value === '+7' || this.value === '+7 ')) {
+        this.value = '';
+        e.preventDefault();
+      }
+    });
+    input.addEventListener('focus', function() {
+      if (!this.value) this.value = '+7 ';
+    });
+    input.addEventListener('blur', function() {
+      if (this.value === '+7 ' || this.value === '+7') this.value = '';
+    });
+  }
+  applyPhoneMask(document.getElementById('editPhone'));
+
   document.querySelectorAll('.fav-remove-btn').forEach(btn => {
     btn.addEventListener('click', async () => {
       const fd = new FormData();
@@ -417,5 +495,118 @@
       }
     });
   });
+
+  function openAddrModal(id=null, title='', street='', house='', flat='', entrance='', isDefault=false) {
+    document.getElementById('addrId').value = id || '';
+    document.getElementById('addrModalTitle').textContent = id ? 'Редактировать адрес' : 'Новый адрес';
+    document.getElementById('addrTitle').value = title;
+    document.getElementById('addrStreet').value = street;
+    document.getElementById('addrHouse').value = house;
+    document.getElementById('addrFlat').value = flat;
+    document.getElementById('addrEntrance').value = entrance;
+    document.getElementById('addrDefault').checked = isDefault;
+    document.getElementById('addrError').style.display = 'none';
+    document.getElementById('addrOverlay').classList.add('show');
+  }
+  function closeAddrModal() {
+    document.getElementById('addrOverlay').classList.remove('show');
+  }
+  document.getElementById('addrOverlay').addEventListener('click', e => {
+    if (e.target === document.getElementById('addrOverlay')) closeAddrModal();
+  });
+
+  async function saveAddr() {
+    const id = document.getElementById('addrId').value;
+    const fd = new FormData();
+    fd.append('csrfmiddlewaretoken', csrf);
+    fd.append('title', document.getElementById('addrTitle').value.trim());
+    fd.append('street', document.getElementById('addrStreet').value.trim());
+    fd.append('house', document.getElementById('addrHouse').value.trim());
+    fd.append('flat', document.getElementById('addrFlat').value.trim());
+    fd.append('entrance', document.getElementById('addrEntrance').value.trim());
+    if (document.getElementById('addrDefault').checked) fd.append('is_default', 'on');
+    const errEl = document.getElementById('addrError');
+    errEl.style.display = 'none';
+    const url = id ? `/account/address/${id}/edit/` : '/account/address/add/';
+    const resp = await fetch(url, { method: 'POST', body: fd });
+    const data = await resp.json();
+    if (!resp.ok) { errEl.textContent = data.error; errEl.style.display = 'block'; return; }
+    closeAddrModal();
+    location.reload();
+  }
+
+  async function deleteAddr(id) {
+    if (!confirm('Удалить адрес?')) return;
+    const fd = new FormData();
+    fd.append('csrfmiddlewaretoken', csrf);
+    const resp = await fetch(`/account/address/${id}/delete/`, { method: 'POST', body: fd });
+    if (resp.ok) location.reload();
+  }
+
+  async function setDefaultAddr(id) {
+    const fd = new FormData();
+    fd.append('csrfmiddlewaretoken', csrf);
+    const resp = await fetch(`/account/address/${id}/default/`, { method: 'POST', body: fd });
+    if (resp.ok) location.reload();
+  }
+
+  function toggleProfileEdit() {
+    const view = document.getElementById('profileView');
+    const edit = document.getElementById('profileEdit');
+    const btn = document.getElementById('profileEditBtn');
+    const isEditing = edit.style.display !== 'none';
+    view.style.display = isEditing ? '' : 'none';
+    edit.style.display = isEditing ? 'none' : '';
+    btn.textContent = isEditing ? 'Редактировать' : 'Отмена';
+    document.getElementById('profileError').style.display = 'none';
+  }
+
+  async function saveProfile() {
+    const fd = new FormData();
+    fd.append('csrfmiddlewaretoken', csrf);
+    fd.append('first_name', document.getElementById('editFirstName').value.trim());
+    fd.append('last_name', document.getElementById('editLastName').value.trim());
+    fd.append('email', document.getElementById('editEmail').value.trim());
+    fd.append('phone', document.getElementById('editPhone').value.trim());
+    const errEl = document.getElementById('profileError');
+    errEl.style.display = 'none';
+    const resp = await fetch('/account/update/', { method: 'POST', body: fd });
+    const data = await resp.json();
+    if (!resp.ok) {
+      errEl.textContent = data.error;
+      errEl.style.display = 'block';
+      return;
+    }
+    document.getElementById('viewFirstName').textContent = data.first_name || '—';
+    document.getElementById('viewLastName').textContent = data.last_name || '—';
+    document.getElementById('viewEmail').textContent = data.email;
+    document.getElementById('viewPhone').textContent = data.phone || '—';
+    document.querySelector('.user-name').textContent = (data.first_name + ' ' + data.last_name).trim() || data.email;
+    document.querySelector('.user-since').textContent = data.email;
+    toggleProfileEdit();
+  }
+
+  async function savePassword() {
+    const fd = new FormData();
+    fd.append('csrfmiddlewaretoken', csrf);
+    fd.append('current_password', document.getElementById('currentPassword').value);
+    fd.append('new_password1', document.getElementById('newPassword1').value);
+    fd.append('new_password2', document.getElementById('newPassword2').value);
+    const errEl = document.getElementById('passwordError');
+    const okEl = document.getElementById('passwordSuccess');
+    errEl.style.display = 'none';
+    okEl.style.display = 'none';
+    const resp = await fetch('/account/password/', { method: 'POST', body: fd });
+    const data = await resp.json();
+    if (!resp.ok) {
+      errEl.textContent = data.error;
+      errEl.style.display = 'block';
+      return;
+    }
+    okEl.style.display = 'block';
+    document.getElementById('currentPassword').value = '';
+    document.getElementById('newPassword1').value = '';
+    document.getElementById('newPassword2').value = '';
+  }
 </script>
 {% endblock %}

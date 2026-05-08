@@ -229,6 +229,18 @@ const FREE_DELIVERY = 3000;
 const DELIVERY_COST = 300;
 const TIME_SLOTS = ['8:00–10:00','10:00–12:00','12:00–14:00','14:00–16:00','16:00–18:00','18:00–20:00','20:00–22:00'];
 const BUSY_SLOTS  = ['8:00–10:00','12:00–14:00'];
+{% if user.is_authenticated %}
+document.getElementById('fname').value = '{{ user.first_name|escapejs }}';
+document.getElementById('lname').value = '{{ user.last_name|escapejs }}';
+document.getElementById('email').value = '{{ user.email|escapejs }}';
+{% if user_profile and user_profile.phone %}document.getElementById('phone').value = '{{ user_profile.phone|escapejs }}';{% endif %}
+{% endif %}
+{% if default_address %}
+document.getElementById('street').value = '{{ default_address.street|escapejs }}';
+document.getElementById('house').value = '{{ default_address.house|escapejs }}';
+document.getElementById('flat').value = '{{ default_address.flat|escapejs }}';
+document.getElementById('entrance').value = '{{ default_address.entrance|escapejs }}';
+{% endif %}
 
 let deliveryMode = 'delivery', selTime = '';
 
@@ -318,5 +330,34 @@ document.getElementById('checkoutForm').addEventListener('submit', function(e) {
 });
 
 renderSlots();
+
+(function() {
+  const phone = document.getElementById('phone');
+  phone.addEventListener('input', function() {
+    let digits = this.value.replace(/\D/g, '');
+    if (digits.startsWith('8')) digits = '7' + digits.slice(1);
+    if (!digits.startsWith('7')) digits = '7' + digits;
+    digits = digits.slice(0, 11);
+    let result = '+7';
+    if (digits.length > 1) result += ' (' + digits.slice(1, 4);
+    if (digits.length >= 4) result += ') ' + digits.slice(4, 7);
+    if (digits.length >= 7) result += ' ' + digits.slice(7, 9);
+    if (digits.length >= 9) result += ' ' + digits.slice(9, 11);
+    this.value = result;
+  });
+  phone.addEventListener('keydown', function(e) {
+    if (e.key === 'Backspace' && (this.value === '+7' || this.value === '+7 ')) {
+      this.value = '';
+      e.preventDefault();
+    }
+  });
+  phone.addEventListener('focus', function() {
+    if (!this.value) this.value = '+7 ';
+  });
+  phone.addEventListener('blur', function() {
+    if (this.value === '+7 ' || this.value === '+7') this.value = '';
+  });
+  if (phone.value) phone.dispatchEvent(new Event('input'));
+})();
 </script>
 {% endblock %}
