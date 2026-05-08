@@ -1084,6 +1084,10 @@ def page_not_found(request, exception=None):
     return render(request, '404.html', status=404)
 
 
+def about(request):
+    return render(request, 'shop/about.html')
+
+
 def quick_order(request):
     if request.method == 'POST':
         Order.objects.create(

@@ -1,0 +1,222 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}О нас — Floréa, Омск{% endblock %}
+{% block meta_description %}Floréa — цветочный магазин в Омске с 2012 года. Свежие букеты ручной работы, доставка по всему городу за 2 часа.{% endblock %}
+
+{% block content %}
+
+<div class="breadcrumb">
+  <div class="breadcrumb-inner">
+    <a href="{% url 'index' %}" style="text-decoration:none;">Главная</a>
+    <span class="breadcrumb-sep">›</span>
+    <span class="breadcrumb-current">О нас</span>
+  </div>
+</div>
+
+<div class="about-page">
+
+  <!-- Герой -->
+  <section class="about-hero">
+    <div class="about-hero-text">
+      <span class="about-tag">С 2012 года в Омске</span>
+      <h1 class="about-title">Мы создаём букеты<br>с душой</h1>
+      <p class="about-subtitle">Floréa — это команда флористов, которые искренне любят своё дело. Каждый букет собирается вручную из свежих цветов, доставленных напрямую с плантаций.</p>
+      <a href="{% url 'catalog' %}" class="btn btn--green">Смотреть каталог</a>
+    </div>
+    <div class="about-hero-img">
+      <img src="{% static 'img/rose.avif' %}" alt="Флористы Floréa">
+    </div>
+  </section>
+
+  <!-- Цифры -->
+  <section class="about-stats">
+    <div class="about-stat">
+      <div class="about-stat-num">12+</div>
+      <div class="about-stat-label">лет на рынке</div>
+    </div>
+    <div class="about-stat">
+      <div class="about-stat-num">1200+</div>
+      <div class="about-stat-label">довольных клиентов</div>
+    </div>
+    <div class="about-stat">
+      <div class="about-stat-num">4.9</div>
+      <div class="about-stat-label">средний рейтинг</div>
+    </div>
+    <div class="about-stat">
+      <div class="about-stat-num">2 ч</div>
+      <div class="about-stat-label">доставка по городу</div>
+    </div>
+  </section>
+
+  <!-- История -->
+  <section class="about-section">
+    <h2 class="about-section-title">Наша история</h2>
+    <div class="about-story">
+      <div class="about-story-item">
+        <div class="about-story-year">2012</div>
+        <div class="about-story-text">Открыли первый небольшой цветочный павильон на рынке. Начинали вдвоём — с огромным желанием и маленькими оборотами.</div>
+      </div>
+      <div class="about-story-item">
+        <div class="about-story-year">2016</div>
+        <div class="about-story-text">Переехали в полноценный магазин в центре города. Начали работать с профессиональными поставщиками из Нидерландов и Эквадора.</div>
+      </div>
+      <div class="about-story-item">
+        <div class="about-story-year">2020</div>
+        <div class="about-story-text">Запустили доставку по всему Омску. Несмотря на сложный год — выросли в 2 раза благодаря онлайн-заказам.</div>
+      </div>
+      <div class="about-story-item">
+        <div class="about-story-year">2024</div>
+        <div class="about-story-text">Открыли второй магазин и запустили этот сайт. Продолжаем расти вместе с нашими клиентами.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ценности -->
+  <section class="about-section about-section--gray">
+    <h2 class="about-section-title">Почему выбирают нас</h2>
+    <div class="about-values">
+      <div class="about-value">
+        <div class="about-value-icon">🌿</div>
+        <h3>Только свежие цветы</h3>
+        <p>Получаем поставки 3 раза в неделю напрямую с плантаций. Никаких залежавшихся цветов.</p>
+      </div>
+      <div class="about-value">
+        <div class="about-value-icon">✂️</div>
+        <h3>Ручная работа</h3>
+        <p>Каждый букет собирается нашими флористами индивидуально. Шаблонных решений не держим.</p>
+      </div>
+      <div class="about-value">
+        <div class="about-value-icon">🚚</div>
+        <h3>Быстрая доставка</h3>
+        <p>Доставляем по всему Омску за 2 часа. Бережно упаковываем чтобы цветы не помялись в пути.</p>
+      </div>
+      <div class="about-value">
+        <div class="about-value-icon">💬</div>
+        <h3>Живая поддержка</h3>
+        <p>Ответим на любой вопрос по телефону или в мессенджере. Поможем выбрать букет для любого повода.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Контакты -->
+  <section class="about-section" id="contacts">
+    <h2 class="about-section-title">Контакты</h2>
+    <div class="about-contacts">
+      <div class="about-contact-item">
+        <div class="about-contact-icon">📍</div>
+        <div>
+          <div class="about-contact-label">Адрес</div>
+          <div class="about-contact-value">г. Омск, ул. Ленина, 12</div>
+        </div>
+      </div>
+      <div class="about-contact-item">
+        <div class="about-contact-icon">📞</div>
+        <div>
+          <div class="about-contact-label">Телефон</div>
+          <div class="about-contact-value"><a href="tel:+73812000000">+7 (3812) 00-00-00</a></div>
+        </div>
+      </div>
+      <div class="about-contact-item">
+        <div class="about-contact-icon">🕐</div>
+        <div>
+          <div class="about-contact-label">Режим работы</div>
+          <div class="about-contact-value">Ежедневно с 8:00 до 21:00</div>
+        </div>
+      </div>
+      <div class="about-contact-item">
+        <div class="about-contact-icon">✉️</div>
+        <div>
+          <div class="about-contact-label">Email</div>
+          <div class="about-contact-value"><a href="mailto:hello@florea.ru">hello@florea.ru</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<style>
+.breadcrumb { background: var(--white); border-bottom: 1px solid #f3f4f6; padding: 14px 24px; }
+.breadcrumb-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--gray); }
+.breadcrumb a { color: var(--gray); text-decoration: none; transition: color .2s; }
+.breadcrumb a:hover { color: var(--green); }
+.breadcrumb-sep { opacity: .4; }
+.breadcrumb-current { color: var(--dark); font-weight: 500; }
+
+.about-page { max-width: 1100px; margin: 0 auto; padding: 0 20px 60px; }
+
+.about-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+  padding: 48px 0;
+}
+.about-tag {
+  display: inline-block;
+  background: #f0fdf4;
+  color: #2d6a4f;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+}
+.about-title { font-size: 42px; font-weight: 800; line-height: 1.2; margin-bottom: 16px; color: #1a1a2e; }
+.about-subtitle { font-size: 16px; color: #6b7280; line-height: 1.7; margin-bottom: 28px; }
+.about-hero-img img { width: 100%; border-radius: 20px; object-fit: cover; height: 380px; }
+
+.about-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  background: #2d6a4f;
+  border-radius: 20px;
+  padding: 36px;
+  margin-bottom: 60px;
+}
+.about-stat { text-align: center; color: #fff; }
+.about-stat-num { font-size: 36px; font-weight: 800; }
+.about-stat-label { font-size: 14px; opacity: .8; margin-top: 4px; }
+
+.about-section { margin-bottom: 60px; }
+.about-section--gray { background: #f9fafb; border-radius: 20px; padding: 40px; }
+.about-section-title { font-size: 28px; font-weight: 700; color: #1a1a2e; margin-bottom: 32px; text-align: center; }
+
+.about-story { display: flex; flex-direction: column; gap: 0; max-width: 700px; margin: 0 auto; }
+.about-story-item { display: grid; grid-template-columns: 80px 1fr; gap: 24px; padding: 20px 0; border-bottom: 1px solid #f3f4f6; }
+.about-story-item:last-child { border-bottom: none; }
+.about-story-year { font-size: 22px; font-weight: 800; color: #2d6a4f; }
+.about-story-text { font-size: 15px; color: #4b5563; line-height: 1.7; padding-top: 4px; }
+
+.about-values { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.about-value { text-align: center; }
+.about-value-icon { font-size: 36px; margin-bottom: 12px; }
+.about-value h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; color: #1a1a2e; }
+.about-value p { font-size: 14px; color: #6b7280; line-height: 1.6; }
+
+.about-contacts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; max-width: 700px; margin: 0 auto; }
+.about-contact-item { display: flex; align-items: flex-start; gap: 16px; background: #f9fafb; border-radius: 14px; padding: 20px; }
+.about-contact-icon { font-size: 24px; }
+.about-contact-label { font-size: 12px; color: #9ca3af; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 4px; }
+.about-contact-value { font-size: 15px; font-weight: 600; color: #1a1a2e; }
+.about-contact-value a { color: #2d6a4f; text-decoration: none; }
+.about-page a { text-decoration: none; }
+.about-contact-value a:hover { text-decoration: underline; }
+
+@media (max-width: 900px) {
+  .about-hero { grid-template-columns: 1fr; }
+  .about-hero-img { display: none; }
+  .about-title { font-size: 30px; }
+  .about-stats { grid-template-columns: repeat(2, 1fr); }
+  .about-values { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .about-stats { grid-template-columns: repeat(2, 1fr); padding: 24px; }
+  .about-values { grid-template-columns: 1fr; }
+  .about-contacts { grid-template-columns: 1fr; }
+}
+</style>
+
+{% endblock %}

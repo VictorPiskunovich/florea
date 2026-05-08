@@ -33,10 +33,9 @@
       </div>
     </a>
     <nav>
+      <a href="{% url 'index' %}">Главная</a>
       <a href="{% url 'catalog' %}">Каталог</a>
-      <a href="{% url 'index' %}#delivery">Доставка</a>
-      <a href="{% url 'index' %}#about">О нас</a>
-      <a href="{% url 'index' %}#contacts">Контакты</a>
+      <a href="{% url 'about' %}">О нас</a>
     </nav>
     <div class="header-actions">
       {% if user.is_authenticated %}
@@ -70,10 +69,9 @@
 
     <div class="footer-col">
       <div class="footer-col-title">Разделы</div>
+      <a href="{% url 'index' %}">Главная</a>
       <a href="{% url 'catalog' %}">Каталог</a>
-      <a href="{% url 'index' %}#delivery">Доставка</a>
-      <a href="{% url 'index' %}#about">О нас</a>
-      <a href="{% url 'index' %}#contacts">Контакты</a>
+      <a href="{% url 'about' %}">О нас</a>
       <a href="{% url 'account' %}">Личный кабинет</a>
       <a href="{% url 'cart' %}">Корзина</a>
     </div>
