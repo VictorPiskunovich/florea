@@ -10,7 +10,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      font-family: sans-serif;
+      font-family: inherit;
       font-size: 13px;
       color: var(--gray);
     }
@@ -57,7 +57,7 @@
       left: 20px;
       background: #ef4444;
       color: #fff;
-      font-family: sans-serif;
+      font-family: inherit;
       font-size: 14px;
       font-weight: 700;
       padding: 6px 14px;
@@ -69,7 +69,7 @@
       right: 14px;
       background: rgba(0,0,0,.45);
       color: #fff;
-      font-family: sans-serif;
+      font-family: inherit;
       font-size: 13px;
       font-weight: 600;
       padding: 4px 10px;
@@ -100,7 +100,7 @@
 
     .info-tags { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
     .info-tag {
-      font-family: sans-serif;
+      font-family: inherit;
       font-size: 12px;
       padding: 4px 12px;
       border-radius: 50px;
@@ -116,7 +116,7 @@
       margin-bottom: 8px;
     }
     .info-subtitle {
-      font-family: sans-serif;
+      font-family: inherit;
       font-size: 15px;
       color: var(--gray);
       margin-bottom: 20px;
@@ -129,10 +129,10 @@
       margin-bottom: 28px;
     }
     .stars { color: #fbbf24; font-size: 18px; letter-spacing: 1px; }
-    .rating-val { font-family: sans-serif; font-weight: 700; font-size: 15px; }
-    .rating-cnt { font-family: sans-serif; font-size: 13px; color: var(--gray); }
+    .rating-val { font-family: inherit; font-weight: 700; font-size: 15px; }
+    .rating-cnt { font-family: inherit; font-size: 13px; color: var(--gray); }
     .rating-sep { color: #e5e7eb; }
-    .in-stock { font-family: sans-serif; font-size: 13px; color: var(--green); font-weight: 600; }
+    .in-stock { font-family: inherit; font-size: 13px; color: var(--green); font-weight: 600; }
 
     .info-price-block { margin-bottom: 32px; }
     .info-price {
@@ -142,7 +142,7 @@
       line-height: 1;
     }
     .info-price-old {
-      font-family: sans-serif;
+      font-family: inherit;
       font-size: 20px;
       color: var(--gray);
       text-decoration: line-through;
@@ -150,7 +150,7 @@
     }
     .info-economy {
       display: inline-block;
-      font-family: sans-serif;
+      font-family: inherit;
       font-size: 13px;
       background: #fef2f2;
       color: #ef4444;
@@ -163,7 +163,7 @@
     /* ─── OPTIONS ─── */
     .option-block { margin-bottom: 24px; }
     .option-label {
-      font-family: sans-serif;
+      font-family: inherit;
       font-size: 13px;
       font-weight: 600;
       text-transform: uppercase;
@@ -173,7 +173,7 @@
     }
     .option-chips { display: flex; gap: 8px; flex-wrap: wrap; }
     .chip {
-      font-family: sans-serif;
+      font-family: inherit;
       font-size: 14px;
       padding: 8px 18px;
       border-radius: 50px;
@@ -242,7 +242,7 @@
     .qty-val {
       width: 48px;
       text-align: center;
-      font-family: sans-serif;
+      font-family: inherit;
       font-size: 16px;
       font-weight: 700;
       border: none;
@@ -255,7 +255,7 @@
       border: none;
       border-radius: 50px;
       padding: 14px 28px;
-      font-family: sans-serif;
+      font-family: inherit;
       font-size: 16px;
       font-weight: 600;
       cursor: pointer;
@@ -277,7 +277,7 @@
     .btn-wish.active { border-color: #ef4444; background: #fef2f2; }
 
     .fast-order {
-      font-family: sans-serif;
+      font-family: inherit;
       font-size: 14px;
       color: var(--green);
       text-align: center;
@@ -302,7 +302,7 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      font-family: sans-serif;
+      font-family: inherit;
       font-size: 14px;
     }
     .di-icon {
@@ -329,7 +329,7 @@
       justify-content: space-between;
       align-items: center;
       cursor: pointer;
-      font-family: sans-serif;
+      font-family: inherit;
       font-size: 15px;
       font-weight: 600;
       color: var(--dark);
@@ -337,7 +337,7 @@
     .acc-arrow { transition: transform .2s; font-size: 12px; color: var(--gray); }
     .acc-header.open .acc-arrow { transform: rotate(180deg); }
     .acc-body {
-      font-family: sans-serif;
+      font-family: inherit;
       font-size: 14px;
       color: var(--gray);
       line-height: 1.7;
@@ -370,7 +370,7 @@
       color: var(--green);
       border-radius: 50px;
       padding: 10px 24px;
-      font-family: sans-serif;
+      font-family: inherit;
       font-size: 14px;
       font-weight: 600;
       cursor: pointer;
@@ -390,13 +390,13 @@
     .rating-big { text-align: center; }
     .rating-big .num { font-size: 56px; font-weight: 700; color: var(--dark); line-height: 1; }
     .rating-big .stars { font-size: 22px; }
-    .rating-big .cnt { font-family: sans-serif; font-size: 13px; color: var(--gray); margin-top: 4px; }
+    .rating-big .cnt { font-family: inherit; font-size: 13px; color: var(--gray); margin-top: 4px; }
     .rating-bars { flex: 1; display: flex; flex-direction: column; gap: 8px; min-width: 200px; }
     .bar-row {
       display: flex;
       align-items: center;
       gap: 10px;
-      font-family: sans-serif;
+      font-family: inherit;
       font-size: 13px;
       color: var(--gray);
     }

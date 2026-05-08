@@ -10,7 +10,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-family: sans-serif;
+  font-family: inherit;
   font-size: 13px;
   color: var(--gray);
 }
@@ -73,7 +73,7 @@
 }
 .avatar-edit:hover { border-color: var(--green); }
 .user-name { font-size: 17px; font-weight: 700; margin-bottom: 4px; }
-.user-since { font-family: sans-serif; font-size: 12px; color: var(--gray); margin-bottom: 14px; }
+.user-since { font-family: inherit; font-size: 12px; color: var(--gray); margin-bottom: 14px; }
 .user-stats {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -86,7 +86,7 @@
   text-align: center;
 }
 .stat-pill-val { font-size: 18px; font-weight: 700; color: var(--green); display: block; }
-.stat-pill-label { font-family: sans-serif; font-size: 11px; color: var(--gray); }
+.stat-pill-label { font-family: inherit; font-size: 11px; color: var(--gray); }
 
 /* Бонусы */
 .bonus-card {
@@ -95,9 +95,9 @@
   padding: 18px 20px;
   color: #fff;
 }
-.bonus-label { font-family: sans-serif; font-size: 12px; opacity: .75; margin-bottom: 4px; }
+.bonus-label { font-family: inherit; font-size: 12px; opacity: .75; margin-bottom: 4px; }
 .bonus-val { font-size: 28px; font-weight: 700; margin-bottom: 2px; }
-.bonus-sub { font-family: sans-serif; font-size: 12px; opacity: .7; }
+.bonus-sub { font-family: inherit; font-size: 12px; opacity: .7; }
 .bonus-bar-track {
   height: 4px;
   background: rgba(255,255,255,.25);
@@ -125,7 +125,7 @@
   gap: 12px;
   padding: 14px 20px;
   cursor: pointer;
-  font-family: sans-serif;
+  font-family: inherit;
   font-size: 14px;
   color: var(--dark);
   border-left: 3px solid transparent;
@@ -164,7 +164,7 @@
   gap: 12px;
 }
 .panel-header h2 { font-size: clamp(20px, 3vw, 26px); }
-.panel-header p { font-family: sans-serif; font-size: 14px; color: var(--gray); margin-top: 4px; }
+.panel-header p { font-family: inherit; font-size: 14px; color: var(--gray); margin-top: 4px; }
 
 /* ─── АКТИВНЫЕ ЗАКАЗЫ ─── */
 .active-order-card {
@@ -184,13 +184,13 @@
   flex-wrap: wrap;
   gap: 10px;
 }
-.order-num { font-family: sans-serif; font-size: 15px; font-weight: 700; }
-.order-date { font-family: sans-serif; font-size: 13px; color: var(--gray); }
+.order-num { font-family: inherit; font-size: 15px; font-weight: 700; }
+.order-date { font-family: inherit; font-size: 13px; color: var(--gray); }
 .order-status {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-family: sans-serif;
+  font-family: inherit;
   font-size: 13px;
   font-weight: 600;
   padding: 5px 12px;
@@ -247,7 +247,7 @@
 }
 .tracker-step.done .tracker-circle   { background: var(--green); border-color: var(--green); color: #fff; }
 .tracker-step.active .tracker-circle { background: var(--white); border-color: var(--green); color: var(--green); font-weight: 700; }
-.tracker-label { font-family: sans-serif; font-size: 11px; color: var(--gray); text-align: center; }
+.tracker-label { font-family: inherit; font-size: 11px; color: var(--gray); text-align: center; }
 .tracker-step.done .tracker-label   { color: var(--green); font-weight: 600; }
 .tracker-step.active .tracker-label { color: var(--dark); font-weight: 600; }
 
@@ -266,9 +266,9 @@
   font-size: 24px;
   flex-shrink: 0;
 }
-.oi-name { font-family: sans-serif; font-size: 14px; font-weight: 600; }
-.oi-meta { font-family: sans-serif; font-size: 13px; color: var(--gray); }
-.oi-price { font-family: sans-serif; font-size: 14px; font-weight: 700; color: var(--green); margin-left: auto; white-space: nowrap; }
+.oi-name { font-family: inherit; font-size: 14px; font-weight: 600; }
+.oi-meta { font-family: inherit; font-size: 13px; color: var(--gray); }
+.oi-price { font-family: inherit; font-size: 14px; font-weight: 700; color: var(--green); margin-left: auto; white-space: nowrap; }
 
 .order-footer {
   display: flex;
@@ -279,11 +279,11 @@
   flex-wrap: wrap;
   gap: 12px;
 }
-.order-total-row { font-family: sans-serif; font-size: 15px; }
+.order-total-row { font-family: inherit; font-size: 15px; }
 .order-total-row b { color: var(--green); font-size: 18px; }
 .order-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 .btn-sm {
-  font-family: sans-serif;
+  font-family: inherit;
   font-size: 13px;
   font-weight: 600;
   padding: 8px 16px;
@@ -303,7 +303,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-family: sans-serif;
+  font-family: inherit;
   font-size: 13px;
   color: var(--gray);
   margin-bottom: 14px;
@@ -320,7 +320,7 @@
   padding: 8px 18px;
   border: 2px solid #e5e7eb;
   border-radius: 50px;
-  font-family: sans-serif;
+  font-family: inherit;
   font-size: 13px;
   cursor: pointer;
   background: var(--white);
@@ -350,11 +350,11 @@
   cursor: pointer;
   flex-wrap: wrap;
 }
-.history-num { font-family: sans-serif; font-weight: 700; font-size: 14px; min-width: 120px; }
-.history-date { font-family: sans-serif; font-size: 13px; color: var(--gray); flex: 1; }
-.history-amount { font-family: sans-serif; font-weight: 700; font-size: 15px; color: var(--green); white-space: nowrap; }
+.history-num { font-family: inherit; font-weight: 700; font-size: 14px; min-width: 120px; }
+.history-date { font-family: inherit; font-size: 13px; color: var(--gray); flex: 1; }
+.history-amount { font-family: inherit; font-weight: 700; font-size: 15px; color: var(--green); white-space: nowrap; }
 .history-badge {
-  font-family: sans-serif;
+  font-family: inherit;
   font-size: 12px;
   font-weight: 600;
   padding: 4px 12px;
@@ -403,7 +403,7 @@
   padding: 24px;
 }
 .profile-card-title {
-  font-family: sans-serif;
+  font-family: inherit;
   font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
@@ -429,14 +429,14 @@
 
 .profile-field { margin-bottom: 16px; }
 .profile-field:last-child { margin-bottom: 0; }
-.profile-field label { font-family: sans-serif; font-size: 12px; color: var(--gray); display: block; margin-bottom: 4px; }
+.profile-field label { font-family: inherit; font-size: 12px; color: var(--gray); display: block; margin-bottom: 4px; }
 .profile-field input,
 .profile-field select {
   width: 100%;
   padding: 10px 14px;
   border: 2px solid #e5e7eb;
   border-radius: 10px;
-  font-family: sans-serif;
+  font-family: inherit;
   font-size: 14px;
   color: var(--dark);
   outline: none;
@@ -447,7 +447,7 @@
 .profile-field select:focus { border-color: var(--green3); }
 .profile-field input:read-only { background: #f9fafb; cursor: default; }
 .profile-field-val {
-  font-family: sans-serif;
+  font-family: inherit;
   font-size: 15px;
   color: var(--dark);
   padding: 4px 0;
@@ -461,7 +461,7 @@
   align-items: center;
   padding: 12px 0;
   border-bottom: 1px solid #f3f4f6;
-  font-family: sans-serif;
+  font-family: inherit;
   font-size: 14px;
 }
 .notif-row:last-child { border-bottom: none; }
@@ -497,7 +497,7 @@
   border: none;
   border-radius: 50px;
   padding: 13px 32px;
-  font-family: sans-serif;
+  font-family: inherit;
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
@@ -521,7 +521,7 @@
   justify-content: center;
   background: var(--green);
   color: #fff;
-  font-family: sans-serif;
+  font-family: inherit;
   font-size: 13px;
   font-weight: 700;
   min-width: 24px;
@@ -541,7 +541,7 @@
 }
 .fav-empty-icon { font-size: 56px; margin-bottom: 14px; }
 .fav-empty h3 { font-size: 20px; margin-bottom: 8px; }
-.fav-empty p { font-family: sans-serif; font-size: 14px; color: var(--gray); margin-bottom: 20px; }
+.fav-empty p { font-family: inherit; font-size: 14px; color: var(--gray); margin-bottom: 20px; }
 
 .fav-grid {
   display: grid;
@@ -576,7 +576,7 @@
   gap: 4px;
 }
 .fav-card-name {
-  font-family: sans-serif;
+  font-family: inherit;
   font-size: 14px;
   font-weight: 600;
   color: var(--dark);
@@ -585,7 +585,7 @@
 }
 .fav-card-name:hover { color: var(--green); }
 .fav-card-desc {
-  font-family: sans-serif;
+  font-family: inherit;
   font-size: 12px;
   color: var(--gray);
   line-height: 1.4;
@@ -601,7 +601,7 @@
   flex-wrap: wrap;
 }
 .fav-card-price {
-  font-family: sans-serif;
+  font-family: inherit;
   font-size: 17px;
   font-weight: 700;
   color: var(--green);
@@ -626,14 +626,14 @@
   top: 12px; right: 12px;
   background: var(--green);
   color: #fff;
-  font-family: sans-serif;
+  font-family: inherit;
   font-size: 11px;
   font-weight: 700;
   padding: 3px 10px;
   border-radius: 50px;
 }
 .address-title { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
-.address-text { font-family: sans-serif; font-size: 13px; color: var(--gray); line-height: 1.6; margin-bottom: 14px; }
+.address-text { font-family: inherit; font-size: 13px; color: var(--gray); line-height: 1.6; margin-bottom: 14px; }
 .address-card-actions { display: flex; gap: 8px; }
 .btn-add-address {
   display: flex;
@@ -643,7 +643,7 @@
   border: 2px dashed #d1d5db;
   border-radius: var(--radius);
   padding: 20px;
-  font-family: sans-serif;
+  font-family: inherit;
   font-size: 14px;
   color: var(--gray);
   cursor: pointer;
@@ -679,7 +679,7 @@
 }
 .logout-modal-icon { font-size: 40px; margin-bottom: 12px; }
 .logout-modal h3 { font-size: 20px; margin-bottom: 8px; }
-.logout-modal p { font-family: sans-serif; font-size: 14px; color: var(--gray); margin-bottom: 24px; }
+.logout-modal p { font-family: inherit; font-size: 14px; color: var(--gray); margin-bottom: 24px; }
 .logout-modal-actions { display: flex; gap: 10px; justify-content: center; }
 
 /* ─── RESPONSIVE ─── */

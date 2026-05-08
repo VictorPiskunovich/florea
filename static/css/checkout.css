@@ -14,7 +14,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-family: sans-serif;
+  font-family: inherit;
   font-size: 13px;
   color: var(--gray);
   flex: 1;
@@ -56,7 +56,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-family: sans-serif;
+  font-family: inherit;
   font-size: 13px;
   color: var(--gray);
 }
@@ -101,7 +101,7 @@
   color: #fff;
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  font-family: sans-serif;
+  font-family: inherit;
   font-weight: 700;
   font-size: 15px;
   flex-shrink: 0;
@@ -120,7 +120,7 @@
 }
 .field:last-child { margin-bottom: 0; }
 .field label {
-  font-family: sans-serif;
+  font-family: inherit;
   font-size: 13px;
   color: var(--gray);
   font-weight: 500;
@@ -131,7 +131,7 @@
   padding: 12px 16px;
   border: 2px solid #e5e7eb;
   border-radius: 10px;
-  font-family: sans-serif;
+  font-family: inherit;
   font-size: 15px;
   color: var(--dark);
   outline: none;
@@ -144,7 +144,7 @@
 .field input.error,
 .field select.error { border-color: #ef4444; }
 .field-error {
-  font-family: sans-serif;
+  font-family: inherit;
   font-size: 12px;
   color: #ef4444;
   display: none;
@@ -171,7 +171,7 @@
 }
 .toggle-card.active { border-color: var(--green); background: #f0fdf4; }
 .toggle-icon { font-size: 26px; flex-shrink: 0; }
-.toggle-label { font-family: sans-serif; }
+.toggle-label { font-family: inherit; }
 .toggle-label b { font-size: 15px; display: block; margin-bottom: 2px; }
 .toggle-label span { font-size: 13px; color: var(--gray); }
 .toggle-radio { display: none; }
@@ -184,7 +184,7 @@
   border: 1px solid var(--green3);
   border-radius: 12px;
   padding: 16px;
-  font-family: sans-serif;
+  font-family: inherit;
   font-size: 14px;
   color: var(--dark);
   display: none;
@@ -204,7 +204,7 @@
   padding: 9px 16px;
   border: 2px solid #e5e7eb;
   border-radius: 50px;
-  font-family: sans-serif;
+  font-family: inherit;
   font-size: 13px;
   cursor: pointer;
   transition: border-color .2s, background .2s, color .2s;
@@ -221,7 +221,7 @@
   align-items: center;
   gap: 10px;
   cursor: pointer;
-  font-family: sans-serif;
+  font-family: inherit;
   font-size: 14px;
   margin-bottom: 14px;
   user-select: none;
@@ -251,7 +251,7 @@
   padding: 8px 16px;
   border: 2px solid #e5e7eb;
   border-radius: 50px;
-  font-family: sans-serif;
+  font-family: inherit;
   font-size: 13px;
   cursor: pointer;
   background: var(--white);
@@ -275,7 +275,7 @@
 .payment-card.active { border-color: var(--green); background: #f0fdf4; }
 .payment-radio { display: none; }
 .payment-icon { font-size: 24px; flex-shrink: 0; }
-.payment-label { font-family: sans-serif; }
+.payment-label { font-family: inherit; }
 .payment-label b { font-size: 15px; display: block; }
 .payment-label span { font-size: 13px; color: var(--gray); }
 .payment-mark {
@@ -312,7 +312,7 @@
   border: none;
   border-radius: 50px;
   padding: 18px;
-  font-family: sans-serif;
+  font-family: inherit;
   font-size: 18px;
   font-weight: 700;
   cursor: pointer;
@@ -321,7 +321,7 @@
 }
 .btn-submit-order:hover { background: var(--green2); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(45,106,79,.4); }
 .submit-note {
-  font-family: sans-serif;
+  font-family: inherit;
   font-size: 12px;
   color: var(--gray);
   text-align: center;
@@ -357,15 +357,15 @@
   font-size: 24px;
   flex-shrink: 0;
 }
-.s-name { font-family: sans-serif; font-size: 14px; font-weight: 600; flex: 1; }
-.s-qty  { font-family: sans-serif; font-size: 13px; color: var(--gray); }
-.s-price { font-family: sans-serif; font-size: 14px; font-weight: 700; color: var(--green); white-space: nowrap; }
+.s-name { font-family: inherit; font-size: 14px; font-weight: 600; flex: 1; }
+.s-qty  { font-family: inherit; font-size: 13px; color: var(--gray); }
+.s-price { font-family: inherit; font-size: 14px; font-weight: 700; color: var(--green); white-space: nowrap; }
 .summary-divider { height: 1px; background: #f3f4f6; margin: 4px 0 16px; }
 .summary-rows { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
 .summary-row {
   display: flex;
   justify-content: space-between;
-  font-family: sans-serif;
+  font-family: inherit;
   font-size: 14px;
   color: var(--gray);
 }
@@ -397,9 +397,9 @@
 .success-icon { font-size: 72px; margin-bottom: 20px; animation: pop .4s ease; }
 @keyframes pop { 0% { transform: scale(0); } 70% { transform: scale(1.1); } 100% { transform: scale(1); } }
 .success-screen h2 { font-size: 28px; margin-bottom: 10px; }
-.success-screen p { font-family: sans-serif; font-size: 16px; color: var(--gray); max-width: 380px; line-height: 1.6; margin-bottom: 8px; }
+.success-screen p { font-family: inherit; font-size: 16px; color: var(--gray); max-width: 380px; line-height: 1.6; margin-bottom: 8px; }
 .success-num {
-  font-family: sans-serif;
+  font-family: inherit;
   font-size: 14px;
   background: #f0fdf4;
   color: var(--green);
@@ -414,7 +414,7 @@
   color: #fff;
   padding: 13px 28px;
   border-radius: 50px;
-  font-family: sans-serif;
+  font-family: inherit;
   font-size: 15px;
   font-weight: 600;
   text-decoration: none;
@@ -426,7 +426,7 @@
   color: var(--green);
   padding: 13px 28px;
   border-radius: 50px;
-  font-family: sans-serif;
+  font-family: inherit;
   font-size: 15px;
   font-weight: 600;
   text-decoration: none;

@@ -10,7 +10,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      font-family: sans-serif;
+      font-family: inherit;
       font-size: 13px;
       color: var(--gray);
     }
@@ -36,7 +36,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      font-family: sans-serif;
+      font-family: inherit;
       font-size: 13px;
       color: var(--gray);
       flex: 1;
@@ -96,7 +96,7 @@
     }
     .cart-panel-header h2 { font-size: 20px; }
     .clear-cart {
-      font-family: sans-serif;
+      font-family: inherit;
       font-size: 13px;
       color: var(--gray);
       cursor: pointer;
@@ -144,7 +144,7 @@
       text-overflow: ellipsis;
     }
     .item-meta {
-      font-family: sans-serif;
+      font-family: inherit;
       font-size: 13px;
       color: var(--gray);
       margin-bottom: 14px;
@@ -176,13 +176,13 @@
     .qty-val {
       width: 36px;
       text-align: center;
-      font-family: sans-serif;
+      font-family: inherit;
       font-size: 15px;
       font-weight: 700;
       user-select: none;
     }
     .item-remove {
-      font-family: sans-serif;
+      font-family: inherit;
       font-size: 13px;
       color: var(--gray);
       cursor: pointer;
@@ -195,8 +195,8 @@
 
     .item-price-block { text-align: right; flex-shrink: 0; }
     .item-price { font-size: 20px; font-weight: 700; color: var(--green); white-space: nowrap; }
-    .item-price-unit { font-family: sans-serif; font-size: 12px; color: var(--gray); margin-top: 2px; white-space: nowrap; }
-    .item-price-old { font-family: sans-serif; font-size: 12px; color: var(--gray); text-decoration: line-through; }
+    .item-price-unit { font-family: inherit; font-size: 12px; color: var(--gray); margin-top: 2px; white-space: nowrap; }
+    .item-price-old { font-family: inherit; font-size: 12px; color: var(--gray); text-decoration: line-through; }
 
     /* ─── PROMO ─── */
     .promo-row {
@@ -210,7 +210,7 @@
       padding: 11px 16px;
       border: 2px solid #e5e7eb;
       border-radius: 50px;
-      font-family: sans-serif;
+      font-family: inherit;
       font-size: 14px;
       outline: none;
       transition: border-color .2s;
@@ -225,7 +225,7 @@
       border: none;
       border-radius: 50px;
       padding: 11px 22px;
-      font-family: sans-serif;
+      font-family: inherit;
       font-size: 14px;
       font-weight: 600;
       cursor: pointer;
@@ -235,7 +235,7 @@
     .btn-promo:hover { background: var(--green); }
     .promo-msg {
       padding: 0 24px 14px;
-      font-family: sans-serif;
+      font-family: inherit;
       font-size: 13px;
       display: none;
     }
@@ -277,8 +277,8 @@
       font-size: 40px;
     }
     .also-body { padding: 10px; display: flex; flex-direction: column; flex: 1; }
-    .also-name { font-family: sans-serif; font-size: 13px; font-weight: 600; margin-bottom: 4px; }
-    .also-price { font-family: sans-serif; font-size: 13px; color: var(--green); font-weight: 700; margin-top: auto; padding-top: 6px; }
+    .also-name { font-family: inherit; font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+    .also-price { font-family: inherit; font-size: 13px; color: var(--green); font-weight: 700; margin-top: auto; padding-top: 6px; }
     .also-add {
       width: 100%;
       margin-top: 6px;
@@ -288,7 +288,7 @@
       border-radius: 50px;
       padding: 6px;
       font-size: 12px;
-      font-family: sans-serif;
+      font-family: inherit;
       cursor: pointer;
       transition: background .2s;
     }
@@ -313,7 +313,7 @@
     .summary-row {
       display: flex;
       justify-content: space-between;
-      font-family: sans-serif;
+      font-family: inherit;
       font-size: 14px;
       color: var(--gray);
     }
@@ -328,7 +328,7 @@
       font-weight: 700;
       margin-bottom: 20px;
     }
-    .summary-total-label { font-family: sans-serif; font-size: 15px; }
+    .summary-total-label { font-family: inherit; font-size: 15px; }
     .summary-total-price { color: var(--green); }
 
     .btn-checkout {
@@ -340,7 +340,7 @@
       border: none;
       border-radius: 50px;
       padding: 17px;
-      font-family: sans-serif;
+      font-family: inherit;
       font-size: 17px;
       font-weight: 700;
       cursor: pointer;
@@ -351,7 +351,7 @@
     .btn-checkout:disabled { background: #d1d5db; box-shadow: none; transform: none; cursor: not-allowed; }
 
     .checkout-note {
-      font-family: sans-serif;
+      font-family: inherit;
       font-size: 12px;
       color: var(--gray);
       text-align: center;
@@ -370,7 +370,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      font-family: sans-serif;
+      font-family: inherit;
       font-size: 13px;
       color: var(--gray);
     }
@@ -383,7 +383,7 @@
       padding: 16px;
     }
     .dp-text {
-      font-family: sans-serif;
+      font-family: inherit;
       font-size: 13px;
       margin-bottom: 10px;
       display: flex;
@@ -418,13 +418,13 @@
     .empty-cart.show { display: flex; }
     .empty-icon { font-size: 80px; margin-bottom: 20px; }
     .empty-cart h2 { font-size: 26px; margin-bottom: 10px; }
-    .empty-cart p { font-family: sans-serif; font-size: 16px; color: var(--gray); margin-bottom: 32px; }
+    .empty-cart p { font-family: inherit; font-size: 16px; color: var(--gray); margin-bottom: 32px; }
     .btn-to-catalog {
       background: var(--green);
       color: #fff;
       padding: 14px 36px;
       border-radius: 50px;
-      font-family: sans-serif;
+      font-family: inherit;
       font-size: 16px;
       font-weight: 600;
       text-decoration: none;

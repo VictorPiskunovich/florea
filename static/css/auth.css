@@ -53,7 +53,7 @@ body.auth-page {
   font-size: 22px;
   font-weight: 700;
   color: var(--green);
-  font-family: 'Georgia', serif;
+  font-family: inherit;
 }
 
 /* ─── Вкладки ─── */
@@ -98,7 +98,7 @@ body.auth-page {
 .auth-welcome p {
   font-size: 14px;
   color: var(--gray);
-  font-family: sans-serif;
+  font-family: inherit;
 }
 
 /* ─── Группы полей ─── */
@@ -112,7 +112,7 @@ body.auth-page {
   font-size: 13px;
   font-weight: 600;
   color: var(--dark);
-  font-family: sans-serif;
+  font-family: inherit;
 }
 .optional {
   font-weight: 400;
@@ -146,7 +146,7 @@ body.auth-page {
   border: 1.5px solid #e5e7eb;
   border-radius: 12px;
   font-size: 14px;
-  font-family: sans-serif;
+  font-family: inherit;
   color: var(--dark);
   background: #fafafa;
   transition: border-color .2s, box-shadow .2s, background .2s;
@@ -179,7 +179,7 @@ body.auth-page {
 .field-error {
   font-size: 12px;
   color: #ef4444;
-  font-family: sans-serif;
+  font-family: inherit;
   min-height: 16px;
   display: block;
 }
@@ -205,7 +205,7 @@ body.auth-page {
   align-items: flex-start;
   gap: 8px;
   font-size: 13px;
-  font-family: sans-serif;
+  font-family: inherit;
   color: var(--dark);
   cursor: pointer;
   user-select: none;
@@ -250,7 +250,7 @@ body.auth-page {
   border-radius: 12px;
   font-size: 15px;
   font-weight: 700;
-  font-family: 'Georgia', serif;
+  font-family: inherit;
   cursor: pointer;
   letter-spacing: .5px;
   transition: opacity .2s, transform .1s;
@@ -266,7 +266,7 @@ body.auth-page {
   gap: 12px;
   color: #d1d5db;
   font-size: 13px;
-  font-family: sans-serif;
+  font-family: inherit;
   margin-bottom: 16px;
 }
 .auth-divider::before,
@@ -295,7 +295,7 @@ body.auth-page {
   background: #fff;
   font-size: 13px;
   font-weight: 600;
-  font-family: sans-serif;
+  font-family: inherit;
   cursor: pointer;
   transition: border-color .2s, background .2s, transform .1s;
 }
@@ -312,7 +312,7 @@ body.auth-page {
   border: none;
   padding: 0;
   font-size: 13px;
-  font-family: sans-serif;
+  font-family: inherit;
   color: var(--green2);
   cursor: pointer;
   font-weight: 600;
@@ -326,7 +326,7 @@ body.auth-page {
 .auth-switch {
   text-align: center;
   font-size: 13px;
-  font-family: sans-serif;
+  font-family: inherit;
   color: var(--gray);
 }
 
@@ -351,7 +351,7 @@ body.auth-page {
 }
 .pass-strength-label {
   font-size: 12px;
-  font-family: sans-serif;
+  font-family: inherit;
   font-weight: 600;
   min-width: 60px;
   text-align: right;
@@ -360,7 +360,7 @@ body.auth-page {
 /* ─── Восстановление пароля ─── */
 .code-hint {
   font-size: 13px;
-  font-family: sans-serif;
+  font-family: inherit;
   color: var(--gray);
   margin-bottom: 12px;
   text-align: center;
@@ -409,7 +409,7 @@ body.auth-page {
   border-radius: 12px;
   font-size: 15px;
   font-weight: 700;
-  font-family: 'Georgia', serif;
+  font-family: inherit;
   cursor: pointer;
   letter-spacing: .5px;
   transition: opacity .2s, transform .1s;
@@ -422,7 +422,7 @@ body.auth-page {
 .auth-alert {
   border-radius: 10px;
   padding: 11px 14px;
-  font-family: sans-serif;
+  font-family: inherit;
   font-size: 13px;
   margin-bottom: 18px;
 }
@@ -457,7 +457,7 @@ body.auth-page {
   align-items: flex-start;
   gap: 8px;
   font-size: 13px;
-  font-family: sans-serif;
+  font-family: inherit;
   color: var(--dark);
   cursor: pointer;
   user-select: none;
@@ -503,7 +503,7 @@ body.auth-page {
 .auth-switch {
   text-align: center;
   font-size: 13px;
-  font-family: sans-serif;
+  font-family: inherit;
   color: var(--gray);
   margin-top: 4px;
 }
@@ -512,7 +512,7 @@ body.auth-page {
   border: none;
   padding: 0;
   font-size: 13px;
-  font-family: sans-serif;
+  font-family: inherit;
   color: var(--green2);
   cursor: pointer;
   font-weight: 600;
@@ -542,7 +542,7 @@ body.auth-page {
 }
 .pw-strength-label {
   font-size: 12px;
-  font-family: sans-serif;
+  font-family: inherit;
   font-weight: 600;
   min-width: 64px;
   text-align: right;
